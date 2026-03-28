@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Amemeee</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -260,6 +261,39 @@
   .skill-fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); width: var(--pct); transform: scaleX(0); transform-origin: left; transition: transform 1s 0.2s ease; }
   .skill-fill.animate { transform: scaleX(1); }
 
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 16px;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 16px;
+    text-align: center;
+    transition: 0.3s ease;
+    cursor: pointer;
+  }
+
+  .skill-card i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  .skill-card p {
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .skill-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
   /* ── Contact ── */
   #contact { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 100px 60px; }
   #contact .section-title { margin-bottom: 16px; }
@@ -299,6 +333,9 @@
     .project-card.featured .project-img { aspect-ratio: 16/9; margin-bottom: 0; }
     #about { gap: 48px; }
     .about-right { padding-top: 0; }
+    .skills-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
   /* Mobile ≤ 768 */
@@ -320,6 +357,9 @@
     .gallery-arrow { width: 38px; height: 38px; font-size: 14px; }
     #gPrev { margin-right: 10px; }
     #gNext { margin-left: 10px; }
+    .skills-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   /* Small mobile ≤ 480 */
@@ -363,7 +403,7 @@
   <div class="hero-inner">
     <p class="hero-eyebrow">PHP PROGRAMMER</p>
     <h1 class="hero-name">Muhammad<br><em>Amin</em></h1>
-    <p class="hero-desc">Crafting digital experiences at the intersection of code and art. Projects that breathe, visuals that linger.</p>
+    <p class="hero-desc">Hi, Nice to meet you!</p>
     <a href="#projects" class="hero-cta">View my work <span class="arrow"></span></a>
   </div>
   <div class="hero-scroll-hint">
@@ -393,7 +433,7 @@
         </div>
       </div>
     </div>
-    <div class="project-card reveal">
+    <!-- <div class="project-card reveal">
       <p class="project-num">002</p>
       <div class="project-img p2">
         <div class="project-img-inner">
@@ -416,7 +456,7 @@
       <h3 class="project-title">Mobile App Design</h3>
       <p class="project-desc">End-to-end UX design for a productivity app. Research-led, system-driven.</p>
       <a href="#" class="project-link">View Project</a>
-    </div>
+    </div> -->
   </div>
 </section>
 
@@ -440,34 +480,94 @@
     <p class="section-label reveal">About</p>
     <h2 class="section-title reveal">The <em>person</em><br>behind the work</h2>
     <p class="about-body reveal">
-      I'm a designer and developer based somewhere beautiful. I obsess over the details — the way a typeface sits on a baseline, the easing curve of a hover state, the silence between elements on a page.<br><br>
-      My work lives between disciplines: part code, part craft, wholly intentional.
+     PHP developer with 3+ years of experience building and maintaining web applications. Focused on backend systems, performance optimization, and continuous growth with Laravel.
     </p>
-    <div class="about-stats reveal">
+    <p class="section-label reveal">Get in touch</p>
+    <p class="about-body reveal"><em>Email:</em>
+      <a href="mailto:hello@yourname.com" >muhd.amin0004@gmail.com</a> 
+    </p>
+    <p class="about-body reveal"><em>Phone:</em>
+      <a href="mailto:hello@yourname.com" >+6011-62008369</a>
+    </p>
+    <!-- <div class="about-stats reveal">
       <div><p class="stat-num">5+</p><p class="stat-label">Years</p></div>
       <div><p class="stat-num">40+</p><p class="stat-label">Projects</p></div>
       <div><p class="stat-num">12+</p><p class="stat-label">Clients</p></div>
-    </div>
+    </div> -->
   </div>
   <div class="about-right reveal">
-    <p class="section-label">Skills</p>
-    <ul class="skills-list">
-      <li>UI / UX Design <span class="skill-bar"><span class="skill-fill" style="--pct:92%"></span></span></li>
-      <li>Front-end Development <span class="skill-bar"><span class="skill-fill" style="--pct:85%"></span></span></li>
-      <li>Motion Design <span class="skill-bar"><span class="skill-fill" style="--pct:78%"></span></span></li>
-      <li>Illustration <span class="skill-bar"><span class="skill-fill" style="--pct:70%"></span></span></li>
-      <li>3D / Blender <span class="skill-bar"><span class="skill-fill" style="--pct:60%"></span></span></li>
-      <li>Brand Identity <span class="skill-bar"><span class="skill-fill" style="--pct:88%"></span></span></li>
-    </ul>
+  <p class="section-label">Skills</p>
+
+  <div class="skills-grid">
+    
+    <div class="skill-card">
+      <i class="fas fa-code"></i>
+      <p>PHP</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-server"></i>
+      <p>Laravel</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-database"></i>
+      <p>MySQL</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fab fa-js"></i>
+      <p>JavaScript</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fab fa-html5"></i>
+      <p>HTML</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fab fa-css3-alt"></i>
+      <p>CSS</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fab fa-git-alt"></i>
+      <p>Git</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-cloud"></i>
+      <p>Cloud / Server</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-video"></i>
+      <p>OBS</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-robot"></i>
+      <p>AI Tools</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-image"></i>
+      <p>Adobe Photoshop</p>
+    </div>
+
+    <div class="skill-card">
+      <i class="fas fa-pen-nib"></i>
+      <p>Adobe Illustrator</p>
+    </div>
+
   </div>
+</div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <p class="section-label reveal">Get in touch</p>
+  <!-- <a href="mailto:hello@yourname.com" class="contact-email reveal"><h6><em>muhd.amin0004@gmail.com</em></h6></a> -->
   <h2 class="section-title reveal">Let's make something<br><em>together!</em></h2>
-  <p class="contact-sub reveal">Open to freelance projects and collaborations.</p>
-  <a href="mailto:hello@yourname.com" class="contact-email reveal">muhd.amin0004@gmail.com</a>
   <!-- <ul class="social-links reveal">
     <li><a href="#">Twitter</a></li>
     <li><a href="#">Instagram</a></li>
