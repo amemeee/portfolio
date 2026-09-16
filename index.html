@@ -6,237 +6,175 @@
 <title>Portfolio — Amemeee</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>
+  (function() {
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+  })();
+</script>
 </head>
 <body>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- Mobile nav drawer -->
-<div class="nav-drawer" id="navDrawer">
-  <a href="#projects" onclick="closeDrawer()">Work</a>
-  <a href="#art"      onclick="closeDrawer()">Art</a>
-  <a href="#about"    onclick="closeDrawer()">About</a>
-  <a href="#contact"  onclick="closeDrawer()">Contact</a>
-</div>
-
 <!-- NAV -->
 <nav id="nav">
-  <a href="#hero" class="nav-logo">AMEMEEE</a>
-  <ul class="nav-links">
-    <li><a href="#projects">Work</a></li>
-    <li><a href="#art">Art</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <a href="#top" class="nav-logo">AMEMEEE</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#work">Work</a>
+    <a href="#art">Art</a>
+    <a href="#contact">Contact</a>
+    <a href="assets/resume.pdf" download class="nav-resume">Resume</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
+  </div>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">PHP PROGRAMMER</p>
-    <h1 class="hero-name">Muhammad<br><em>Amin</em></h1>
-    <p class="hero-desc">Hi! Nice to Meet You :)</p>
-    <a href="#projects" class="hero-cta">View my work <span class="arrow"></span></a>
-  </div>
-  <div class="hero-scroll-hint">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <p class="section-label reveal">Selected Work</p>
-  <h2 class="section-title reveal">Recent <em>Projects</em></h2>
-  <div class="projects-grid">
-    <div class="project-card featured reveal">
-      <div>
-        <p class="project-num">001</p>
-        <div class="project-tags"><span class="tag">Web Development</span><span class="tag">PHP</span><span class="tag">HTML</span><span class="tag">Javascript</span><span class="tag">CSS</span><span class="tag">JSON</span><span class="tag">AJAX</span><span class="tag">JQuery</span></div>
-        <h3 class="project-title">Arena Auctioneers</h3>
-        <p class="project-desc">A web-based auction platform that enables users to browse for property, bid and more. The system supports real-time bidding workflows, structured property data from financial institutions, and ensures smooth auction operations through a reliable backend architecture.</p>
-        <a href="https://arenaauctioneers.com" target="_blank" class="hero-cta">View Project <span class="arrow"></span></a>
-
-      </div>
-      <div class="project-img p1">
-        <div class="project-img-inner">
-            <img style="text-align: center;" src="assets/project/arena_auctioneers/1.png" >
-          <span style="font-family:'Playfair Display',serif;font-size:40px;color:#2a2020;font-style:italic;">001</span>
-        </div>
-      </div>
+<!-- Light-mode bug warning modal -->
+<div class="modal-overlay" id="bugModalOverlay">
+  <div class="modal-box">
+    <p class="modal-text">Are you sure? Light attracts bugs.</p>
+    <div class="modal-actions">
+      <button class="bento-btn" id="bugModalYes">Yes, risk it</button>
+      <button class="bento-btn ghost" id="bugModalNo">No, stay dark</button>
     </div>
-    <!-- <div class="project-card reveal">
-      <p class="project-num">002</p>
-      <div class="project-img p2">
-        <div class="project-img-inner">
-          <span style="font-family:'Playfair Display',serif;font-size:40px;color:#1a1a2a;font-style:italic;">002</span>
-        </div>
-      </div>
-      <div class="project-tags"><span class="tag">Branding</span><span class="tag">Identity</span></div>
-      <h3 class="project-title">Brand Identity System</h3>
-      <p class="project-desc">Visual identity for a fictional studio — logotype, palette, motion guidelines.</p>
-      <a href="#" class="project-link">View Project</a>
-    </div>
-    <div class="project-card reveal">
-      <p class="project-num">003</p>
-      <div class="project-img p3">
-        <div class="project-img-inner">
-          <span style="font-family:'Playfair Display',serif;font-size:40px;color:#1a2a1a;font-style:italic;">003</span>
-        </div>
-      </div>
-      <div class="project-tags"><span class="tag">App</span><span class="tag">UI/UX</span></div>
-      <h3 class="project-title">Mobile App Design</h3>
-      <p class="project-desc">End-to-end UX design for a productivity app. Research-led, system-driven.</p>
-      <a href="#" class="project-link">View Project</a>
-    </div> -->
-  </div>
-</section>
-
-<!-- ART -->
-<section id="art">
-  <p class="section-label reveal">Creative Work</p>
-  <h2 class="section-title reveal">Art &amp; <em>Illustrations</em></h2>
-  <div class="gallery-outer reveal">
-    <button class="gallery-arrow" id="gPrev" aria-label="Previous">&#8592;</button>
-    <div class="gallery-viewport">
-      <div class="gallery-strip" id="galleryStrip"></div>
-    </div>
-    <button class="gallery-arrow" id="gNext" aria-label="Next">&#8594;</button>
-  </div>
-  <div class="gallery-dots" id="galleryDots"></div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-left">
-    <p class="section-label reveal">About</p>
-    <h2 class="section-title reveal">The <em>person</em><br>behind the work</h2>
-    <p class="about-body reveal">
-      <table>
-        <tr>
-          <td><strong>Name</strong></td>
-          <td>:</td>
-          <td>Muhammad Amin bin Mohd Hafendi (27)</td>
-        </tr>
-        <tr>
-          <td><strong>Contact</strong></td>
-          <td>:</td>
-          <td><a href="tel:+601162008369">+6011-62008369</a></td>
-        </tr>
-        <tr>
-          <td><strong>Email</strong></td>
-          <td>:</td>
-          <td><a href="mailto:muhd.amin0004@gmail.com">muhd.amin0004@gmail.com</a></td>
-        </tr>
-        <tr>
-          <td><strong>Resume</strong></td>
-          <td>:</td>
-          <td><a href="assets/resume.pdf" download>Download Here</a></td>
-        </tr>
-      </table>
-    </p>
-    <!-- <div class="about-stats reveal">
-      <div><p class="stat-num">5+</p><p class="stat-label">Years</p></div>
-      <div><p class="stat-num">40+</p><p class="stat-label">Projects</p></div>
-      <div><p class="stat-num">12+</p><p class="stat-label">Clients</p></div>
-    </div> -->
-  </div>
-  <div class="about-right reveal">
-  <p class="section-label">Skills</p>
-
-  <div class="skills-grid">
-    
-    <div class="skill-card">
-      <i class="fas fa-code"></i>
-      <p>PHP</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-server"></i>
-      <p>Laravel</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-database"></i>
-      <p>MySQL</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fab fa-js"></i>
-      <p>JavaScript</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fab fa-html5"></i>
-      <p>HTML</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fab fa-css3-alt"></i>
-      <p>CSS</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fab fa-git-alt"></i>
-      <p>Git</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-cloud"></i>
-      <p>Cloud / Server</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-video"></i>
-      <p>OBS</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-robot"></i>
-      <p>AI Tools</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-image"></i>
-      <p>Adobe Photoshop</p>
-    </div>
-
-    <div class="skill-card">
-      <i class="fas fa-pen-nib"></i>
-      <p>Adobe Illustrator</p>
-    </div>
-
   </div>
 </div>
-</section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <!-- <a href="mailto:hello@yourname.com" class="contact-email reveal"><h6><em>muhd.amin0004@gmail.com</em></h6></a> -->
-  <h2 class="section-title reveal">Let’s build something<br><em><b>POWERFUL!</b></em></h2>
-  <!-- <ul class="social-links reveal">
-    <li><a href="#">Twitter</a></li>
-    <li><a href="#">Instagram</a></li>
-    <li><a href="#">Behance</a></li>
-    <li><a href="#">GitHub</a></li>
-    <li><a href="#">LinkedIn</a></li>
-  </ul> -->
-</section>
+<div class="page" id="top">
 
-<!-- FOOTER -->
+  <!-- INTRO -->
+  <section class="bento-grid">
+    <div class="bento-item t-2x2 reveal">
+      <p class="tile-label">Hello, I'm</p>
+      <h1 class="profile-name">Muhammad Amin</h1>
+      <p class="profile-role">PHP / Laravel Developer</p>
+      <p class="profile-bio">I build reliable backend systems and full-stack web platforms — from real-time auction engines to APIs — with clean, maintainable code.</p>
+      <div class="profile-actions">
+        <a href="assets/resume.pdf" download class="bento-btn">Resume <i class="fas fa-arrow-down"></i></a>
+        <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn ghost">Email me</a>
+      </div>
+    </div>
+
+    <div class="bento-item t-2x2 reveal center-tile quote-tile">
+      <p class="quote-mark">&ldquo;</p>
+      <p class="quote-text">Don't Let It Vanish.</p>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="bento-grid">
+    <a href="https://arenaauctioneers.com" target="_blank" class="bento-item t-2x2 bento-img reveal" style="background-image:url('assets/project/arena_auctioneers/1.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-label">Selected Work</p>
+      <h2 class="tile-heading">Arena Auctioneers</h2>
+      <p class="tile-sub">Live Project <i class="fas fa-arrow-up-right-from-square"></i></p>
+    </a>
+
+    <div class="bento-item t-2x2 reveal">
+      <p class="tile-label">Laravel Auction Platform</p>
+      <p class="tile-desc">A web-based auction platform that enables users to browse property, bid, and manage listings in real time. Handles structured property data from financial institutions with a reliable backend architecture.</p>
+      <div class="tag-row">
+        <span class="tag">PHP</span><span class="tag">Laravel</span><span class="tag">MySQL</span>
+        <span class="tag">JavaScript</span><span class="tag">AJAX</span><span class="tag">jQuery</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="bento-grid">
+    <div class="bento-item t-4x1 reveal skills-card">
+      <p class="tile-label">Skills</p>
+      <div class="skills-inner-grid">
+        <div class="skill-chip"><i class="fas fa-code"></i><span>PHP</span></div>
+        <div class="skill-chip"><i class="fas fa-server"></i><span>Laravel</span></div>
+        <div class="skill-chip"><i class="fas fa-database"></i><span>MySQL</span></div>
+        <div class="skill-chip"><i class="fab fa-js"></i><span>JavaScript</span></div>
+        <div class="skill-chip"><i class="fab fa-html5"></i><span>HTML</span></div>
+        <div class="skill-chip"><i class="fab fa-css3-alt"></i><span>CSS</span></div>
+        <div class="skill-chip"><i class="fab fa-git-alt"></i><span>Git</span></div>
+        <div class="skill-chip"><i class="fas fa-cloud"></i><span>Cloud / Server</span></div>
+        <div class="skill-chip"><i class="fas fa-image"></i><span>Photoshop</span></div>
+        <div class="skill-chip"><i class="fas fa-pen-nib"></i><span>Illustrator</span></div>
+        <div class="skill-chip"><i class="fas fa-video"></i><span>OBS</span></div>
+        <div class="skill-chip"><i class="fas fa-robot"></i><span>AI Tools</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ART -->
+  <section id="art" class="bento-grid">
+    <div class="bento-item t-2x2 bento-img reveal" style="background-image:url('art/seishin.gif');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-label">Art &amp; Illustration</p>
+      <h2 class="tile-heading">Spell Caster</h2>
+      <p class="tile-sub">Adobe Animate · Flash 8</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art7.gif');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Cyberpunk</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art1.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Midnight Samurai</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/dropship.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Dropship Marketing</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art12.jpeg');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Abyss Hare</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art11.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Gadis Lolipop!</p>
+    </div>
+
+    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art2.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">Vanilla Ice Cream</p>
+    </div>
+
+    <div class="bento-item t-2x2 bento-img reveal" style="background-image:url('art/art4.png');">
+      <div class="bento-img-fade"></div>
+      <p class="tile-sub-small">AKUMA</p>
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="bento-grid">
+    <div class="bento-item t-4x1 reveal contact-tile">
+      <h2 class="contact-heading">Let's build something<br><em>powerful.</em></h2>
+      <div class="profile-actions">
+        <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
+        <a href="tel:+601162008369" class="bento-btn ghost">+6011-6200 8369</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
 <footer>
   <span>© 2026 Amemeee</span>
   <span>Designed &amp; built with care</span>
 </footer>
 
 <script>
-  // ── Cursor (desktop only) ──
+  // Cursor (desktop only)
   if (window.matchMedia('(pointer: fine)').matches) {
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('cursorRing');
@@ -250,142 +188,185 @@
     })();
   }
 
-  // ── Nav scroll ──
+  // Nav scroll state
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
 
-  // ── Hamburger / mobile nav ──
+  // Keep --nav-h in sync with the navbar's real rendered height,
+  // so .page's clearance never drifts out of sync across breakpoints/devices.
+  function setNavHeight() {
+    document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+  }
+  setNavHeight();
+  new ResizeObserver(setNavHeight).observe(nav);
+  document.fonts && document.fonts.ready.then(setNavHeight);
+
+  // Mobile hamburger menu
   const hamburger = document.getElementById('hamburger');
-  const navDrawer = document.getElementById('navDrawer');
+  const navLinks = document.getElementById('navLinks');
   hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('open');
-    navDrawer.classList.toggle('open');
+    navLinks.classList.toggle('open');
   });
-  function closeDrawer() {
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     hamburger.classList.remove('open');
-    navDrawer.classList.remove('open');
-  }
-
-  // ── Reveal on scroll ──
-  const reveals  = document.querySelectorAll('.reveal');
-  const revObs   = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 60);
-        revObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => revObs.observe(el));
-
-  // ── Skill bars ──
-  const skillObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.skill-fill').forEach(f => f.classList.add('animate'));
-        skillObs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  const skillSection = document.querySelector('#about');
-  if (skillSection) skillObs.observe(skillSection);
-
-  // ── Art Gallery ──
-  const artworks = [
-    { src: 'art/art5.png',     title: 'Genshin Impact (Malaysia) Event 2020',   medium: 'Adobe Photoshop' },
-    { src: 'art/seishin.gif',  title: 'NFT Event (Seishin) — Spell Caster 🔮',  medium: 'Adobe Animate · Sketch Book · Flash 8' },
-    { src: 'art/art7.gif',     title: 'NFT Event (Seishin) — Cyberpunk',        medium: 'Adobe Animate · Sketch Book · Flash 8' },
-    { src: 'art/art1.png',     title: 'NFT Event (Seishin) — Midnight Samurai', medium: 'Sketch Book' },
-    { src: 'art/dropship.png', title: 'Dropship Marketing (Murah Kaya)',        medium: 'Sketch Book' },
-    { src: 'art/art12.jpeg',   title: 'NFT Event — Abyss Hare',                medium: 'Sketch Book' },
-    { src: 'art/art11.png',    title: 'Gadis Lolipop!',                         medium: 'Sketch Book' },
-    { src: 'art/art3.png',     title: '....',                                    medium: 'Sketch Book' },
-    { src: 'art/art4.png',     title: 'AKUMA',                                  medium: 'Sketch Book' },
-    { src: 'art/art2.png',     title: 'Vanilla Ice Cream',                      medium: 'Sketch Book' },
-  ];
-
-  const strip  = document.getElementById('galleryStrip');
-  const dotsEl = document.getElementById('galleryDots');
-  const gPrev  = document.getElementById('gPrev');
-  const gNext  = document.getElementById('gNext');
-  const GAP    = 16;
-  let gPos = 0;
-
-  // Build cards once
-  artworks.forEach(({ src, title, medium }) => {
-    const card = document.createElement('div');
-    card.className = 'gallery-card';
-    card.innerHTML = `
-      <div class="gallery-card-img">
-        <img src="${src}" alt="${title}" loading="lazy">
-      </div>
-      <div class="gallery-card-caption">
-        <span class="gallery-card-title">${title}</span>
-        <span class="gallery-card-medium">${medium}</span>
-      </div>`;
-    strip.appendChild(card);
+    navLinks.classList.remove('open');
+  }));
+  document.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('open') &&
+        !navLinks.contains(e.target) &&
+        !hamburger.contains(e.target)) {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    }
   });
 
-  // Returns how many cards are visible at current viewport width
-  function getVisible() {
-    const w = window.innerWidth;
-    if (w <= 480)  return 1;
-    if (w <= 768)  return 1;
-    if (w <= 1024) return 2;
-    return 4;
+  // Dark / light theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = themeToggle.querySelector('i');
+  function syncIcon() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+  }
+  syncIcon();
+  function applyTheme(next) {
+    localStorage.setItem('theme', next);
+    document.documentElement.setAttribute('data-theme', next);
+    syncIcon();
+  }
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'dark') {
+      bugModalOverlay.classList.add('open');
+    } else {
+      clearBugs();
+      applyTheme('dark');
+    }
+  });
+
+  // Bug warning modal
+  const bugModalOverlay = document.getElementById('bugModalOverlay');
+  document.getElementById('bugModalNo').addEventListener('click', () => {
+    bugModalOverlay.classList.remove('open');
+  });
+  document.getElementById('bugModalYes').addEventListener('click', () => {
+    bugModalOverlay.classList.remove('open');
+    applyTheme('light');
+    spawnBugs();
+  });
+
+  function clearBugs() {
+    const existing = document.getElementById('bugContainer');
+    if (existing) existing.remove();
   }
 
-  function buildDots(steps) {
-    dotsEl.innerHTML = '';
-    if (steps === 0) return; // no dots needed — all cards fit
-    for (let i = 0; i <= steps; i++) {
-      const d = document.createElement('div');
-      d.className = 'gdot' + (i === gPos ? ' active' : '');
-      d.addEventListener('click', () => { gPos = i; render(); });
-      dotsEl.appendChild(d);
+  const bugEmojis = ['👾', '🐜', '🪰', '🦟', '🪲', '🪳'];
+
+  let audioCtx;
+  function playSquashSound() {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const now = ctx.currentTime;
+
+    // Descending "pop" tone
+    const osc = ctx.createOscillator();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(70, now + 0.12);
+    const oscGain = ctx.createGain();
+    oscGain.gain.setValueAtTime(0.22, now);
+    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+    osc.connect(oscGain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+
+    // Quick crunch/noise burst for a "squash" texture
+    const bufferSize = Math.floor(ctx.sampleRate * 0.08);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.15, now);
+    noise.connect(noiseGain).connect(ctx.destination);
+    noise.start(now);
+  }
+
+  function spawnBugs() {
+    clearBugs();
+    const count = Math.floor(Math.random() * 8) + 1;
+    const container = document.createElement('div');
+    container.id = 'bugContainer';
+    document.body.appendChild(container);
+    for (let i = 0; i < count; i++) {
+      const bug = document.createElement('button');
+      bug.className = 'bug';
+      bug.textContent = bugEmojis[Math.floor(Math.random() * bugEmojis.length)];
+      bug.setAttribute('aria-label', 'Squash bug');
+      bug.style.top = (12 + Math.random() * 68) + 'vh';
+      bug.style.left = (5 + Math.random() * 85) + 'vw';
+      bug.style.animationDelay = (Math.random() * 0.6) + 's';
+      bug.addEventListener('click', () => explodeBug(bug));
+      container.appendChild(bug);
     }
   }
 
-  function render() {
-    const vis      = getVisible();
-    const steps    = Math.max(0, artworks.length - vis);
-    const viewport = strip.parentElement.offsetWidth;
-    const cardW    = (viewport - GAP * (vis - 1)) / vis;
+  function explodeBug(bug) {
+    playSquashSound();
+    const rect = bug.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
 
-    // Clamp position in case of resize
-    if (gPos > steps) gPos = steps;
+    const boom = document.createElement('div');
+    boom.className = 'bug-explosion';
+    boom.textContent = '💥';
+    boom.style.left = cx + 'px';
+    boom.style.top = cy + 'px';
+    document.body.appendChild(boom);
+    setTimeout(() => boom.remove(), 450);
 
-    // Set card widths via inline style on strip children
-    strip.querySelectorAll('.gallery-card').forEach(c => {
-      c.style.flex = `0 0 ${cardW}px`;
-    });
+    const particleChars = ['✨', '💥', '⭐'];
+    for (let i = 0; i < 7; i++) {
+      const p = document.createElement('span');
+      p.className = 'bug-particle';
+      p.textContent = particleChars[Math.floor(Math.random() * particleChars.length)];
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 30 + Math.random() * 45;
+      p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 500);
+    }
 
-    strip.style.transform = `translateX(-${gPos * (cardW + GAP)}px)`;
-    gPrev.disabled = gPos === 0;
-    gNext.disabled = gPos >= steps;
-    buildDots(steps);
+    const container = bug.parentElement;
+    bug.remove();
+    if (container && container.querySelectorAll('.bug').length === 0) {
+      showAllClearToast();
+    }
   }
 
-  gPrev.addEventListener('click', () => { gPos--; render(); });
-  gNext.addEventListener('click', () => { gPos++; render(); });
+  function showAllClearToast() {
+    const toast = document.createElement('div');
+    toast.className = 'bug-toast';
+    toast.textContent = 'Great job! You receive nothing.';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.classList.add('hide'), 2200);
+    setTimeout(() => toast.remove(), 2600);
+  }
 
-  // Touch / swipe
-  let gTouchX = 0;
-  strip.addEventListener('touchstart', e => { gTouchX = e.touches[0].clientX; }, { passive: true });
-  strip.addEventListener('touchend', e => {
-    const dx    = e.changedTouches[0].clientX - gTouchX;
-    const steps = Math.max(0, artworks.length - getVisible());
-    if (dx < -50 && gPos < steps) { gPos++; render(); }
-    if (dx >  50 && gPos > 0)     { gPos--; render(); }
-  });
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(render, 80);
-  });
-
-  render();
+  // Reveal on scroll
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 40);
+        revObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 </script>
 </body>
 </html>
