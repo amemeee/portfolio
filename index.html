@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Amemeee</title>
+<link rel="icon" type="image/png" href="art/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -37,16 +38,8 @@
   </button>
 </nav>
 
-<!-- Light-mode bug warning modal -->
-<div class="modal-overlay" id="bugModalOverlay">
-  <div class="modal-box">
-    <p class="modal-text">Are you sure? Light attracts bugs.</p>
-    <div class="modal-actions">
-      <button class="bento-btn" id="bugModalYes">Yes, risk it</button>
-      <button class="bento-btn ghost" id="bugModalNo">No, stay dark</button>
-    </div>
-  </div>
-</div>
+<!-- HERO COVER -->
+<div class="hero-cover"></div>
 
 <div class="page" id="top">
 
@@ -70,22 +63,55 @@
   </section>
 
   <!-- WORK -->
-  <section id="work" class="bento-grid">
-    <a href="https://arenaauctioneers.com" target="_blank" class="bento-item t-2x2 bento-img reveal" style="background-image:url('assets/project/arena_auctioneers/1.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-label">Selected Work</p>
-      <h2 class="tile-heading">Arena Auctioneers</h2>
-      <p class="tile-sub">Live Project <i class="fas fa-arrow-up-right-from-square"></i></p>
-    </a>
+  <section id="work" class="work-carousel-section">
+    <h2 class="carousel-heading reveal">EVERY PROJECT, LIVE &amp; SHIPPED</h2>
+    <span class="carousel-badge reveal">4 Live Projects</span>
 
-    <div class="bento-item t-2x2 reveal">
-      <p class="tile-label">Laravel Auction Platform</p>
-      <p class="tile-desc">A web-based auction platform that enables users to browse property, bid, and manage listings in real time. Handles structured property data from financial institutions with a reliable backend architecture.</p>
-      <div class="tag-row">
-        <span class="tag">PHP</span><span class="tag">Laravel</span><span class="tag">MySQL</span>
-        <span class="tag">JavaScript</span><span class="tag">AJAX</span><span class="tag">jQuery</span>
+    <div class="carousel-outer reveal">
+      <button class="carousel-arrow" id="projPrev" aria-label="Previous project">&#8592;</button>
+
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="projTrack">
+
+          <div class="proj-card">
+            <div class="proj-card-media proj-card-media-img" style="background-image:url('assets/project/portfolio/1.png');"></div>
+            <span class="proj-badge">LIVE</span>
+            <a href="https://amemeee.github.io/portfolio/" target="_blank" class="proj-card-title">This Portfolio <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <p class="proj-card-sub">HTML &middot; CSS &middot; JavaScript</p>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-card-media proj-card-media-img" style="background-image:url('assets/project/arena_auctioneers/1.png');"></div>
+            <span class="proj-badge">LIVE</span>
+            <a href="https://arenaauctioneers.com" target="_blank" class="proj-card-title">Arena Auctioneers <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <p class="proj-card-sub">PHP &middot; HTML &middot; CSS &middot; JS &middot; AJAX &middot; jQuery</p>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-card-media">
+              <iframe class="project-iframe" src="https://homestay.arenaauctioneers.com" loading="lazy" title="Arena Auctioneers Homestay live preview"></iframe>
+            </div>
+            <span class="proj-badge">LIVE</span>
+            <a href="https://homestay.arenaauctioneers.com" target="_blank" class="proj-card-title">Arena Auctioneers Homestay <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <p class="proj-card-sub">Laravel &middot; Blade</p>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-card-media">
+              <iframe class="project-iframe" src="https://01-agent-property-auction.wasmer.app" loading="lazy" title="Agent Property Auction Platform live preview"></iframe>
+            </div>
+            <span class="proj-badge">LIVE</span>
+            <a href="https://01-agent-property-auction.wasmer.app" target="_blank" class="proj-card-title">Agent Property Auction Platform <i class="fas fa-arrow-up-right-from-square"></i></a>
+            <p class="proj-card-sub">Vue &middot; Laravel</p>
+          </div>
+
+        </div>
       </div>
+
+      <button class="carousel-arrow" id="projNext" aria-label="Next project">&#8594;</button>
     </div>
+
+    <div class="carousel-dots" id="projDots"></div>
   </section>
 
   <!-- SKILLS -->
@@ -229,133 +255,12 @@
     themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
   }
   syncIcon();
-  function applyTheme(next) {
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', next);
     document.documentElement.setAttribute('data-theme', next);
     syncIcon();
-  }
-  themeToggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    if (current === 'dark') {
-      bugModalOverlay.classList.add('open');
-    } else {
-      clearBugs();
-      applyTheme('dark');
-    }
   });
-
-  // Bug warning modal
-  const bugModalOverlay = document.getElementById('bugModalOverlay');
-  document.getElementById('bugModalNo').addEventListener('click', () => {
-    bugModalOverlay.classList.remove('open');
-  });
-  document.getElementById('bugModalYes').addEventListener('click', () => {
-    bugModalOverlay.classList.remove('open');
-    applyTheme('light');
-    spawnBugs();
-  });
-
-  function clearBugs() {
-    const existing = document.getElementById('bugContainer');
-    if (existing) existing.remove();
-  }
-
-  const bugEmojis = ['👾', '🐜', '🪰', '🦟', '🪲', '🪳'];
-
-  let audioCtx;
-  function playSquashSound() {
-    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = audioCtx;
-    const now = ctx.currentTime;
-
-    // Descending "pop" tone
-    const osc = ctx.createOscillator();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(320, now);
-    osc.frequency.exponentialRampToValueAtTime(70, now + 0.12);
-    const oscGain = ctx.createGain();
-    oscGain.gain.setValueAtTime(0.22, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-    osc.connect(oscGain).connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.15);
-
-    // Quick crunch/noise burst for a "squash" texture
-    const bufferSize = Math.floor(ctx.sampleRate * 0.08);
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.15, now);
-    noise.connect(noiseGain).connect(ctx.destination);
-    noise.start(now);
-  }
-
-  function spawnBugs() {
-    clearBugs();
-    const count = Math.floor(Math.random() * 8) + 1;
-    const container = document.createElement('div');
-    container.id = 'bugContainer';
-    document.body.appendChild(container);
-    for (let i = 0; i < count; i++) {
-      const bug = document.createElement('button');
-      bug.className = 'bug';
-      bug.textContent = bugEmojis[Math.floor(Math.random() * bugEmojis.length)];
-      bug.setAttribute('aria-label', 'Squash bug');
-      bug.style.top = (12 + Math.random() * 68) + 'vh';
-      bug.style.left = (5 + Math.random() * 85) + 'vw';
-      bug.style.animationDelay = (Math.random() * 0.6) + 's';
-      bug.addEventListener('click', () => explodeBug(bug));
-      container.appendChild(bug);
-    }
-  }
-
-  function explodeBug(bug) {
-    playSquashSound();
-    const rect = bug.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-
-    const boom = document.createElement('div');
-    boom.className = 'bug-explosion';
-    boom.textContent = '💥';
-    boom.style.left = cx + 'px';
-    boom.style.top = cy + 'px';
-    document.body.appendChild(boom);
-    setTimeout(() => boom.remove(), 450);
-
-    const particleChars = ['✨', '💥', '⭐'];
-    for (let i = 0; i < 7; i++) {
-      const p = document.createElement('span');
-      p.className = 'bug-particle';
-      p.textContent = particleChars[Math.floor(Math.random() * particleChars.length)];
-      p.style.left = cx + 'px';
-      p.style.top = cy + 'px';
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 30 + Math.random() * 45;
-      p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-      p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 500);
-    }
-
-    const container = bug.parentElement;
-    bug.remove();
-    if (container && container.querySelectorAll('.bug').length === 0) {
-      showAllClearToast();
-    }
-  }
-
-  function showAllClearToast() {
-    const toast = document.createElement('div');
-    toast.className = 'bug-toast';
-    toast.textContent = 'Great job! You receive nothing.';
-    document.body.appendChild(toast);
-    setTimeout(() => toast.classList.add('hide'), 2200);
-    setTimeout(() => toast.remove(), 2600);
-  }
 
   // Reveal on scroll
   const revObs = new IntersectionObserver(entries => {
@@ -367,6 +272,44 @@
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // Work carousel
+  const projTrack = document.getElementById('projTrack');
+  if (projTrack) {
+    const projCards = Array.from(projTrack.children);
+    const projPrev  = document.getElementById('projPrev');
+    const projNext  = document.getElementById('projNext');
+    const projDotsEl = document.getElementById('projDots');
+    let projIndex = 0;
+
+    function buildProjDots() {
+      projDotsEl.innerHTML = '';
+      projCards.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'cdot' + (i === projIndex ? ' active' : '');
+        d.addEventListener('click', () => { projIndex = i; renderCarousel(); });
+        projDotsEl.appendChild(d);
+      });
+    }
+
+    function renderCarousel() {
+      const viewport = projTrack.parentElement;
+      const active = projCards[projIndex];
+      const targetX = viewport.offsetWidth / 2 - (active.offsetLeft + active.offsetWidth / 2);
+      projTrack.style.transform = `translateX(${targetX}px)`;
+
+      projCards.forEach((c, i) => c.classList.toggle('is-active', i === projIndex));
+      projPrev.disabled = projIndex === 0;
+      projNext.disabled = projIndex === projCards.length - 1;
+      buildProjDots();
+    }
+
+    projPrev.addEventListener('click', () => { if (projIndex > 0) { projIndex--; renderCarousel(); } });
+    projNext.addEventListener('click', () => { if (projIndex < projCards.length - 1) { projIndex++; renderCarousel(); } });
+    window.addEventListener('resize', renderCarousel);
+    renderCarousel();
+  }
+
 </script>
 </body>
 </html>
