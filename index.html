@@ -120,67 +120,85 @@
   <section class="bento-grid">
     <div class="bento-item t-4x1 reveal skills-card">
       <p class="tile-label">Skills</p>
-      <div class="skills-inner-grid">
-        <div class="skill-chip"><i class="fas fa-code"></i><span>PHP</span></div>
-        <div class="skill-chip"><i class="fas fa-server"></i><span>Laravel</span></div>
-        <div class="skill-chip"><i class="fas fa-database"></i><span>MySQL</span></div>
-        <div class="skill-chip"><i class="fab fa-js"></i><span>JavaScript</span></div>
-        <div class="skill-chip"><i class="fab fa-html5"></i><span>HTML</span></div>
-        <div class="skill-chip"><i class="fab fa-css3-alt"></i><span>CSS</span></div>
-        <div class="skill-chip"><i class="fab fa-git-alt"></i><span>Git</span></div>
-        <div class="skill-chip"><i class="fas fa-cloud"></i><span>Cloud / Server</span></div>
-        <div class="skill-chip"><i class="fas fa-image"></i><span>Photoshop</span></div>
-        <div class="skill-chip"><i class="fas fa-pen-nib"></i><span>Illustrator</span></div>
-        <div class="skill-chip"><i class="fas fa-video"></i><span>OBS</span></div>
-        <div class="skill-chip"><i class="fas fa-robot"></i><span>AI Tools</span></div>
+      <div class="skills-charselect">
+        <div class="skills-portrait">
+          <img id="skillsPortrait" src="art/backend.jpg" alt="">
+          <span class="skills-portrait-tag" id="skillsPortraitTag">Backend</span>
+        </div>
+        <div class="skills-panel">
+          <div class="skills-buttons" id="skillsButtons">
+            <button class="skills-btn active" data-category="backend" data-image="art/backend.jpg"><i class="fas fa-server"></i>Backend</button>
+            <button class="skills-btn" data-category="frontend" data-image="art/frontend.jpg"><i class="fas fa-code"></i>Frontend</button>
+            <button class="skills-btn" data-category="tools" data-image="art/ai.jpg"><i class="fas fa-toolbox"></i>DevOps</button>
+            <button class="skills-btn" data-category="ai" data-image="art/tools.jpg"><i class="fas fa-robot"></i>AI Tools</button>
+            <button class="skills-btn" data-category="design" data-image="art/others.jpg"><i class="fas fa-ellipsis"></i>Others</button>
+          </div>
+          <div class="skills-divider"></div>
+          <div class="tag-row" id="skillsTags">
+            <span class="tag">PHP</span>
+            <span class="tag">Laravel</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">REST API</span>
+            <span class="tag">Postman</span>
+            <span class="tag">Composer</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ART -->
   <section id="art" class="bento-grid">
-    <div class="bento-item t-2x2 bento-img reveal" style="background-image:url('art/seishin.gif');">
-      <div class="bento-img-fade"></div>
+    <div class="bento-item t-4x1 reveal art-card">
       <p class="tile-label">Art &amp; Illustration</p>
-      <h2 class="tile-heading">Spell Caster</h2>
-      <p class="tile-sub">Adobe Animate · Flash 8</p>
-    </div>
+      <div class="art-grid">
+        <div class="bento-img t-2x2" style="background-image:url('art/seishin.gif');">
+          <div class="bento-img-fade"></div>
+          <h2 class="tile-heading">Spell Caster</h2>
+          <p class="tile-sub">Adobe Animate · Flash 8</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art7.gif');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Cyberpunk</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/art7.gif');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Cyberpunk</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art1.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Midnight Samurai</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/art1.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Midnight Samurai</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/dropship.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Dropship Marketing</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/dropship.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Dropship Marketing</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art12.jpeg');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Abyss Hare</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/art12.jpeg');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Abyss Hare</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art11.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Gadis Lolipop!</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/art11.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Gadis Lolipop!</p>
+        </div>
 
-    <div class="bento-item t-1x1 bento-img reveal" style="background-image:url('art/art2.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">Vanilla Ice Cream</p>
-    </div>
+        <div class="bento-img t-1x1" style="background-image:url('art/art2.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Vanilla Ice Cream</p>
+        </div>
 
-    <div class="bento-item t-2x2 bento-img reveal" style="background-image:url('art/art4.png');">
-      <div class="bento-img-fade"></div>
-      <p class="tile-sub-small">AKUMA</p>
-    </div>
+        <div class="bento-img t-2x2" style="background-image:url('art/art4.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">AKUMA</p>
+        </div>
 
+        <div class="bento-img t-1x1" style="background-image:url('art/art6.png');">
+          <div class="bento-img-fade"></div>
+          <p class="tile-sub-small">Gumpunk</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- CONTACT -->
@@ -189,7 +207,6 @@
       <h2 class="contact-heading">Let's build something<br><em>powerful.</em></h2>
       <div class="profile-actions">
         <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
-        <a href="tel:+601162008369" class="bento-btn ghost">+6011-6200 8369</a>
       </div>
     </div>
   </section>
@@ -200,6 +217,11 @@
   <span>© 2026 Amemeee</span>
   <span>Designed &amp; built with care</span>
 </footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
 
 <script>
   // Cursor (desktop only)
@@ -311,6 +333,84 @@
     window.addEventListener('resize', renderCarousel);
     renderCarousel();
   }
+
+  // Skills character-select
+  const skillsButtons = document.getElementById('skillsButtons');
+  if (skillsButtons) {
+    const skillsData = {
+      backend:  ['PHP', 'Laravel', 'MySQL', 'REST API', 'Postman', 'Composer'],
+      frontend: ['JavaScript', 'Vue', 'HTML', 'CSS', 'Bootstrap', 'Tailwind', 'npm'],
+      tools:    ['Git', 'GitHub Actions', 'Cloud / Server', 'AWS', 'Deployment'],
+      ai:       ['Claude', 'ChatGPT', 'Gemini', 'Grok'],
+      design:   ['Photoshop', 'Illustrator', 'OBS'],
+    };
+    const skillsPortrait = document.getElementById('skillsPortrait');
+    const skillsPortraitTag = document.getElementById('skillsPortraitTag');
+    const skillsTags = document.getElementById('skillsTags');
+    const skillsCharselect = document.querySelector('.skills-charselect');
+    const skillsBtns = Array.from(skillsButtons.querySelectorAll('.skills-btn'));
+    let skillsIndex = 0;
+
+    function activateSkill(btn) {
+      if (btn.classList.contains('active')) return;
+      skillsIndex = skillsBtns.indexOf(btn);
+      skillsBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      btn.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+
+      skillsPortraitTag.textContent = btn.textContent;
+      skillsTags.innerHTML = skillsData[btn.dataset.category]
+        .map(s => `<span class="tag">${s}</span>`).join('');
+
+      skillsPortrait.style.opacity = '0';
+      setTimeout(() => {
+        skillsPortrait.src = btn.dataset.image;
+        skillsPortrait.style.opacity = '1';
+      }, 200);
+    }
+
+    skillsBtns.forEach(btn => btn.addEventListener('click', () => {
+      activateSkill(btn);
+      restartSkillsAutoplay();
+    }));
+
+    let skillsTimer = null;
+    function startSkillsAutoplay() {
+      skillsTimer = setInterval(() => {
+        skillsIndex = (skillsIndex + 1) % skillsBtns.length;
+        activateSkill(skillsBtns[skillsIndex]);
+      }, 4000);
+    }
+    function stopSkillsAutoplay() { clearInterval(skillsTimer); }
+    function restartSkillsAutoplay() { stopSkillsAutoplay(); startSkillsAutoplay(); }
+
+    startSkillsAutoplay();
+    skillsCharselect.addEventListener('mouseenter', stopSkillsAutoplay);
+    skillsCharselect.addEventListener('mouseleave', restartSkillsAutoplay);
+  }
+
+  // Art lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+
+  function openLightbox(url) {
+    lightboxImg.src = url;
+    lightbox.classList.add('open');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+  }
+
+  document.querySelectorAll('.art-grid .bento-img').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const url = tile.style.backgroundImage.slice(5, -2);
+      openLightbox(url);
+    });
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
 </script>
 </body>
