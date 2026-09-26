@@ -389,11 +389,16 @@ body {
 .art-card { justify-content: flex-start; padding: 32px; }
 .art-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   grid-auto-rows: minmax(140px, auto);
   grid-auto-flow: dense;
   gap: 12px;
 }
+/* Featured pieces stay tall but only 1 column wide here: auto-fit's
+   column count isn't guaranteed to be even, so a 2-column span can
+   leave a stray gap next to it whenever the count lands on an odd
+   number. Spanning rows only sidesteps that regardless of width. */
+.art-grid .t-2x2 { grid-column: span 1; grid-row: span 2; }
 
 /* ── Skills card (character-select) ── */
 .skills-card {
@@ -516,7 +521,6 @@ footer {
   .page { padding-left: 8px; padding-right: 8px; }
   .bento-grid { grid-template-columns: repeat(2, 1fr); }
   .t-4x1 { grid-column: span 2; }
-  .art-grid { grid-template-columns: repeat(2, 1fr); }
   .skills-charselect { flex-direction: column; }
   .skills-portrait { flex-basis: auto; }
   .skills-portrait img { min-height: 320px; }
@@ -545,7 +549,18 @@ footer {
   .t-2x2 { grid-column: span 2; grid-row: span 1; }
   .bento-img { min-height: 260px; }
   .art-card { padding: 20px; }
-  .art-grid { gap: 10px; }
+  .art-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 10px;
+  }
+  .art-grid .bento-img {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    min-height: 320px;
+  }
   .skills-card { padding: 20px; }
   .skills-charselect { position: relative; display: block; min-height: 440px; border-radius: 18px; overflow: hidden; }
   .skills-portrait { position: absolute; inset: 0; flex-basis: auto; border-radius: 0; border: none; box-shadow: none; }
