@@ -1,5 +1,6 @@
 :root {
   --nav-h: 74px;
+  --footer-h: 64px;
   --bg: #f5f2ec;
   --surface: #ffffff;
   --surface-hover: #fffdfa;
@@ -44,10 +45,11 @@ body {
   overflow-x: hidden;
 }
 
-/* ── Hero cover (full-bleed art, first thing on the page) ── */
+/* ── Hero cover (full-bleed art, its own snap section) ── */
 .hero-cover {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  scroll-snap-align: start;
   background-image: url('art/bg.png');
   background-size: cover;
   background-position: center;
@@ -137,8 +139,41 @@ body {
 .nav-hamburger.open span:nth-child(2) { opacity: 0; }
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── Page / bento layout ── */
-.page { padding-top: var(--nav-h); max-width: 1200px; margin: 0 auto; }
+/* ── Page: one section per scroll, snapped ──
+   The real fix for click-triggered jumps lives in JS (the mousedown/
+   focusin scroll-position guard) — that was the actual source of the
+   bug, not this snap type. With it in place, "mandatory" is safe to use
+   again and gives the crisper, always-snap-to-nearest-section feel. */
+.page {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+.page.no-snap {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+.page > * { box-sizing: border-box; }
+.page > .bento-grid {
+  min-height: 100vh;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: calc(var(--nav-h) + 24px);
+  padding-bottom: var(--footer-h);
+  align-content: center;
+  scroll-snap-align: start;
+}
+.page > .work-carousel-section {
+  min-height: 100vh;
+  padding-top: calc(var(--nav-h) + 40px);
+  padding-bottom: var(--footer-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+}
 
 .bento-grid {
   display: grid;
@@ -189,16 +224,6 @@ body {
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text);
-  margin-bottom: 20px;
-}
-.carousel-badge {
-  display: inline-block;
-  padding: 10px 22px;
-  border-radius: 100px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 12px; font-weight: 600; letter-spacing: 0.05em;
   margin-bottom: 56px;
 }
 
@@ -474,12 +499,14 @@ body {
 .contact-tile .bento-btn.ghost { color: var(--bg); border-color: color-mix(in srgb, var(--bg) 25%, transparent); }
 .contact-tile .bento-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ── Footer ── */
+/* ── Footer (fixed bar, since sections snap to full-screen) ── */
 footer {
-  padding: 28px 60px; border-top: 1px solid var(--border);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+  padding: 20px 60px; border-top: 1px solid var(--border);
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
   font-size: 10px; letter-spacing: 0.12em; color: var(--muted);
-  background: var(--bg); max-width: 1200px; margin: 0 auto;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(10px);
 }
 
 /* ════════════ BREAKPOINTS ════════════ */
@@ -565,8 +592,7 @@ footer {
   footer { padding: 20px; text-align: center; justify-content: center; }
 
   .work-carousel-section { padding: 56px 12px; }
-  .carousel-heading { font-size: 22px; }
-  .carousel-badge { margin-bottom: 36px; }
+  .carousel-heading { font-size: 22px; margin-bottom: 36px; }
   .carousel-outer { gap: 6px; }
   .carousel-arrow { width: 32px; height: 32px; font-size: 13px; }
   .carousel-viewport { max-width: 100%; }

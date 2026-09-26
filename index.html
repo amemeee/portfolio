@@ -38,10 +38,10 @@
   </button>
 </nav>
 
-<!-- HERO COVER -->
-<div class="hero-cover"></div>
+<div class="page" id="pageScroll">
 
-<div class="page" id="top">
+  <!-- HERO COVER -->
+  <div class="hero-cover" id="top"></div>
 
   <!-- INTRO -->
   <section class="bento-grid">
@@ -65,7 +65,6 @@
   <!-- WORK -->
   <section id="work" class="work-carousel-section">
     <h2 class="carousel-heading reveal">EVERY PROJECT, LIVE &amp; SHIPPED</h2>
-    <span class="carousel-badge reveal">4 Live Projects</span>
 
     <div class="carousel-outer reveal">
       <button class="carousel-arrow" id="projPrev" aria-label="Previous project">&#8592;</button>
@@ -238,18 +237,60 @@
     })();
   }
 
-  // Nav scroll state
+  // Nav scroll state (the page itself scrolls now, not the window)
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+  const pageEl = document.getElementById('pageScroll');
+  pageEl.addEventListener('scroll', () => nav.classList.toggle('scrolled', pageEl.scrollTop > 40));
+
+  // Root-cause fix for the "clicking anything jumps the page" bug:
+  // browsers scroll a newly-focused element into view by default, and
+  // since .page is now the scroll-snap container, ANY click anywhere
+  // (theme toggle, links, lightbox close, art tiles, carousel arrows...)
+  // can nudge its scroll position and trip the mandatory snap. Just
+  // resetting scrollTop back isn't enough on its own — the browser's
+  // own focus-scroll (and the snap engine reacting to it) can still be
+  // mid-animation a frame later and override a one-time correction. So:
+  // remember the scroll position right before a mousedown, and on the
+  // resulting focus change, briefly turn snapping off entirely (so
+  // there's nothing for it to jump to), force the position back
+  // instantly, then re-enable snapping a couple of frames later once
+  // any pending browser scroll step has had time to finish. Real
+  // keyboard/Tab focus never fires 'mousedown' first, so that
+  // navigation's own scroll-into-view is left alone.
+  let preFocusScrollTop = null;
+  pageEl.addEventListener('mousedown', () => { preFocusScrollTop = pageEl.scrollTop; }, true);
+  document.addEventListener('focusin', () => {
+    if (preFocusScrollTop === null) return;
+    const restoreTop = preFocusScrollTop;
+    preFocusScrollTop = null;
+    pageEl.classList.add('no-snap');
+    pageEl.scrollTop = restoreTop;
+    requestAnimationFrame(() => {
+      pageEl.scrollTop = restoreTop;
+      requestAnimationFrame(() => {
+        pageEl.scrollTop = restoreTop;
+        pageEl.classList.remove('no-snap');
+      });
+    });
+  });
 
   // Keep --nav-h in sync with the navbar's real rendered height,
-  // so .page's clearance never drifts out of sync across breakpoints/devices.
+  // so each section's clearance never drifts out of sync across breakpoints/devices.
   function setNavHeight() {
     document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
   }
   setNavHeight();
   new ResizeObserver(setNavHeight).observe(nav);
   document.fonts && document.fonts.ready.then(setNavHeight);
+
+  // Keep --footer-h in sync too, since the footer is now a fixed bar
+  // that each section needs to leave clearance for at the bottom.
+  const footerEl = document.querySelector('footer');
+  function setFooterHeight() {
+    document.documentElement.style.setProperty('--footer-h', footerEl.offsetHeight + 'px');
+  }
+  setFooterHeight();
+  new ResizeObserver(setFooterHeight).observe(footerEl);
 
   // Mobile hamburger menu
   const hamburger = document.getElementById('hamburger');
@@ -330,6 +371,14 @@
 
     projPrev.addEventListener('click', () => { if (projIndex > 0) { projIndex--; renderCarousel(); } });
     projNext.addEventListener('click', () => { if (projIndex < projCards.length - 1) { projIndex++; renderCarousel(); } });
+
+    // Mouse-clicking a button focuses it, and browsers scroll a newly
+    // focused element into view by default — nudging .page's own scroll
+    // and tripping its scroll-snap. Blocking the mousedown-triggered focus
+    // (clicks still work normally) keeps that from touching page scroll,
+    // while keyboard/Tab focus still behaves normally.
+    [projPrev, projNext].forEach(btn => btn.addEventListener('mousedown', (e) => e.preventDefault()));
+
     window.addEventListener('resize', renderCarousel);
     renderCarousel();
   }
@@ -347,16 +396,31 @@
     const skillsPortrait = document.getElementById('skillsPortrait');
     const skillsPortraitTag = document.getElementById('skillsPortraitTag');
     const skillsTags = document.getElementById('skillsTags');
-    const skillsCharselect = document.querySelector('.skills-charselect');
     const skillsBtns = Array.from(skillsButtons.querySelectorAll('.skills-btn'));
     let skillsIndex = 0;
+
+    // Scrolls only the button row itself (horizontally), never any
+    // vertical ancestor — scrollIntoView() would also nudge the page's
+    // own scroll-snap container, causing it to jump sections.
+    function scrollButtonIntoView(btn) {
+      const container = btn.parentElement;
+      const btnLeft = btn.offsetLeft;
+      const btnRight = btnLeft + btn.offsetWidth;
+      const viewLeft = container.scrollLeft;
+      const viewRight = viewLeft + container.clientWidth;
+      if (btnLeft < viewLeft) {
+        container.scrollTo({ left: btnLeft, behavior: 'smooth' });
+      } else if (btnRight > viewRight) {
+        container.scrollTo({ left: btnRight - container.clientWidth, behavior: 'smooth' });
+      }
+    }
 
     function activateSkill(btn) {
       if (btn.classList.contains('active')) return;
       skillsIndex = skillsBtns.indexOf(btn);
       skillsBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      btn.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      scrollButtonIntoView(btn);
 
       skillsPortraitTag.textContent = btn.textContent;
       skillsTags.innerHTML = skillsData[btn.dataset.category]
@@ -369,24 +433,7 @@
       }, 200);
     }
 
-    skillsBtns.forEach(btn => btn.addEventListener('click', () => {
-      activateSkill(btn);
-      restartSkillsAutoplay();
-    }));
-
-    let skillsTimer = null;
-    function startSkillsAutoplay() {
-      skillsTimer = setInterval(() => {
-        skillsIndex = (skillsIndex + 1) % skillsBtns.length;
-        activateSkill(skillsBtns[skillsIndex]);
-      }, 4000);
-    }
-    function stopSkillsAutoplay() { clearInterval(skillsTimer); }
-    function restartSkillsAutoplay() { stopSkillsAutoplay(); startSkillsAutoplay(); }
-
-    startSkillsAutoplay();
-    skillsCharselect.addEventListener('mouseenter', stopSkillsAutoplay);
-    skillsCharselect.addEventListener('mouseleave', restartSkillsAutoplay);
+    skillsBtns.forEach(btn => btn.addEventListener('click', () => activateSkill(btn)));
   }
 
   // Art lightbox
