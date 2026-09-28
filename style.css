@@ -61,7 +61,7 @@ body {
   position: absolute; inset: 0;
   background: linear-gradient(to bottom, transparent 55%, var(--bg) 100%);
 }
-:root[data-theme="light"] .hero-cover { background-image: url('art/bg-light.png'); }
+:root[data-theme="light"] .hero-cover { background-image: url('art/4.gif'); }
 
 /* ── Custom cursor (fine pointer / desktop only) ── */
 .cursor, .cursor-ring { display: none; }
@@ -224,10 +224,20 @@ body {
   letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--text);
-  margin-bottom: 56px;
+  margin-bottom: 20px;
 }
+.carousel-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 22px; border-radius: 100px;
+  background: var(--text); color: var(--bg);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: none; margin-bottom: 56px;
+  transition: opacity 0.2s ease;
+}
+.carousel-cta i { font-size: 10px; }
+.carousel-cta:hover { opacity: 0.8; }
 
-.carousel-outer { display: flex; align-items: center; justify-content: center; gap: 16px; }
+.carousel-outer { display: flex; align-items: center; justify-content: center; gap: 32px; }
 .carousel-arrow {
   flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
   border: 1px solid var(--border); background: var(--surface);
@@ -238,7 +248,7 @@ body {
 .carousel-arrow:hover { border-color: var(--accent); color: var(--accent); }
 .carousel-arrow:disabled { opacity: 0.3; pointer-events: none; }
 
-.carousel-viewport { overflow: hidden; width: 100%; max-width: 900px; }
+.carousel-viewport { overflow: hidden; width: 100%; max-width: 1100px; }
 .carousel-track {
   display: flex; align-items: flex-start; gap: 32px;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -247,10 +257,10 @@ body {
 
 .proj-card {
   position: relative;
-  flex: 0 0 560px;
-  text-align: left;
-  opacity: 0.35;
-  transform: scale(0.86);
+  flex: 0 0 480px;
+  text-align: center;
+  opacity: 0.5;
+  transform: scale(0.9);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .proj-card.is-active { opacity: 1; transform: scale(1); }
@@ -281,10 +291,10 @@ body {
   color: var(--accent); font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
 }
 .proj-card-title {
-  display: flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px;
   color: var(--text); text-decoration: none; width: fit-content;
-  margin: 10px 0 4px;
+  margin: 10px auto 4px;
   transition: color 0.2s ease;
 }
 .proj-card-title i { font-size: 12px; color: var(--accent); }
@@ -607,7 +617,8 @@ footer {
   footer { padding: 20px; text-align: center; justify-content: center; }
 
   .work-carousel-section { padding: 56px 12px; }
-  .carousel-heading { font-size: 22px; margin-bottom: 36px; }
+  .carousel-heading { font-size: 22px; margin-bottom: 12px; }
+  .carousel-cta { margin-bottom: 32px; }
   .carousel-outer { gap: 6px; }
   .carousel-arrow { width: 32px; height: 32px; font-size: 13px; }
   .carousel-viewport { max-width: 100%; }
