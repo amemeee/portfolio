@@ -67,6 +67,7 @@
       <div class="work-layout">
         <ol class="work-list" id="workList">
           <li>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item active" data-url="https://amemeee.github.io/portfolio/">
               <span class="work-num">01</span>
               <span class="work-body">
@@ -75,18 +76,22 @@
                 <span class="work-stack">HTML · CSS · JavaScript</span>
               </span>
             </button>
+            <a class="work-visit" href="https://amemeee.github.io/portfolio/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://arenaauctioneers.com">
               <span class="work-num">02</span>
               <span class="work-body">
                 <span class="work-title">Arena Auctioneers</span>
                 <span class="work-desc">Property auction listings across Malaysia, searchable by location, type, bank and price.</span>
-                <span class="work-stack">PHP · jQuery · AJAX</span>
+                <span class="work-stack">PHP · JavaScript · jQuery · AJAX</span>
               </span>
             </button>
+            <a class="work-visit" href="https://arenaauctioneers.com" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
+            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://homestay.arenaauctioneers.com" title="Arena Auctioneers Homestay live preview" tabindex="-1"></iframe></div>
             <button class="work-item" data-url="https://homestay.arenaauctioneers.com">
               <span class="work-num">03</span>
               <span class="work-body">
@@ -95,8 +100,10 @@
                 <span class="work-stack">Laravel · Blade</span>
               </span>
             </button>
+            <a class="work-visit" href="https://homestay.arenaauctioneers.com" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
+            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
             <button class="work-item" data-url="https://01-agent-property-auction.wasmer.app">
               <span class="work-num">04</span>
               <span class="work-body">
@@ -105,8 +112,10 @@
                 <span class="work-stack">Vue · Laravel</span>
               </span>
             </button>
+            <a class="work-visit" href="https://01-agent-property-auction.wasmer.app" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
         </ol>
+        <div class="work-dots" id="workDots"></div>
         <div class="work-preview">
           <div class="browser-bar">
             <span class="browser-dots"><i></i><i></i><i></i></span>
@@ -114,7 +123,7 @@
             <a class="browser-visit" id="workVisit" href="#" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </div>
           <div class="browser-screen" id="workScreen">
-            <img class="work-shot active" src="assets/project/portfolio/1.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
+            <img class="work-shot active" src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
             <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://homestay.arenaauctioneers.com" title="Arena Auctioneers Homestay live preview" tabindex="-1"></iframe></div>
             <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
@@ -125,7 +134,7 @@
   </section>
 
   <!-- SKILLS -->
-  <section class="bento-grid">
+  <section id="skills" class="bento-grid">
     <div class="bento-item t-4x1 reveal skills-card">
       <p class="tile-label">Skills</p>
       <div class="skills-charselect">
@@ -240,7 +249,9 @@
   // Nav scroll state (.page is the scroll container)
   const nav = document.getElementById('nav');
   const pageEl = document.getElementById('pageScroll');
-  pageEl.addEventListener('scroll', () => nav.classList.toggle('scrolled', pageEl.scrollTop > 40));
+  const syncNav = () => nav.classList.toggle('scrolled', Math.max(pageEl.scrollTop, window.scrollY) > 40);
+  pageEl.addEventListener('scroll', syncNav);
+  window.addEventListener('scroll', syncNav); // phones scroll the window instead
 
   // Clicking focuses the target, and the browser's focus-scroll can trip
   // mandatory snapping. Pin scrollTop across mouse-initiated focus changes.
@@ -352,6 +363,34 @@
       btn.addEventListener('mouseenter', () => showProject(i));
     });
     showProject(0);
+  }
+
+  // Phones: projects become a swipeable row of cards
+  const workCards = workList ? Array.from(workList.children) : [];
+  const workDots = document.getElementById('workDots');
+  if (workCards.length && workDots) {
+    workCards.forEach((card, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'cdot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Project ${i + 1}`);
+      dot.addEventListener('click', () => workList.scrollTo({ left: card.offsetLeft - workList.offsetLeft, behavior: 'smooth' }));
+      workDots.appendChild(dot);
+    });
+    const dots = Array.from(workDots.children);
+
+    const thumbScale = new ResizeObserver(entries => entries.forEach(e => {
+      e.target.style.setProperty('--live-scale', e.target.clientWidth / 1280);
+    }));
+    workList.querySelectorAll('.work-thumb').forEach(t => thumbScale.observe(t));
+
+    const cardInView = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting || getComputedStyle(workDots).display === 'none') return;
+      const i = workCards.indexOf(e.target);
+      dots.forEach((d, j) => d.classList.toggle('active', j === i));
+      const frame = e.target.querySelector('.work-thumb iframe');
+      if (frame && !frame.src) frame.src = frame.dataset.src;
+    }), { root: workList, threshold: 0.6 });
+    workCards.forEach(card => cardInView.observe(card));
   }
 
   // Skills character-select

@@ -220,7 +220,8 @@ body {
 }
 .work-shot.active { opacity: 1; visibility: visible; }
 img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-.work-live iframe {
+.work-thumb, .work-visit, .work-dots { display: none; }
+.work-live iframe, .work-thumb iframe {
   width: 1280px; height: 800px; border: 0;
   transform: scale(var(--live-scale, 0.5)); transform-origin: 0 0;
   pointer-events: none;
@@ -484,6 +485,16 @@ footer a:hover { color: var(--accent); }
 @media (max-width: 640px) {
   .hero-cover { background-image: url('art/mobile-bg.png'); }
   :root[data-theme="light"] .hero-cover { background-image: url('art/mobile-bg-light.png'); }
+  /* Phones: free scrolling, content-height sections, footer at the end */
+  .page { height: auto; overflow: visible; scroll-snap-type: none; }
+  .hero-cover { height: 100vh; height: 100svh; }
+  .page > #work, .page > #skills, .page > #art, .page > #contact {
+    min-height: 0;
+    padding-top: 12px; padding-bottom: 12px;
+    scroll-margin-top: var(--nav-h);
+  }
+  .page > #contact { padding-bottom: 32px; }
+  footer { position: static; }
   #nav { padding: 16px 20px; }
   .nav-logo { font-size: 14px; }
   .nav-hamburger { display: flex; }
@@ -499,9 +510,50 @@ footer a:hover { color: var(--accent); }
   .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 14px 16px; }
   .t-2x2 { grid-column: span 2; grid-row: span 1; }
   .art-card, .work-card { padding: 20px; }
+  /* Projects: swipeable cards */
+  .work-preview { display: none; }
+  .work-list {
+    flex-direction: row; gap: 12px;
+    margin: 0 -20px; padding: 0 20px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 20px;
+    scrollbar-width: none;
+  }
+  .work-list::-webkit-scrollbar { display: none; }
+  .work-list li {
+    flex: 0 0 86%; scroll-snap-align: start;
+    display: flex; flex-direction: column;
+    border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; background: var(--bg);
+  }
+  .work-list li + li { border-top: 1px solid var(--border); }
+  .work-thumb {
+    display: block; position: relative;
+    aspect-ratio: 16 / 10; overflow: hidden; background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .work-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .work-list .work-item {
+    flex: 1; width: 100%; margin: 0; padding: 16px 16px 10px;
+    background: none; border-radius: 0; cursor: default;
+  }
+  .work-list .work-item .work-num { color: var(--accent); }
+  .work-visit {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin: 0 16px 16px 46px;
+    font-size: 12px; font-weight: 600; color: var(--accent); text-decoration: none;
+  }
+  .work-visit i { font-size: 10px; }
+  .work-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+  .cdot {
+    width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%;
+    background: var(--border); cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .cdot.active { background: var(--accent); transform: scale(1.4); }
   .work-item { padding: 14px 10px; margin: 0 -10px; width: calc(100% + 20px); }
   .work-title { font-size: 16px; }
   .art-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .art-tile.is-featured { aspect-ratio: 1; }
   .lightbox { padding: 16px; }
   .lightbox-nav { top: auto; bottom: 20px; transform: none; width: 44px; height: 44px; }
   .lightbox-nav.prev { left: 20px; }
