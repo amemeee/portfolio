@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio — Amemeee</title>
+<title>Muhammad Amin · PHP / Laravel Developer</title>
+<meta name="description" content="Muhammad Amin (Amemeee): PHP / Laravel developer and illustrator.">
 <link rel="icon" type="image/png" href="art/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -17,9 +18,6 @@
 </script>
 </head>
 <body>
-
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -46,13 +44,11 @@
   <!-- INTRO -->
   <section class="bento-grid">
     <div class="bento-item t-2x2 reveal">
-      <p class="tile-label">Hello, I'm</p>
       <h1 class="profile-name">Muhammad Amin</h1>
       <p class="profile-role">PHP / Laravel Developer</p>
-      <p class="profile-bio">I build reliable backend systems and full-stack web platforms — from real-time auction engines to APIs — with clean, maintainable code.</p>
+      <p class="profile-bio">Laravel and PHP are my favourite stack. Away from the code, I love animation and drawing. Hire me!</p>
       <div class="profile-actions">
-        <a href="assets/resume.pdf" download class="bento-btn">Resume <i class="fas fa-arrow-down"></i></a>
-        <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn ghost">Email me</a>
+        <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">Email me</a>
       </div>
     </div>
 
@@ -63,57 +59,69 @@
   </section>
 
   <!-- WORK -->
-  <section id="work" class="work-carousel-section">
-    <h2 class="carousel-heading reveal">EVERY PROJECT, LIVE &amp; SHIPPED</h2>
-    <a href="https://github.com/amemeee" target="_blank" class="carousel-cta reveal">View All Projects <i class="fas fa-arrow-up-right-from-square"></i></a>
-
-    <div class="carousel-outer reveal">
-      <button class="carousel-arrow" id="projPrev" aria-label="Previous project">&#8592;</button>
-
-      <div class="carousel-viewport">
-        <div class="carousel-track" id="projTrack">
-
-          <div class="proj-card">
-            <div class="proj-card-media">
-              <iframe class="project-iframe" src="https://amemeee.github.io/portfolio/" loading="lazy" title="Portfolio live preview"></iframe>
-            </div>
-            <span class="proj-badge">LIVE</span>
-            <a href="https://amemeee.github.io/portfolio/" target="_blank" class="proj-card-title">This Portfolio <i class="fas fa-arrow-up-right-from-square"></i></a>
-            <p class="proj-card-sub">HTML &middot; CSS &middot; JavaScript</p>
+  <section id="work" class="bento-grid">
+    <div class="bento-item t-4x1 reveal work-card">
+      <div class="section-head">
+        <h2 class="tile-label">Projects</h2>
+      </div>
+      <div class="work-layout">
+        <ol class="work-list" id="workList">
+          <li>
+            <button class="work-item active" data-url="https://amemeee.github.io/portfolio/">
+              <span class="work-num">01</span>
+              <span class="work-body">
+                <span class="work-title">This Portfolio</span>
+                <span class="work-desc">The site you are on. No framework.</span>
+                <span class="work-stack">HTML · CSS · JavaScript</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="work-item" data-url="https://arenaauctioneers.com">
+              <span class="work-num">02</span>
+              <span class="work-body">
+                <span class="work-title">Arena Auctioneers</span>
+                <span class="work-desc">Property auction listings across Malaysia, searchable by location, type, bank and price.</span>
+                <span class="work-stack">PHP · jQuery · AJAX</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="work-item" data-url="https://homestay.arenaauctioneers.com">
+              <span class="work-num">03</span>
+              <span class="work-body">
+                <span class="work-title">Arena Auctioneers Homestay</span>
+                <span class="work-desc">Booking site for the Arena Auctioneers homestay.</span>
+                <span class="work-stack">Laravel · Blade</span>
+              </span>
+            </button>
+          </li>
+          <li>
+            <button class="work-item" data-url="https://01-agent-property-auction.wasmer.app">
+              <span class="work-num">04</span>
+              <span class="work-body">
+                <span class="work-title">Agent Property Auction Platform</span>
+                <span class="work-desc">Property auction platform built for agents.</span>
+                <span class="work-stack">Vue · Laravel</span>
+              </span>
+            </button>
+          </li>
+        </ol>
+        <div class="work-preview">
+          <div class="browser-bar">
+            <span class="browser-dots"><i></i><i></i><i></i></span>
+            <span class="browser-url" id="workUrl"></span>
+            <a class="browser-visit" id="workVisit" href="#" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </div>
-
-          <div class="proj-card">
-            <div class="proj-card-media proj-card-media-img" style="background-image:url('assets/project/arena_auctioneers/1.png');"></div>
-            <span class="proj-badge">LIVE</span>
-            <a href="https://arenaauctioneers.com" target="_blank" class="proj-card-title">Arena Auctioneers <i class="fas fa-arrow-up-right-from-square"></i></a>
-            <p class="proj-card-sub">PHP &middot; HTML &middot; CSS &middot; JS &middot; AJAX &middot; jQuery</p>
+          <div class="browser-screen" id="workScreen">
+            <img class="work-shot active" src="assets/project/portfolio/1.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
+            <div class="work-shot work-live"><iframe data-src="https://homestay.arenaauctioneers.com" title="Arena Auctioneers Homestay live preview" tabindex="-1"></iframe></div>
+            <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
           </div>
-
-          <div class="proj-card">
-            <div class="proj-card-media">
-              <iframe class="project-iframe" src="https://homestay.arenaauctioneers.com" loading="lazy" title="Arena Auctioneers Homestay live preview"></iframe>
-            </div>
-            <span class="proj-badge">LIVE</span>
-            <a href="https://homestay.arenaauctioneers.com" target="_blank" class="proj-card-title">Arena Auctioneers Homestay <i class="fas fa-arrow-up-right-from-square"></i></a>
-            <p class="proj-card-sub">Laravel &middot; Blade</p>
-          </div>
-
-          <div class="proj-card">
-            <div class="proj-card-media">
-              <iframe class="project-iframe" src="https://01-agent-property-auction.wasmer.app" loading="lazy" title="Agent Property Auction Platform live preview"></iframe>
-            </div>
-            <span class="proj-badge">LIVE</span>
-            <a href="https://01-agent-property-auction.wasmer.app" target="_blank" class="proj-card-title">Agent Property Auction Platform <i class="fas fa-arrow-up-right-from-square"></i></a>
-            <p class="proj-card-sub">Vue &middot; Laravel</p>
-          </div>
-
         </div>
       </div>
-
-      <button class="carousel-arrow" id="projNext" aria-label="Next project">&#8594;</button>
     </div>
-
-    <div class="carousel-dots" id="projDots"></div>
   </section>
 
   <!-- SKILLS -->
@@ -150,53 +158,49 @@
   <!-- ART -->
   <section id="art" class="bento-grid">
     <div class="bento-item t-4x1 reveal art-card">
-      <p class="tile-label">Art &amp; Illustration</p>
+      <div class="section-head">
+        <h2 class="tile-label">Art &amp; Illustration</h2>
+        <p class="art-count" id="artCount"></p>
+      </div>
       <div class="art-grid">
-        <div class="bento-img t-2x2" style="background-image:url('art/seishin.gif');">
-          <div class="bento-img-fade"></div>
-          <h2 class="tile-heading">Spell Caster</h2>
-          <p class="tile-sub">Adobe Animate · Flash 8</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art7.gif');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Cyberpunk</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art1.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Midnight Samurai</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/dropship.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Dropship Marketing</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art12.jpeg');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Abyss Hare</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art11.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Gadis Lolipop!</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art2.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Vanilla Ice Cream</p>
-        </div>
-
-        <div class="bento-img t-2x2" style="background-image:url('art/art4.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">AKUMA</p>
-        </div>
-
-        <div class="bento-img t-1x1" style="background-image:url('art/art6.png');">
-          <div class="bento-img-fade"></div>
-          <p class="tile-sub-small">Gumpunk</p>
-        </div>
+        <button class="art-tile is-featured" data-title="Spell Caster" data-meta="Adobe Animate · Flash 8">
+          <img src="art/seishin.gif" alt="" loading="lazy" decoding="async">
+          <span class="art-tag">Animated</span>
+          <span class="art-caption"><span class="art-title">Spell Caster</span><span class="art-meta">Adobe Animate · Flash 8</span></span>
+        </button>
+        <button class="art-tile" data-title="Cyberpunk">
+          <img src="art/art7.gif" alt="" loading="lazy" decoding="async">
+          <span class="art-tag">Animated</span>
+          <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
+        </button>
+        <button class="art-tile" data-title="Midnight Samurai">
+          <img src="art/art1.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
+        </button>
+        <button class="art-tile" data-title="AKUMA">
+          <img src="art/art4.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">AKUMA</span></span>
+        </button>
+        <button class="art-tile" data-title="Abyss Hare">
+          <img src="art/art12.jpeg" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Abyss Hare</span></span>
+        </button>
+        <button class="art-tile" data-title="Gadis Lolipop!">
+          <img src="art/art11.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Gadis Lolipop!</span></span>
+        </button>
+        <button class="art-tile" data-title="Vanilla Ice Cream">
+          <img src="art/art2.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Vanilla Ice Cream</span></span>
+        </button>
+        <button class="art-tile" data-title="Gumpunk">
+          <img src="art/art6.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Gumpunk</span></span>
+        </button>
+        <button class="art-tile" data-title="Dropship Marketing">
+          <img src="art/dropship.png" alt="" loading="lazy" decoding="async">
+          <span class="art-caption"><span class="art-title">Dropship Marketing</span></span>
+        </button>
       </div>
     </div>
   </section>
@@ -204,7 +208,7 @@
   <!-- CONTACT -->
   <section id="contact" class="bento-grid">
     <div class="bento-item t-4x1 reveal contact-tile">
-      <h2 class="contact-heading">Let's build something<br><em>powerful.</em></h2>
+      <h2 class="contact-heading">Hiring, or have a project?<br><em>Send me an email.</em></h2>
       <div class="profile-actions">
         <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
       </div>
@@ -215,49 +219,31 @@
 
 <footer>
   <span>© 2026 Amemeee</span>
-  <span>Designed &amp; built with care</span>
+  <a href="https://github.com/amemeee" target="_blank" rel="noopener">GitHub</a>
 </footer>
 
-<div class="lightbox" id="lightbox">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Artwork viewer">
   <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous piece">&#8592;</button>
+  <figure class="lightbox-figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption class="lightbox-caption">
+      <span class="lightbox-title" id="lightboxTitle"></span>
+      <span class="lightbox-meta" id="lightboxMeta"></span>
+      <span class="lightbox-count" id="lightboxCount"></span>
+    </figcaption>
+  </figure>
+  <button class="lightbox-nav next" id="lightboxNext" aria-label="Next piece">&#8594;</button>
 </div>
 
 <script>
-  // Cursor (desktop only)
-  if (window.matchMedia('(pointer: fine)').matches) {
-    const cursor = document.getElementById('cursor');
-    const ring   = document.getElementById('cursorRing');
-    let mx = -100, my = -100, rx = -100, ry = -100;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    (function loop() {
-      rx += (mx - rx) * 0.15; ry += (my - ry) * 0.15;
-      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-      ring.style.left   = rx + 'px'; ring.style.top   = ry + 'px';
-      requestAnimationFrame(loop);
-    })();
-  }
-
-  // Nav scroll state (the page itself scrolls now, not the window)
+  // Nav scroll state (.page is the scroll container)
   const nav = document.getElementById('nav');
   const pageEl = document.getElementById('pageScroll');
   pageEl.addEventListener('scroll', () => nav.classList.toggle('scrolled', pageEl.scrollTop > 40));
 
-  // Root-cause fix for the "clicking anything jumps the page" bug:
-  // browsers scroll a newly-focused element into view by default, and
-  // since .page is now the scroll-snap container, ANY click anywhere
-  // (theme toggle, links, lightbox close, art tiles, carousel arrows...)
-  // can nudge its scroll position and trip the mandatory snap. Just
-  // resetting scrollTop back isn't enough on its own — the browser's
-  // own focus-scroll (and the snap engine reacting to it) can still be
-  // mid-animation a frame later and override a one-time correction. So:
-  // remember the scroll position right before a mousedown, and on the
-  // resulting focus change, briefly turn snapping off entirely (so
-  // there's nothing for it to jump to), force the position back
-  // instantly, then re-enable snapping a couple of frames later once
-  // any pending browser scroll step has had time to finish. Real
-  // keyboard/Tab focus never fires 'mousedown' first, so that
-  // navigation's own scroll-into-view is left alone.
+  // Clicking focuses the target, and the browser's focus-scroll can trip
+  // mandatory snapping. Pin scrollTop across mouse-initiated focus changes.
   let preFocusScrollTop = null;
   pageEl.addEventListener('mousedown', () => { preFocusScrollTop = pageEl.scrollTop; }, true);
   document.addEventListener('focusin', () => {
@@ -275,8 +261,7 @@
     });
   });
 
-  // Keep --nav-h in sync with the navbar's real rendered height,
-  // so each section's clearance never drifts out of sync across breakpoints/devices.
+  // Keep --nav-h / --footer-h in sync with the rendered bars
   function setNavHeight() {
     document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
   }
@@ -284,8 +269,6 @@
   new ResizeObserver(setNavHeight).observe(nav);
   document.fonts && document.fonts.ready.then(setNavHeight);
 
-  // Keep --footer-h in sync too, since the footer is now a fixed bar
-  // that each section needs to leave clearance for at the bottom.
   const footerEl = document.querySelector('footer');
   function setFooterHeight() {
     document.documentElement.style.setProperty('--footer-h', footerEl.offsetHeight + 'px');
@@ -339,49 +322,36 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
-  // Work carousel
-  const projTrack = document.getElementById('projTrack');
-  if (projTrack) {
-    const projCards = Array.from(projTrack.children);
-    const projPrev  = document.getElementById('projPrev');
-    const projNext  = document.getElementById('projNext');
-    const projDotsEl = document.getElementById('projDots');
-    let projIndex = 0;
+  // Work list + preview
+  const workList = document.getElementById('workList');
+  if (workList) {
+    const workItems = Array.from(workList.querySelectorAll('.work-item'));
+    const workShots = Array.from(document.querySelectorAll('#workScreen .work-shot'));
+    const workScreen = document.getElementById('workScreen');
+    const workUrl = document.getElementById('workUrl');
+    const workVisit = document.getElementById('workVisit');
 
-    function buildProjDots() {
-      projDotsEl.innerHTML = '';
-      projCards.forEach((_, i) => {
-        const d = document.createElement('div');
-        d.className = 'cdot' + (i === projIndex ? ' active' : '');
-        d.addEventListener('click', () => { projIndex = i; renderCarousel(); });
-        projDotsEl.appendChild(d);
-      });
+    // Live previews render at desktop width, then scale down to the frame
+    const LIVE_WIDTH = 1280;
+    new ResizeObserver(() => {
+      workScreen.style.setProperty('--live-scale', workScreen.clientWidth / LIVE_WIDTH);
+    }).observe(workScreen);
+
+    function showProject(i) {
+      workItems.forEach((b, j) => b.classList.toggle('active', j === i));
+      workShots.forEach((el, j) => el.classList.toggle('active', j === i));
+      const frame = workShots[i].querySelector('iframe');
+      if (frame && !frame.src) frame.src = frame.dataset.src;
+      const url = workItems[i].dataset.url;
+      workUrl.textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      workVisit.href = url;
     }
 
-    function renderCarousel() {
-      const viewport = projTrack.parentElement;
-      const active = projCards[projIndex];
-      const targetX = viewport.offsetWidth / 2 - (active.offsetLeft + active.offsetWidth / 2);
-      projTrack.style.transform = `translateX(${targetX}px)`;
-
-      projCards.forEach((c, i) => c.classList.toggle('is-active', i === projIndex));
-      projPrev.disabled = projIndex === 0;
-      projNext.disabled = projIndex === projCards.length - 1;
-      buildProjDots();
-    }
-
-    projPrev.addEventListener('click', () => { if (projIndex > 0) { projIndex--; renderCarousel(); } });
-    projNext.addEventListener('click', () => { if (projIndex < projCards.length - 1) { projIndex++; renderCarousel(); } });
-
-    // Mouse-clicking a button focuses it, and browsers scroll a newly
-    // focused element into view by default — nudging .page's own scroll
-    // and tripping its scroll-snap. Blocking the mousedown-triggered focus
-    // (clicks still work normally) keeps that from touching page scroll,
-    // while keyboard/Tab focus still behaves normally.
-    [projPrev, projNext].forEach(btn => btn.addEventListener('mousedown', (e) => e.preventDefault()));
-
-    window.addEventListener('resize', renderCarousel);
-    renderCarousel();
+    workItems.forEach((btn, i) => {
+      btn.addEventListener('click', () => showProject(i));
+      btn.addEventListener('mouseenter', () => showProject(i));
+    });
+    showProject(0);
   }
 
   // Skills character-select
@@ -400,9 +370,7 @@
     const skillsBtns = Array.from(skillsButtons.querySelectorAll('.skills-btn'));
     let skillsIndex = 0;
 
-    // Scrolls only the button row itself (horizontally), never any
-    // vertical ancestor — scrollIntoView() would also nudge the page's
-    // own scroll-snap container, causing it to jump sections.
+    // Scroll only the button row; scrollIntoView() would also move .page
     function scrollButtonIntoView(btn) {
       const container = btn.parentElement;
       const btnLeft = btn.offsetLeft;
@@ -438,27 +406,59 @@
   }
 
   // Art lightbox
+  const artTiles = Array.from(document.querySelectorAll('.art-tile'));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxTitle = document.getElementById('lightboxTitle');
+  const lightboxMeta = document.getElementById('lightboxMeta');
+  const lightboxCount = document.getElementById('lightboxCount');
   const lightboxClose = document.getElementById('lightboxClose');
+  let artIndex = 0;
+  let artOpener = null;
 
-  function openLightbox(url) {
-    lightboxImg.src = url;
+  document.getElementById('artCount').textContent = `${artTiles.length} pieces`;
+
+  function showArt(i) {
+    artIndex = (i + artTiles.length) % artTiles.length;
+    const tile = artTiles[artIndex];
+    lightboxImg.src = tile.querySelector('img').src;
+    lightboxImg.alt = tile.dataset.title;
+    lightboxTitle.textContent = tile.dataset.title;
+    lightboxMeta.textContent = tile.dataset.meta || '';
+    lightboxCount.textContent = `${artIndex + 1} / ${artTiles.length}`;
+  }
+  function openLightbox(i) {
+    artOpener = document.activeElement;
+    showArt(i);
     lightbox.classList.add('open');
+    lightboxClose.focus({ preventScroll: true });
   }
   function closeLightbox() {
+    if (!lightbox.classList.contains('open')) return;
     lightbox.classList.remove('open');
+    if (artOpener) artOpener.focus({ preventScroll: true });
   }
 
-  document.querySelectorAll('.art-grid .bento-img').forEach(tile => {
-    tile.addEventListener('click', () => {
-      const url = tile.style.backgroundImage.slice(5, -2);
-      openLightbox(url);
-    });
-  });
+  artTiles.forEach((tile, i) => tile.addEventListener('click', () => openLightbox(i)));
+  document.getElementById('lightboxPrev').addEventListener('click', () => showArt(artIndex - 1));
+  document.getElementById('lightboxNext').addEventListener('click', () => showArt(artIndex + 1));
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showArt(artIndex - 1);
+    if (e.key === 'ArrowRight') showArt(artIndex + 1);
+  });
+
+  let touchX = null;
+  lightbox.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 50) showArt(artIndex + (dx < 0 ? 1 : -1));
+  });
 
 </script>
 </body>
