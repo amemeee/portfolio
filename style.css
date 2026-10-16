@@ -252,6 +252,7 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
   font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
   text-decoration: none; transition: opacity 0.2s;
 }
+.bento-btn i { font-size: 12px; }
 .bento-btn:hover { opacity: 0.85; }
 .bento-btn.ghost {
   background: transparent; color: var(--text); border: 1px solid var(--border);
@@ -259,10 +260,22 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 .bento-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ── Quote tile ── */
-.quote-tile { justify-content: center; background: var(--text); }
-.quote-tile .quote-mark, .quote-tile .quote-text { color: var(--bg); }
-.quote-mark { font-family: 'Space Grotesk', sans-serif; font-size: 64px; color: var(--accent); line-height: 0.6; }
-.quote-text { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 20px; }
+/* ── Intro: details (70%) + portrait (30%) ── */
+.bento-grid.intro-grid { grid-template-columns: 7fr 3fr; }
+.intro-card { justify-content: center; gap: 0; }
+.status-line {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px); line-height: 1.25;
+  margin-bottom: 14px;
+}
+.status-line em { font-style: normal; color: var(--accent); }
+.profile-avail { font-size: 14px; font-weight: 500; color: var(--text); margin: -6px 0 14px; }
+.portrait-card { padding: 0; background: #fff; min-height: 420px; }
+.portrait-card img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+}
 
 /* ── Lightbox ── */
 .lightbox {
@@ -364,81 +377,21 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
   .art-tile:hover .art-caption, .art-tile:focus-visible .art-caption { opacity: 1; transform: none; }
 }
 
-/* ── Skills card (character-select) ── */
-.skills-card {
-  justify-content: flex-start; padding: 32px;
-  position: relative; overflow: hidden;
+/* ── Skills ── */
+.skills-card { justify-content: flex-start; padding: 32px; }
+.skills-list { display: flex; flex-direction: column; }
+.skills-row {
+  display: grid; grid-template-columns: 160px 1fr; gap: 24px;
+  padding: 16px 0; border-top: 1px solid var(--border);
 }
-.skills-charselect { display: flex; gap: 32px; align-items: stretch; position: relative; }
-
-.skills-portrait {
-  position: relative;
-  flex: 0 0 380px;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--accent-dim);
-  background: var(--bg);
-  box-shadow: 0 0 0 1px var(--shadow), 0 24px 48px var(--shadow-hover);
+.skills-row:first-child { border-top: 0; padding-top: 4px; }
+.skills-row dt {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--text);
 }
-.skills-portrait::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);
-  pointer-events: none;
-}
-.skills-portrait img {
-  width: 100%; height: 100%;
-  min-height: 420px;
-  object-fit: cover; object-position: top center;
-  display: block;
-  transform: scale(1);
-  transition: opacity 0.25s ease, transform 0.5s ease;
-}
-.skills-portrait:hover img { transform: scale(1.05); }
-.skills-portrait-tag {
-  position: absolute; left: 12px; bottom: 12px; z-index: 2;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 100px;
-  background: var(--accent); color: var(--accent-ink);
-  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  box-shadow: 0 6px 16px var(--accent-dim);
-}
-.skills-portrait-tag::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--accent-ink);
-}
-
-.skills-panel { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 22px; min-width: 0; }
-.skills-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
-.skills-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 18px;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--muted);
-  font-family: inherit;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-.skills-btn i { font-size: 11px; }
-.skills-btn:hover { border-color: var(--accent); color: var(--text); transform: translateY(-2px); }
-.skills-btn.active {
-  background: var(--accent); border-color: var(--accent); color: var(--accent-ink);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px var(--accent-dim);
-}
-
-.skills-divider { height: 1px; background: var(--border); width: 100%; }
-
-/* ── Work tags ── */
-.tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag {
-  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
-  color: var(--accent); border: 1px solid var(--accent-dim); background: var(--accent-glow);
-  padding: 5px 12px; border-radius: 100px;
-}
+.skills-row dd { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.skills-row dd span:not(:last-child)::after { content: '·'; margin: 0 4px 0 8px; color: var(--accent); }
+.skills-row dd span { white-space: nowrap; }
 
 /* ── Contact tile ── */
 .contact-tile {
@@ -473,9 +426,6 @@ footer a:hover { color: var(--accent); }
   .page { padding-left: 8px; padding-right: 8px; }
   .bento-grid { grid-template-columns: repeat(2, 1fr); }
   .t-4x1 { grid-column: span 2; }
-  .skills-charselect { flex-direction: column; }
-  .skills-portrait { flex-basis: auto; }
-  .skills-portrait img { min-height: 320px; }
   .art-grid { grid-template-columns: repeat(4, 1fr); }
   .work-layout { grid-template-columns: 1fr; }
   .work-preview { order: -1; }
@@ -509,6 +459,9 @@ footer a:hover { color: var(--accent); }
   .nav-links.open { display: flex; }
   .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 14px 16px; }
   .t-2x2 { grid-column: span 2; grid-row: span 1; }
+  .bento-grid.intro-grid { grid-template-columns: 1fr; }
+  .intro-grid > .bento-item { grid-column: auto; }
+  .portrait-card { order: -1; min-height: 0; aspect-ratio: 1; }
   .art-card, .work-card { padding: 20px; }
   /* Projects: swipeable cards */
   .work-preview { display: none; }
@@ -559,45 +512,8 @@ footer a:hover { color: var(--accent); }
   .lightbox-nav.prev { left: 20px; }
   .lightbox-nav.next { right: 20px; }
   .skills-card { padding: 20px; }
-  .skills-charselect { position: relative; display: block; min-height: 440px; border-radius: 18px; overflow: hidden; }
-  .skills-portrait { position: absolute; inset: 0; flex-basis: auto; border-radius: 0; border: none; box-shadow: none; }
-  .skills-portrait img { width: 100%; height: 100%; min-height: 100%; }
-  .skills-portrait-tag { display: none; }
-  .skills-panel {
-    position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
-    justify-content: flex-end; gap: 12px;
-    padding: 50px 0 16px;
-    background: linear-gradient(to top, rgba(10,9,8,0.92) 0%, rgba(10,9,8,0.6) 55%, transparent 100%);
-  }
-  .skills-panel .skills-buttons {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding: 0 16px;
-    -webkit-mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
-    mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
-  }
-  .skills-panel .skills-buttons::-webkit-scrollbar { display: none; }
-  .skills-panel .skills-btn {
-    flex-shrink: 0;
-    background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.28); color: rgba(255,255,255,0.8);
-  }
-  .skills-panel .skills-btn:hover { border-color: var(--accent); color: #fff; }
-  .skills-panel .skills-btn.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .skills-panel .skills-divider { display: none; }
-  .skills-panel .tag-row {
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 6px;
-    padding: 0 16px;
-    max-height: 90px;
-    overflow: hidden;
-  }
-  .skills-panel .tag {
-    font-size: 9px;
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3);
-  }
+  .skills-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
+  .skills-row dt, .skills-row dd { font-size: 14px; }
   .profile-name { font-size: 26px; }
   .contact-tile { padding: 40px 20px; }
   .contact-heading { font-size: 30px; }
