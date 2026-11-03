@@ -63,10 +63,39 @@
   <!-- WORK -->
   <section id="work" class="bento-grid">
     <div class="bento-item t-4x1 reveal work-card">
-      <div class="section-head">
-        <h2 class="tile-label">Projects</h2>
+      <div class="work-hero">
+        <div class="work-preview">
+          <div class="browser-screen" id="workScreen">
+            <img class="work-shot active" src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
+            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
+            <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
+            <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
+            <img class="work-shot" src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="art/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
+            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
+          </div>
+        </div>
+        <div class="section-head">
+          <h2 class="tile-label">Projects</h2>
+          <div class="work-spot" aria-live="polite">
+            <h3 class="work-spot-title" id="workTitle"></h3>
+            <p class="work-spot-meta"><span id="workStack"></span><span id="workCount"></span></p>
+            <p class="work-spot-desc" id="workDesc"></p>
+            <div class="work-spot-actions">
+              <a class="work-btn" id="workVisit" href="#" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i>Visit site</a>
+              <button class="work-btn glass" id="workNext">Next<i class="fas fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="work-layout">
+      <div class="work-row-head">
+        <h3 class="work-row-label">All projects</h3>
+        <span class="work-row-nav">
+          <button class="work-row-btn" id="rowPrev" aria-label="Scroll projects left"><i class="fas fa-chevron-left"></i></button>
+          <button class="work-row-btn" id="rowNext" aria-label="Scroll projects right"><i class="fas fa-chevron-right"></i></button>
+        </span>
+      </div>
         <ol class="work-list" id="workList">
           <li>
             <div class="work-thumb" aria-hidden="true"><img src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async"></div>
@@ -152,25 +181,20 @@
             </button>
             <a class="work-visit" href="https://amemeee.github.io/bite-the-dust/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
+          <li>
+            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
+            <button class="work-item" data-url="https://amemeee.github.io/soul-match/">
+              <span class="work-num">08</span>
+              <span class="work-body">
+                <span class="work-title">Soul Match</span>
+                <span class="work-desc">Trading card game demo: open packs, browse the gallery and keep a collection saved in the browser.</span>
+                <span class="work-stack">HTML · CSS · JavaScript</span>
+              </span>
+            </button>
+            <a class="work-visit" href="https://amemeee.github.io/soul-match/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
+          </li>
         </ol>
         <div class="work-dots" id="workDots"></div>
-        <div class="work-preview">
-          <div class="browser-bar">
-            <span class="browser-dots"><i></i><i></i><i></i></span>
-            <span class="browser-url" id="workUrl"></span>
-            <a class="browser-visit" id="workVisit" href="#" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </div>
-          <div class="browser-screen" id="workScreen">
-            <img class="work-shot active" src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="art/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -378,30 +402,101 @@
     const workItems = Array.from(workList.querySelectorAll('.work-item'));
     const workShots = Array.from(document.querySelectorAll('#workScreen .work-shot'));
     const workScreen = document.getElementById('workScreen');
-    const workUrl = document.getElementById('workUrl');
     const workVisit = document.getElementById('workVisit');
 
     // Live previews render at desktop width, then scale down to the frame
     const LIVE_WIDTH = 1280;
     new ResizeObserver(() => {
-      workScreen.style.setProperty('--live-scale', workScreen.clientWidth / LIVE_WIDTH);
+      if (!workScreen.clientWidth) return;
+      const scale = workScreen.clientWidth / LIVE_WIDTH;
+      workScreen.style.setProperty('--live-scale', scale);
+      workScreen.style.setProperty('--live-h', Math.max(800, workScreen.clientHeight / scale) + 'px');
     }).observe(workScreen);
 
+    const workTitle = document.getElementById('workTitle');
+    const workDesc = document.getElementById('workDesc');
+    const workStack = document.getElementById('workStack');
+    const workCount = document.getElementById('workCount');
+    const pad = n => String(n).padStart(2, '0');
+    let workIndex = 0;
+
     function showProject(i) {
+      workIndex = (i + workItems.length) % workItems.length;
+      i = workIndex;
       workItems.forEach((b, j) => b.classList.toggle('active', j === i));
       workShots.forEach((el, j) => el.classList.toggle('active', j === i));
       const frame = workShots[i].querySelector('iframe');
       if (frame && !frame.src) frame.src = frame.dataset.src;
-      const url = workItems[i].dataset.url;
-      workUrl.textContent = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      const item = workItems[i];
+      const url = item.dataset.url;
       workVisit.href = url;
+      workTitle.textContent = item.querySelector('.work-title').textContent;
+      workDesc.textContent = item.querySelector('.work-desc').textContent;
+      workStack.textContent = item.querySelector('.work-stack').textContent;
+      workCount.textContent = `${pad(i + 1)} / ${pad(workItems.length)}`;
+      // keep the active card visible in the row
+      const card = item.parentElement;
+      if (getComputedStyle(document.getElementById('workDots')).display === 'none') {
+        const left = card.offsetLeft - workList.offsetLeft;
+        if (left < workList.scrollLeft || left + card.offsetWidth > workList.scrollLeft + workList.clientWidth) {
+          workList.scrollTo({ left: left - 8, behavior: 'smooth' });
+        }
+      }
     }
 
-    workItems.forEach((btn, i) => {
-      btn.addEventListener('click', () => showProject(i));
-      btn.addEventListener('mouseenter', () => showProject(i));
-    });
+    workItems.forEach((btn, i) => btn.addEventListener('click', () => showProject(i)));
+    document.getElementById('workNext').addEventListener('click', () => showProject(workIndex + 1));
     showProject(0);
+
+    // Desktop row shows every card, so load their live thumbnails up front
+    const isRow = () => getComputedStyle(document.getElementById('workDots')).display === 'none';
+    if (isRow()) {
+      workList.querySelectorAll('.work-thumb iframe').forEach(f => { f.src = f.dataset.src; });
+    }
+
+    // Desktop row: wheel, drag and arrow buttons scroll it sideways
+    const rowPrev = document.getElementById('rowPrev');
+    const rowNext = document.getElementById('rowNext');
+    const maxScroll = () => workList.scrollWidth - workList.clientWidth;
+    function updateRowNav() {
+      rowPrev.disabled = workList.scrollLeft <= 1;
+      rowNext.disabled = workList.scrollLeft >= maxScroll() - 1;
+      workList.classList.toggle('at-end', rowNext.disabled);
+      workList.classList.toggle('at-start', rowPrev.disabled);
+    }
+    workList.addEventListener('scroll', updateRowNav, { passive: true });
+    new ResizeObserver(updateRowNav).observe(workList);
+    rowPrev.addEventListener('click', () => workList.scrollBy({ left: -workList.clientWidth * 0.8, behavior: 'smooth' }));
+    rowNext.addEventListener('click', () => workList.scrollBy({ left: workList.clientWidth * 0.8, behavior: 'smooth' }));
+
+    workList.addEventListener('wheel', e => {
+      if (!isRow() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      const atStart = workList.scrollLeft <= 0 && e.deltaY < 0;
+      const atEnd = workList.scrollLeft >= maxScroll() - 1 && e.deltaY > 0;
+      if (atStart || atEnd) return; // let the page scroll on past the ends
+      e.preventDefault();
+      workList.scrollLeft += e.deltaY;
+    }, { passive: false });
+
+    let drag = null;
+    workList.addEventListener('pointerdown', e => {
+      if (!isRow() || e.pointerType !== 'mouse' || e.button !== 0) return;
+      drag = { x: e.clientX, left: workList.scrollLeft, moved: false };
+    });
+    window.addEventListener('pointermove', e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 5) { drag.moved = true; workList.classList.add('dragging'); }
+      if (drag.moved) workList.scrollLeft = drag.left - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (drag && drag.moved) setTimeout(() => workList.classList.remove('dragging'));
+      drag = null;
+    });
+    // a drag shouldn't count as picking a card
+    workList.addEventListener('click', e => {
+      if (workList.classList.contains('dragging')) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
   }
 
   // Phones: projects become a swipeable row of cards
