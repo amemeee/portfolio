@@ -186,6 +186,14 @@ body {
   100% { translate: 0 0; }
 }
 
+/* Phones: no blue tap flash / selection when tapping him, no long-press image menu */
+.hero-cover, .hero-cover * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+}
+.hero-cover img { -webkit-user-drag: none; }
+
 /* Moods: red when he's furious, black spotlight when he's rejected */
 .hero-cover { transition: background-color .5s ease; }
 .hero-cover[data-mood="rage"] { background: #d3241c; }
