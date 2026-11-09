@@ -48,9 +48,9 @@
 
     <div class="hero-layer hero-char" aria-hidden="true">
       <div class="hero-in">
-        <img class="hero-char-img" src="assets/character/idle.png" alt="" decoding="async"
+        <img class="hero-char-img" src="assets/character/idle-smile.png" alt="" decoding="async"
              onload="this.closest('.hero-cover').classList.add('is-layered')" onerror="this.remove()">
-        <img class="hero-char-img hero-blink" src="assets/character/idle-blink.png" alt="" decoding="async"
+        <img class="hero-char-img hero-blink" src="assets/character/idle-smile-blink.png" alt="" decoding="async"
              onload="this.closest('.hero-cover').classList.add('can-blink')" onerror="this.remove()">
       </div>
     </div>
@@ -67,6 +67,9 @@
       <span class="hint-touch"><b>Tap him</b> to poke · <b>tap anywhere else</b> to skip</span>
       <button type="button" class="hero-hint-close" aria-label="Hide hint">×</button>
     </div>
+
+    <!-- Shown while he's quiet: opens the conversation (clicking his body only pokes him) -->
+    <button class="hero-talk" id="heroTalk" type="button"><i class="fas fa-comment-dots" aria-hidden="true"></i>Talk to me</button>
 
     <div class="hero-bubble" id="heroBubble">
       <span class="hero-bubble-text" aria-live="polite"></span>
@@ -103,19 +106,28 @@
         <div class="work-preview">
           <div class="browser-screen" id="workScreen">
             <img class="work-shot active" src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
             <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
             <img class="work-shot" src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
             <img class="work-shot" src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
             <img class="work-shot" src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
+            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
+            <!-- Last slot: an invitation, not a project -->
+            <div class="work-shot work-yours">
+              <div class="yours-frame">
+                <span class="yours-plus">+</span>
+                <span class="yours-title">Your project here?</span>
+                <span class="yours-sub">Hire me and it's next on this list.</span>
+              </div>
+            </div>
           </div>
         </div>
         <div class="section-head">
           <h2 class="tile-label">Projects</h2>
           <div class="work-spot" aria-live="polite">
             <h3 class="work-spot-title" id="workTitle"></h3>
+            <span class="work-tag work-spot-tag" id="workTag" hidden>Just for fun</span>
             <p class="work-spot-meta"><span id="workStack"></span><span id="workCount"></span></p>
             <p class="work-spot-desc" id="workDesc"></p>
             <div class="work-spot-actions">
@@ -146,21 +158,9 @@
             <a class="work-visit" href="https://amemeee.github.io/portfolio/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-url="https://amemeee.github.io/barbershop/">
-              <span class="work-num">02</span>
-              <span class="work-body">
-                <span class="work-title">Skull &amp; Shears</span>
-                <span class="work-desc">Barbershop Website</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/barbershop/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
             <div class="work-thumb" aria-hidden="true"><img src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://arenaauctioneers.com">
-              <span class="work-num">03</span>
+              <span class="work-num">02</span>
               <span class="work-body">
                 <span class="work-title">Arena Auctioneers</span>
                 <span class="work-desc">Property auction listings across Malaysia, searchable by location, type, bank and price.</span>
@@ -172,7 +172,7 @@
           <li>
             <div class="work-thumb" aria-hidden="true"><img src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://homestay.arenaauctioneers.com">
-              <span class="work-num">04</span>
+              <span class="work-num">03</span>
               <span class="work-body">
                 <span class="work-title">Arena Homestay</span>
                 <span class="work-desc">Booking site for the Arena homestay (Subang Murni).</span>
@@ -183,9 +183,10 @@
           </li>
           <li>
             <div class="work-thumb" aria-hidden="true"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-url="https://01-agent-property-auction.wasmer.app">
-              <span class="work-num">05</span>
+            <button class="work-item" data-fun="1" data-url="https://01-agent-property-auction.wasmer.app">
+              <span class="work-num">04</span>
               <span class="work-body">
+                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Agent Property Auction Platform</span>
                 <span class="work-desc">Property auction platform built for agents.</span>
                 <span class="work-stack">Vue · Laravel</span>
@@ -195,9 +196,10 @@
           </li>
           <li>
             <div class="work-thumb" aria-hidden="true"><img src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-url="https://ornate-crumble-cb085e.netlify.app/">
-              <span class="work-num">06</span>
+            <button class="work-item" data-fun="1" data-url="https://ornate-crumble-cb085e.netlify.app/">
+              <span class="work-num">05</span>
               <span class="work-body">
+                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Wedding Invitation</span>
                 <span class="work-desc">Digital wedding card with an animated envelope, countdown, RSVP and guest wishes.</span>
                 <span class="work-stack">Vue 3 · Supabase</span>
@@ -207,9 +209,10 @@
           </li>
           <li>
             <div class="work-thumb" aria-hidden="true"><img src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-url="https://amemeee.github.io/bite-the-dust/">
-              <span class="work-num">07</span>
+            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/bite-the-dust/">
+              <span class="work-num">06</span>
               <span class="work-body">
+                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Bite The Dust</span>
                 <span class="work-desc">Rohan Kishibe Activate Bite THe Dust.</span>
                 <span class="work-stack">HTML · Javascript · CSS</span>
@@ -219,15 +222,41 @@
           </li>
           <li>
             <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-url="https://amemeee.github.io/soul-match/">
-              <span class="work-num">08</span>
+            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/soul-match/">
+              <span class="work-num">07</span>
               <span class="work-body">
+                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Soul Match</span>
                 <span class="work-desc">Trading card game demo: open packs, browse the gallery and keep a collection saved in the browser.</span>
                 <span class="work-stack">HTML · CSS · JavaScript</span>
               </span>
             </button>
             <a class="work-visit" href="https://amemeee.github.io/soul-match/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
+          </li>
+          <li>
+            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
+            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/barbershop/">
+              <span class="work-num">08</span>
+              <span class="work-body">
+                <span class="work-tag">Just for fun</span>
+                <span class="work-title">Skull &amp; Shears</span>
+                <span class="work-desc">Barbershop Website</span>
+                <span class="work-stack">HTML · CSS · JavaScript</span>
+              </span>
+            </button>
+            <a class="work-visit" href="https://amemeee.github.io/barbershop/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
+          </li>
+          <li class="work-yours-item">
+            <div class="work-thumb work-thumb-yours" aria-hidden="true"><span>+</span></div>
+            <button class="work-item" data-url="#contact" data-cta="Let's talk">
+              <span class="work-num">09</span>
+              <span class="work-body">
+                <span class="work-title">Your project here</span>
+                <span class="work-desc">This spot is waiting for your idea. Hire me to put your project here.</span>
+                <span class="work-stack">Laravel · PHP · whatever you need</span>
+              </span>
+            </button>
+            <a class="work-visit" href="#contact">Hire me <i class="fas fa-arrow-right"></i></a>
           </li>
         </ol>
         <div class="work-dots" id="workDots"></div>
@@ -237,6 +266,15 @@
   <!-- SKILLS -->
   <section id="skills" class="bento-grid">
     <div class="bento-item t-4x1 reveal skills-card">
+      <!-- Large screens: he peeks over the top edge of the card (head behind, hands in front) -->
+      <div class="skills-peek" aria-hidden="true">
+        <div class="peek-clip">
+          <div class="peek-face">
+            <img class="peek-head" src="assets/character/scenes/peek-head.png" alt="" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <img class="peek-hands" src="assets/character/scenes/peek-hands.png" alt="" loading="lazy" decoding="async">
+      </div>
       <h2 class="tile-label">Skills</h2>
       <dl class="skills-list">
         <div class="skills-row">
@@ -316,9 +354,16 @@
   <!-- CONTACT -->
   <section id="contact" class="bento-grid">
     <div class="bento-item t-4x1 reveal contact-tile">
-      <h2 class="contact-heading">Hiring, or have a project?<br><em>Send me an email.</em></h2>
-      <div class="profile-actions">
-        <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
+      <!-- Two separate layers so each character can animate -->
+      <div class="contact-scene" aria-hidden="true">
+        <img class="contact-boy" src="assets/character/scenes/contact-boy.png" alt="" loading="lazy" decoding="async">
+        <img class="contact-girl" src="assets/character/scenes/contact-girl.png" alt="" loading="lazy" decoding="async">
+      </div>
+      <div class="contact-body">
+        <h2 class="contact-heading">Hiring, or have<br>a project?<br><em>Send me an email.</em></h2>
+        <div class="profile-actions">
+          <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
+        </div>
       </div>
     </div>
   </section>
@@ -466,9 +511,15 @@
       const item = workItems[i];
       const url = item.dataset.url;
       workVisit.href = url;
+      const isCta = !!item.dataset.cta;                 // the "your project here" slot
+      workVisit.target = isCta ? '' : '_blank';
+      workVisit.innerHTML = isCta
+        ? `${item.dataset.cta}<i class="fas fa-arrow-right"></i>`
+        : '<i class="fas fa-arrow-up-right-from-square"></i>Visit site';
       workTitle.textContent = item.querySelector('.work-title').textContent;
       workDesc.textContent = item.querySelector('.work-desc').textContent;
       workStack.textContent = item.querySelector('.work-stack').textContent;
+      document.getElementById('workTag').hidden = !item.dataset.fun;
       workCount.textContent = `${pad(i + 1)} / ${pad(workItems.length)}`;
       // keep the active card visible in the row
       const card = item.parentElement;
