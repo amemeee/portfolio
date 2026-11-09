@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Amin · PHP / Laravel Developer</title>
 <meta name="description" content="Muhammad Amin (Amemeee): PHP / Laravel developer and illustrator.">
-<link rel="icon" type="image/png" href="art/icon.png">
+<link rel="icon" type="image/png" href="assets/brand/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,7 +39,43 @@
 <div class="page" id="pageScroll">
 
   <!-- HERO COVER -->
-  <div class="hero-cover" id="top"></div>
+  <div class="hero-cover" id="top" aria-label="Amemeee, illustrated self-portrait" role="img">
+    <!-- Rejected: dramatic close-up that cuts in over everything -->
+    <div class="hero-cutin" aria-hidden="true"><img src="assets/character/fx/despair.jpg" alt="" decoding="async"></div>
+
+    <!-- 20+ clicks: giant rage text behind him -->
+    <div class="hero-rage" aria-hidden="true"><span>ARGHHHHH</span></div>
+
+    <div class="hero-layer hero-char" aria-hidden="true">
+      <div class="hero-in">
+        <img class="hero-char-img" src="assets/character/idle.png" alt="" decoding="async"
+             onload="this.closest('.hero-cover').classList.add('is-layered')" onerror="this.remove()">
+        <img class="hero-char-img hero-blink" src="assets/character/idle-blink.png" alt="" decoding="async"
+             onload="this.closest('.hero-cover').classList.add('can-blink')" onerror="this.remove()">
+      </div>
+    </div>
+
+    <!-- Floating "z z Z" while he dozes -->
+    <div class="hero-zzz" aria-hidden="true"><span>z</span><span>z</span><span>Z</span></div>
+    <!-- Manga shock mark when he's woken up -->
+    <div class="hero-shock" aria-hidden="true">!!</div>
+
+    <!-- Speech bubble: lines live in the script near the end of this file -->
+    <!-- How to interact with him (shown briefly, can be dismissed) -->
+    <div class="hero-hint" id="heroHint" role="note">
+      <span class="hint-mouse"><b>Click him</b> to poke · <b>click anywhere else</b> to skip · psst, try typing <b>rose</b></span>
+      <span class="hint-touch"><b>Tap him</b> to poke · <b>tap anywhere else</b> to skip</span>
+      <button type="button" class="hero-hint-close" aria-label="Hide hint">×</button>
+    </div>
+
+    <div class="hero-bubble" id="heroBubble">
+      <span class="hero-bubble-text" aria-live="polite"></span>
+      <div class="hero-bubble-choices" hidden></div>
+      <button class="hero-sound" type="button" aria-pressed="false" aria-label="Turn on his voice" title="Sound">
+        <i class="fas fa-volume-xmark" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
 
   <!-- INTRO -->
   <section class="bento-grid intro-grid">
@@ -56,7 +92,7 @@
     </div>
 
     <div class="bento-item reveal portrait-card">
-      <img src="art/portrait.jpg" alt="Self-portrait illustration of Muhammad Amin">
+      <img src="assets/brand/portrait.jpg" alt="Self-portrait illustration of Muhammad Amin">
     </div>
   </section>
 
@@ -72,7 +108,7 @@
             <img class="work-shot" src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
             <img class="work-shot" src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="art/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
           </div>
         </div>
@@ -92,8 +128,8 @@
       <div class="work-row-head">
         <h3 class="work-row-label">All projects</h3>
         <span class="work-row-nav">
-          <button class="work-row-btn" id="rowPrev" aria-label="Scroll projects left"><i class="fas fa-chevron-left"></i></button>
-          <button class="work-row-btn" id="rowNext" aria-label="Scroll projects right"><i class="fas fa-chevron-right"></i></button>
+          <button class="work-row-btn" id="rowPrev" aria-label="Scroll projects up"><i class="fas fa-chevron-up"></i></button>
+          <button class="work-row-btn" id="rowNext" aria-label="Scroll projects down"><i class="fas fa-chevron-down"></i></button>
         </span>
       </div>
         <ol class="work-list" id="workList">
@@ -170,7 +206,7 @@
             <a class="work-visit" href="https://ornate-crumble-cb085e.netlify.app/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="art/bite-the-dust.jpg" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://amemeee.github.io/bite-the-dust/">
               <span class="work-num">07</span>
               <span class="work-body">
@@ -236,41 +272,41 @@
       </div>
       <div class="art-grid">
         <button class="art-tile is-featured" data-title="Spell Caster" data-meta="Adobe Animate · Flash 8">
-          <img src="art/seishin.gif" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/seishin.gif" alt="" loading="lazy" decoding="async">
           <span class="art-tag">Animated</span>
           <span class="art-caption"><span class="art-title">Spell Caster</span><span class="art-meta">Adobe Animate · Flash 8</span></span>
         </button>
         <button class="art-tile" data-title="Cyberpunk">
-          <img src="art/art7.gif" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art7.gif" alt="" loading="lazy" decoding="async">
           <span class="art-tag">Animated</span>
           <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
         </button>
         <button class="art-tile" data-title="Midnight Samurai">
-          <img src="art/art1.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art1.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
         </button>
         <button class="art-tile" data-title="AKUMA">
-          <img src="art/art4.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art4.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">AKUMA</span></span>
         </button>
         <button class="art-tile" data-title="Abyss Hare">
-          <img src="art/art12.jpeg" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art12.jpeg" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Abyss Hare</span></span>
         </button>
         <button class="art-tile" data-title="Gadis Lolipop!">
-          <img src="art/art11.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art11.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Gadis Lolipop!</span></span>
         </button>
         <button class="art-tile" data-title="Vanilla Ice Cream">
-          <img src="art/art2.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art2.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Vanilla Ice Cream</span></span>
         </button>
         <button class="art-tile" data-title="Gumpunk">
-          <img src="art/art6.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/art6.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Gumpunk</span></span>
         </button>
         <button class="art-tile" data-title="Dropship Marketing">
-          <img src="art/dropship.png" alt="" loading="lazy" decoding="async">
+          <img src="assets/gallery/dropship.png" alt="" loading="lazy" decoding="async">
           <span class="art-caption"><span class="art-title">Dropship Marketing</span></span>
         </button>
       </div>
@@ -298,7 +334,7 @@
   <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
   <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous piece">&#8592;</button>
   <figure class="lightbox-figure">
-    <img id="lightboxImg" src="" alt="">
+    <img id="lightboxImg" alt="">
     <figcaption class="lightbox-caption">
       <span class="lightbox-title" id="lightboxTitle"></span>
       <span class="lightbox-meta" id="lightboxMeta"></span>
@@ -437,9 +473,9 @@
       // keep the active card visible in the row
       const card = item.parentElement;
       if (getComputedStyle(document.getElementById('workDots')).display === 'none') {
-        const left = card.offsetLeft - workList.offsetLeft;
-        if (left < workList.scrollLeft || left + card.offsetWidth > workList.scrollLeft + workList.clientWidth) {
-          workList.scrollTo({ left: left - 8, behavior: 'smooth' });
+        const top = card.offsetTop - workList.offsetTop;
+        if (top < workList.scrollTop || top + card.offsetHeight > workList.scrollTop + workList.clientHeight) {
+          workList.scrollTo({ top: Math.max(0, top - 8), behavior: 'smooth' });
         }
       }
     }
@@ -454,40 +490,31 @@
       workList.querySelectorAll('.work-thumb iframe').forEach(f => { f.src = f.dataset.src; });
     }
 
-    // Desktop row: wheel, drag and arrow buttons scroll it sideways
+    // Desktop side list: wheel (native), drag and arrow buttons scroll it vertically
     const rowPrev = document.getElementById('rowPrev');
     const rowNext = document.getElementById('rowNext');
-    const maxScroll = () => workList.scrollWidth - workList.clientWidth;
+    const maxScroll = () => workList.scrollHeight - workList.clientHeight;
     function updateRowNav() {
-      rowPrev.disabled = workList.scrollLeft <= 1;
-      rowNext.disabled = workList.scrollLeft >= maxScroll() - 1;
+      rowPrev.disabled = workList.scrollTop <= 1;
+      rowNext.disabled = workList.scrollTop >= maxScroll() - 1;
       workList.classList.toggle('at-end', rowNext.disabled);
       workList.classList.toggle('at-start', rowPrev.disabled);
     }
     workList.addEventListener('scroll', updateRowNav, { passive: true });
     new ResizeObserver(updateRowNav).observe(workList);
-    rowPrev.addEventListener('click', () => workList.scrollBy({ left: -workList.clientWidth * 0.8, behavior: 'smooth' }));
-    rowNext.addEventListener('click', () => workList.scrollBy({ left: workList.clientWidth * 0.8, behavior: 'smooth' }));
-
-    workList.addEventListener('wheel', e => {
-      if (!isRow() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      const atStart = workList.scrollLeft <= 0 && e.deltaY < 0;
-      const atEnd = workList.scrollLeft >= maxScroll() - 1 && e.deltaY > 0;
-      if (atStart || atEnd) return; // let the page scroll on past the ends
-      e.preventDefault();
-      workList.scrollLeft += e.deltaY;
-    }, { passive: false });
+    rowPrev.addEventListener('click', () => workList.scrollBy({ top: -workList.clientHeight * 0.8, behavior: 'smooth' }));
+    rowNext.addEventListener('click', () => workList.scrollBy({ top: workList.clientHeight * 0.8, behavior: 'smooth' }));
 
     let drag = null;
     workList.addEventListener('pointerdown', e => {
       if (!isRow() || e.pointerType !== 'mouse' || e.button !== 0) return;
-      drag = { x: e.clientX, left: workList.scrollLeft, moved: false };
+      drag = { y: e.clientY, top: workList.scrollTop, moved: false };
     });
     window.addEventListener('pointermove', e => {
       if (!drag) return;
-      const dx = e.clientX - drag.x;
-      if (Math.abs(dx) > 5) { drag.moved = true; workList.classList.add('dragging'); }
-      if (drag.moved) workList.scrollLeft = drag.left - dx;
+      const dy = e.clientY - drag.y;
+      if (Math.abs(dy) > 5) { drag.moved = true; workList.classList.add('dragging'); }
+      if (drag.moved) workList.scrollTop = drag.top - dy;
     });
     window.addEventListener('pointerup', () => {
       if (drag && drag.moved) setTimeout(() => workList.classList.remove('dragging'));
@@ -581,7 +608,7 @@
     touchX = null;
     if (Math.abs(dx) > 50) showArt(artIndex + (dx < 0 ? 1 : -1));
   });
-
 </script>
+<script src="assets/js/character.js"></script>
 </body>
 </html>

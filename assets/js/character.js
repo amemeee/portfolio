@@ -1,0 +1,678 @@
+// Talking character on the hero cover: poses, speech bubble, conversation, reactions.
+// Art lives in assets/character/ (poses) and assets/character/fx/ (effects).
+
+// ── Hero: blinking (only for poses that have a closed-eyes frame) ──
+(() => {
+  const hero = document.getElementById('top');
+  if (!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const blink = () => {
+    if (hero.classList.contains('can-blink')) {
+      hero.classList.add('blinking');
+      setTimeout(() => hero.classList.remove('blinking'), 130);
+      if (Math.random() < 0.25) setTimeout(() => {            // occasional double blink
+        hero.classList.add('blinking');
+        setTimeout(() => hero.classList.remove('blinking'), 110);
+      }, 260);
+    }
+    setTimeout(blink, 2500 + Math.random() * 3000);
+  };
+  setTimeout(blink, 2000);
+})();
+
+// ── Hero: talking character (a short conversation the visitor steers) ──
+(() => {
+  const hero = document.getElementById('top');
+  const bubble = document.getElementById('heroBubble');
+  const textEl = bubble && bubble.querySelector('.hero-bubble-text');
+  const choicesEl = bubble && bubble.querySelector('.hero-bubble-choices');
+  const body = hero && hero.querySelector('.hero-char-img');
+  if (!bubble || !body) return;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── The conversation (edit freely) ──
+  // Each step: t = what he says (text, or a function returning text), pose = which image, then ONE of:
+  //   next: step to play automatically afterwards
+  //   options: [['button label', 'step'], ...] for the visitor to choose
+  //            + auto: step he continues with if nobody answers (AUTO_MS)
+  //   go: '#section' to scroll to (then the chat rests until they come back)
+  //   end: true to stop talking after this line
+  const CUTIN_MS = 5000;     // how long the despair close-up stays on screen
+  const SAD_MS = 5000;       // then how long he stands there disappointed
+  const WAKE_ASK_CHANCE = 0.5; // after waking up, chance he asks "will you hire me?"
+  const JOKE_MS = 10000;     // each joke stays up this long
+  const AUTO_MS = 10000;     // unanswered question: wait this long, then he talks by himself
+  const phone = matchMedia('(max-width: 640px)').matches;
+  const h = new Date().getHours();
+  const hello =
+    h < 5  ? "Up this late? Same. I'm Amin." :
+    h < 12 ? "Good morning! I'm Amin." :
+    h < 18 ? "Hi there! I'm Amin." :
+    h < 22 ? "Good evening! I'm Amin." :
+             "Late-night browsing? Respect. I'm Amin.";
+  // Returning visitor? (counted in their own browser only)
+  let visits = 0;
+  try { visits = +localStorage.getItem('heroVisits') || 0; localStorage.setItem('heroVisits', visits + 1); } catch (e) {}
+
+  const JOKES = [
+    'Why do programmers prefer dark mode? Because light attracts bugs.',
+    "There are 10 kinds of people: those who understand binary, and those who don't.",
+    "A SQL query walks into a bar, goes up to two tables and asks: 'Can I join you?'",
+    'Why did the developer go broke? He used up all his cache.',
+    "My code doesn't have bugs. It has surprise features.",
+    "I'd tell you a UDP joke, but you might not get it."
+  ];
+  // Shuffled once; each joke is told at most once per visit
+  const jokeBag = JOKES.slice();
+  for (let k = jokeBag.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [jokeBag[k], jokeBag[j]] = [jokeBag[j], jokeBag[k]]; }
+  let jokesTold = 0;
+  const jokesLeft = () => jokesTold < jokeBag.length;
+  const nextJoke = () => jokeBag[jokesTold++];
+
+  const MENU = [['Projects', 'toWork'], ['Art', 'toArt'], ['Contact', 'toContact'], ['Tell me a joke', 'joke']];
+  // The visitor's reasons for being here (first question, and whenever he asks again)
+  const REASONS = [["You're hired!", 'hired'], ["I'm hiring", 'hiring'], ['I need a website', 'site'], ['I like your art', 'artLike'],
+                   ['Just looking around', 'browse'], ['Who are you?', 'about'], ["You talk, I'll listen", 'listen']];
+  const STEPS = {
+    hello:    { t: hello, pose: 'wave', next: 'ask' },
+    welcome:  { t: "Hey, you're back! Good to see you again.", pose: 'wave', next: 'ask' },
+    ask:      { t: 'What brings you here?', pose: 'look', auto: 'solo', options: REASONS },
+
+    // Nobody answered (or they asked him to talk): he introduces himself
+    solo:     { t: "Not much of a talker? No worries, I'll do the talking.", pose: 'look', next: 'solo2' },
+    listen:   { t: 'Alright, story time.', pose: 'look', next: 'solo2' },
+    solo2:    { t: "I'm an IT manager by day, and a Laravel developer at heart.", pose: 'look', next: 'solo3' },
+    solo3:    { t: 'I build things with PHP and Laravel, from barbershop sites to property auction platforms.', pose: 'look', next: 'solo4' },
+    solo4:    { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'solo5' },
+    solo5:    { t: "When I'm not coding, I draw. There's a whole gallery further down.", pose: 'think', next: 'solo6' },
+    solo6:    { t: phone ? 'On your phone? Scroll down and swipe through my projects.'
+                         : "Scroll down whenever you're ready. The projects are right below.", pose: 'point', next: 'solo7' },
+    solo7:    { t: "Or pick one and I'll take you there.", pose: 'look', auto: 'signoff', options: MENU },
+
+    hiring:   { t: 'Oh! Give me a second… *fixes tie*', pose: 'fix', next: 'hiring2' },
+    hiring2:  { t: "I build web apps with Laravel and PHP, and I'm open to full-time or freelance work.", pose: 'look', auto: 'solo6',
+                options: [['Show me your work', 'toWork'], ['How do I reach you?', 'toContact']] },
+
+    site:     { t: 'You came to the right guy.', pose: 'wave', next: 'site2' },
+    site2:    { t: "I've built barbershop sites, homestay bookings and auction platforms.", pose: 'look', next: 'site3' },
+    site3:    { t: "Here are a few. Then let's talk.", pose: 'point', auto: 'solo7',
+                options: [['See projects', 'toWork'], ['Contact', 'toContact']] },
+
+    artLike:  { t: "Oh, you noticed! …this one's for you.", pose: 'rose', fx: 'rose', next: 'artLike2' },
+    artLike2: { t: 'I draw in my free time, mostly manga style.', pose: 'look', next: 'artLike3' },
+    artLike3: { t: "There's more further down.", pose: 'point', auto: 'solo7', options: [['Show me', 'toArt']] },
+
+    browse:   { t: 'Make yourself at home.', pose: 'look', next: 'browse2' },
+    browse2:  { t: 'I write code by day and draw by night. Which side do you want to see?', pose: 'think', auto: 'solo6',
+                options: [['The code', 'toWork'], ['The drawings', 'toArt']] },
+
+    about:    { t: 'IT manager by day, Laravel developer at heart.', pose: 'look', next: 'about2' },
+    about2:   { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'about3' },
+    about3:   { t: "Want to see what I've built?", pose: 'look', auto: 'solo5',
+                options: [['Sure', 'toWork'], ['Just say hi', 'toContact']] },
+
+    joke:     { t: nextJoke, pose: 'laugh', next: 'joke2', wait: JOKE_MS, redirect: () => (jokesLeft() ? null : 'noJokes') },
+    joke2:    { t: () => (jokesLeft() ? 'Another one?' : 'That was my last one, by the way.'), pose: 'look', auto: 'signoff',
+                options: () => (jokesLeft()
+                  ? [['Another one', 'joke'], ['Projects', 'toWork'], ['Contact', 'toContact']]
+                  : [['Projects', 'toWork'], ['Art', 'toArt'], ['Contact', 'toContact']]) },
+    noJokes:  { t: "I'm out of jokes. That was my whole collection.", pose: 'think', auto: 'signoff',
+                options: [['Projects', 'toWork'], ['Art', 'toArt'], ['Contact', 'toContact']] },
+
+    // Typed "hire" anywhere on the page
+    hire:     { t: 'I heard that!', pose: 'wave', next: 'hire2' },
+    hire2:    { t: 'Shall I take you to my contact details?', pose: 'look', options: [['Yes!', 'toContact'], ['Just testing', 'hireNo']] },
+    hireNo:   { t: "Ha. Okay, I'll be right here.", pose: 'laugh', end: true },
+
+    // On the page 5+ minutes
+    long:     { t: "Still here? I'm flattered.", pose: 'laugh', next: 'long2' },
+    long2:    { t: 'Should we make it official?', pose: 'look', options: [['Contact me already', 'toContact'], ['Keep browsing', 'longNo']] },
+    longNo:   { t: 'Take all the time you need.', pose: 'look', end: true },
+
+    toWork:   { t: 'Right this way!', pose: 'point', go: '#work' },
+    toArt:    { t: 'My favourite part. Down here!', pose: 'point', go: '#art' },
+    toContact:{ t: "Can't wait to hear from you~", pose: 'rose', fx: 'rose', next: 'toContact2' },
+    toContact2:{ t: "Email works best. I'll take you there.", pose: 'point', go: '#contact' },
+    // Typed "rose" or "love"
+    roseEgg:  { t: 'For you~', pose: 'rose', fx: 'rose', end: true },
+
+    // Asked once per visit at a random quiet moment
+    // "You're hired!" button
+    hired:    { t: 'W-wait… really?!', pose: 'excited', auto: 'hiredJoke',
+                options: [['Yes!', 'willYes'], ['No', 'willNo']] },
+    hiredJoke:{ t: "…you're joking, right? Ha… ha…", pose: 'laugh', end: true },
+    wakeAsk:  { t: 'Since you woke me up anyway…', pose: 'shy', next: 'askHireWake' },
+    askHireWake:{ t: 'Um… so… will you hire me?', pose: 'shy', auto: 'willSkip',
+                options: [['Yes!', 'willYes'], ['No', 'willNo'], ['Go back to sleep', 'backToSleep']] },
+    backToSleep:{ t: 'Oh… thank you… goodnight…', pose: 'sleep', doSleep: true },
+    wakeMenu: { t: 'Anyway… what brings you here?', pose: 'look', auto: 'signoff', options: REASONS },
+    askHire:  { t: 'Um… so… will you hire me?', pose: 'shy', auto: 'willSkip',
+                options: [['Yes!', 'willYes'], ['No', 'willNo']] },
+    willYes:  { t: "R-really?! You won't regret it!", pose: 'excited', next: 'willYes2',
+                run: () => { hireAsked = true; try { localStorage.setItem('heroHired', 'yes'); } catch (e) {} } },
+    willYes2: { t: "Let's make it official?", pose: 'look', auto: 'signoff',
+                options: [['Contact me', 'toContact'], ['Later', 'willLater']] },
+    willLater:{ t: "Okay! I'll be right here, smiling.", pose: 'excited', end: true },
+    willNo:   { t: '…why, universe… WHY…', pose: 'sad', fx: 'cutin', mood: 'sad', next: 'willNoSad', wait: CUTIN_MS },
+    willNoSad:{ t: '…oh. Okay.', pose: 'sad', mood: 'sad', next: 'willNo2', wait: SAD_MS },
+    willNo2:  { t: "*sniff*… it's fine… I'm fine…", pose: 'cry', mood: 'sad', next: 'willNo3', wait: 3500 },
+    willNo3:  { t: 'Maybe my projects can change your mind?', pose: 'look', auto: 'signoff',
+                options: [['Show me', 'toWork'], ['Okay, fine, yes', 'willYes']] },
+    willSkip: { t: '…forget I asked.', pose: 'shy', end: true },
+
+    back:     { t: 'Welcome back! Anything else?', pose: 'wave', auto: 'signoff', options: [...REASONS, ['Tell me a joke', 'joke']] },
+    again:    { t: 'Need something?', pose: 'look', auto: 'signoff', options: [...REASONS, ['Tell me a joke', 'joke'], ['Go to sleep', 'goSleep']] },
+    goSleep:  { t: '*yawn*… okay, just a quick nap…', pose: 'sleep', doSleep: true },
+
+    // Asides: short interruptions, then he picks up where he was
+    poke1:    { t: 'Hey, that tickles.', pose: 'laugh' },              // 2 quick clicks
+    poke2:    { t: 'Okay, stop it.', pose: 'annoyed' },                 // 3
+    angry:    { t: "That's it. I'm not talking to you.", pose: 'annoyed' }, // 5: sulks
+    rage:     { t: 'ARGHHHHH!! STOP POKING ME!!', pose: 'rage', mood: 'rage' },      // 20: meltdown
+    calmDown: { t: "…okay. I'm calm. I'm fine. Totally fine.", pose: 'look' },
+    signoff:  { t: "No pressure. I'll be right here if you need me.", pose: 'look', end: true },
+    forgive:  { t: '…fine. I forgive you.', pose: 'look' },
+    sleepy:   { t: 'You make me sleepy waiting for your answer…', pose: 'think' },
+    wake:     { t: "WAH?! I'm up! I'm up!", pose: 'shock' },
+    wake2:    { t: "I wasn't sleeping. I was… debugging with my eyes closed.", pose: 'laugh' },
+    tabBack:  { t: "Oh, you're back. I was just… fixing my tie.", pose: 'fix' }
+  };
+  const ASIDES = new Set(['poke1', 'poke2', 'rage', 'calmDown', 'angry', 'forgive', 'sleepy', 'wake', 'wake2', 'tabBack']);
+  const COFFEE_CHANCE = 0;   // KIV: coffee break switched off for now (set 0.5 to bring it back)
+  const POKES_TO_ANGRY = 5;  // clicks until he gets angry and sulks
+  const POKES_TO_RAGE = 20;  // clicks until he completely loses it
+  const FORGIVE_MS = 5000;   // stop clicking this long and he forgives you
+  const HIRE_ASK_MIN_MS = 40000, HIRE_ASK_MAX_MS = 80000; // when he asks "will you hire me?"
+  const SLEEP_MS = 30000;    // no activity this long → he dozes off
+  const SLEEPY_HOLD_MS = 5000; // "You make me sleepy…" stays up this long before he falls asleep
+
+  // ── Poses ──
+  // Each image: same 1024x1024 canvas and framing, transparent background.
+  // 'fix' is the idle pose. A pose whose file is missing falls back to 'look', then 'fix'.
+  const POSES = {
+    fix:     { src: 'assets/character/idle.png', blink: 'assets/character/idle-blink.png' },
+    look:    { src: 'assets/character/look.png',      blink: 'assets/character/look-blink.png' },
+    wave:    { src: 'assets/character/wave.png',      blink: 'assets/character/wave-blink.png' },
+    point:   { src: 'assets/character/point.png',     blink: 'assets/character/point-blink.png' },
+    laugh:   { src: 'assets/character/laugh.png' },
+    annoyed: { src: 'assets/character/annoyed.png',   blink: 'assets/character/annoyed-blink.png' },
+    think:   { src: 'assets/character/think.png',     blink: 'assets/character/think-blink.png' },
+    sleep:   { src: 'assets/character/sleep.png' },            // eyes already closed, no blink frame
+    shock:   { src: 'assets/character/shock.png' },            // woken up; too brief to need blinking
+    coffee:  { src: 'assets/character/coffee-hold.png', blink: 'assets/character/coffee-hold-blink.png' },
+    sip:     { src: 'assets/character/coffee-drink.png' },    // eyes closed while sipping
+    rage:    { src: 'assets/character/rage.png', fallback: 'annoyed' }, // 20+ clicks
+    rose:    { src: 'assets/character/rose-throw.png', fallback: 'wave' },     // just threw a rose (winking)
+    shy:     { src: 'assets/character/shy.png',   fallback: 'laugh' },   // "will you hire me?"
+    excited: { src: 'assets/character/excited.png', fallback: 'laugh' }, // star eyes, jumping for joy
+    sad:     { src: 'assets/character/sad.png',   fallback: 'think' },   // "…oh. Okay."
+    cry:     { src: 'assets/character/cry.png', fallback: 'think' }    // comedic tears
+  };
+  const blinkImg = hero.querySelector('.hero-blink');
+  const charLayer = hero.querySelector('.hero-char');
+  const load = (src) => { const im = new Image(); im.src = src; return im.decode().then(() => true, () => false); };
+  Object.values(POSES).forEach(p => {
+    load(p.src).then(ok => p.ok = ok);
+    if (p.blink) load(p.blink).then(ok => p.blinkOk = ok);
+  });
+  let pose = 'fix';
+  const setPose = (name) => {
+    const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok);
+    if (!p || p === POSES[pose]) return;
+    pose = Object.keys(POSES).find(k => POSES[k] === p);
+    body.src = p.src;
+    if (blinkImg && blinkImg.isConnected && p.blinkOk) { blinkImg.src = p.blink; hero.classList.add('can-blink'); }
+    else hero.classList.remove('can-blink');
+    hero.classList.remove('blinking');
+    if (!calm) { charLayer.classList.remove('pop'); void charLayer.offsetWidth; charLayer.classList.add('pop'); }
+  };
+
+  // Head position inside the pose images, as fractions of the image
+  const HEAD = { right: 0.64, top: 0.08, centerX: 0.5, ear: 0.2 };
+  const place = () => {
+    const hr = hero.getBoundingClientRect(), r = body.getBoundingClientRect();
+    const bw = bubble.offsetWidth, bh = bubble.offsetHeight, pad = 16;
+    let x = r.left - hr.left + r.width * HEAD.right;
+    let y = r.top - hr.top + r.height * HEAD.ear;           // bubble's bottom edge
+    if (x + bw > hr.width - pad) {                           // no room on the right: go above the head
+      x = r.left - hr.left + r.width * HEAD.centerX - 20;
+      y = r.top - hr.top + r.height * HEAD.top - 16;
+    }
+    // Phones: centered above his head
+    const centered = innerWidth <= 640;
+    bubble.classList.toggle('centered', centered);
+    if (centered) {
+      x = (hr.width - bw) / 2;
+      y = r.top - hr.top + r.height * HEAD.top - 12;
+    }
+    x = Math.max(pad, Math.min(x, hr.width - bw - pad));
+    bubble.style.left = `${x}px`;
+    // Phones during the despair close-up: below the panel, in the black letterbox
+    if (centered && hero.classList.contains('cutin')) {
+      const panel = cutin.querySelector('img').getBoundingClientRect();
+      bubble.style.top = `${Math.min(panel.bottom - hr.top + 20, hr.height - bh - pad)}px`;
+      return;
+    }
+    bubble.style.top = `${Math.max(pad + 60, y - bh)}px`;   // stay below the nav
+  };
+
+  // ── Interaction hint: fades in after the greeting, hides after a while or when dismissed ──
+  // It also comes back whenever he has nothing more to say, and hides when he talks again.
+  const hint = document.getElementById('heroHint');
+  let hintOff = false, hintIntro = false;
+  try { hintOff = localStorage.getItem('heroHintOff') === '1'; } catch (e) {}
+  const showHint = () => { if (hint && !hintOff) hint.classList.add('show'); };
+  const hideHint = () => { if (hint && !hintIntro) hint.classList.remove('show'); };
+  if (hint) {
+    hint.querySelector('.hero-hint-close').addEventListener('click', (e) => {
+      e.stopPropagation(); hintOff = true; hintIntro = false; hint.classList.remove('show');
+      try { localStorage.setItem('heroHintOff', '1'); } catch (err) {}
+    });
+    if (!hintOff) {
+      setTimeout(() => { hintIntro = true; showHint(); }, 6000);              // first look, while he talks
+      setTimeout(() => { hintIntro = false; if (!resting) hideHint(); }, 26000);
+    }
+  }
+
+  // ── Voice: tiny generated blips, off until the visitor turns it on ──
+  const PITCH = { fix: 400, look: 440, wave: 520, point: 480, laugh: 620, annoyed: 300, think: 380 };
+  const soundBtn = bubble.querySelector('.hero-sound');
+  let soundOn = false, ctx = null;
+  try { soundOn = localStorage.getItem('heroSound') === 'on'; } catch (e) {}
+  const audio = () => {
+    if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); }
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+  // one short tone: frequency glides from f0 to f1 over `dur` seconds
+  const tone = (f0, f1, dur, vol = 0.05, type = 'triangle') => {
+    if (!soundOn) return;
+    const a = audio(); if (!a || a.state !== 'running') return;
+    const t = a.currentTime, o = a.createOscillator(), g = a.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f0, t);
+    o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  };
+  const blip = () => {
+    const f = (PITCH[pose] || 440) * (0.92 + Math.random() * 0.16);
+    tone(f, f * 0.9, pose === 'annoyed' ? 0.07 : 0.045, 0.04, pose === 'annoyed' ? 'square' : 'triangle');
+  };
+  const popSound = () => tone(280, 620, 0.09, 0.05, 'sine');
+  const clickSound = () => tone(900, 700, 0.03, 0.035, 'sine');
+  const shockSound = () => tone(300, 1200, 0.18, 0.06, 'square');   // startled "boing"
+  const whooshSound = () => tone(900, 250, 0.35, 0.04, 'sine');      // rose flying past
+
+  // ── Rose throw: the rose flies from his hand straight at the viewer ──
+  const throwRose = () => {
+    if (calm) return;                                         // no flying objects for reduced motion
+    const r = body.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+    const rose = document.createElement('img');
+    rose.src = 'assets/character/fx/rose.png'; rose.alt = ''; rose.className = 'hero-rose-fly';
+    const x0 = r.left - hr.left + r.width * 0.17, y0 = r.top - hr.top + r.height * 0.52; // his open hand
+    rose.style.left = `${x0}px`; rose.style.top = `${y0}px`;
+    hero.appendChild(rose);
+    const dx = hr.width / 2 - x0, dy = hr.height * 0.45 - y0;  // toward the middle of the screen
+    whooshSound();
+    rose.animate([
+      { transform: 'translate(-50%,-50%) scale(.2) rotate(-40deg)', opacity: 0 },
+      { transform: 'translate(-50%,-50%) scale(.35) rotate(0deg)', opacity: 1, offset: .1 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(2.6) rotate(380deg)`, opacity: 1, offset: .7 },
+      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy + hr.height * 0.6}px)) scale(2.4) rotate(420deg)`, opacity: 0 }
+    ], { duration: 1500, easing: 'cubic-bezier(.3,.1,.4,1)' }).onfinish = () => rose.remove();
+  };
+  // ── Cut-in: full-screen dramatic close-up (manga panel) for CUTIN_MS ──
+  const cutin = hero.querySelector('.hero-cutin');
+  const showCutin = () => {
+    hero.classList.remove('cutin'); void cutin.offsetWidth; hero.classList.add('cutin');
+    tone(220, 110, 0.9, 0.05, 'triangle');                    // sad "dun dun"
+    setTimeout(() => { hero.classList.remove('cutin'); if (bubble.classList.contains('show')) place(); }, CUTIN_MS);
+  };
+  const FX = { rose: throwRose, cutin: showCutin };
+  const syncSoundBtn = () => {
+    soundBtn.setAttribute('aria-pressed', String(soundOn));
+    soundBtn.setAttribute('aria-label', soundOn ? 'Mute his voice' : 'Turn on his voice');
+    soundBtn.firstElementChild.className = `fas ${soundOn ? 'fa-volume-high' : 'fa-volume-xmark'}`;
+  };
+  syncSoundBtn();
+  soundBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    soundOn = !soundOn;
+    try { localStorage.setItem('heroSound', soundOn ? 'on' : 'off'); } catch (err) {}
+    syncSoundBtn();
+    if (soundOn) { audio(); setTimeout(clickSound, 30); }
+  });
+  // Browsers only allow audio after an interaction; unlock it on the first one
+  window.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { once: true, capture: true });
+
+  // ── Playback ──
+  let current = null, timer = null, typing = null, idleT = null;
+  let lastActive = Date.now(), visible = true, leftOnce = false, resting = false, pendingLong = false;
+  let coffeeT = [], onCoffee = false;
+  const stopCoffee = () => { coffeeT.forEach(clearTimeout); coffeeT = []; onCoffee = false; };
+  const clearTimers = () => { clearTimeout(timer); clearInterval(typing); clearTimeout(idleT); stopCoffee(); };
+
+  // skipTo: where the "Skip" button goes (same as not answering, minus the wait)
+  let justWoke = false;      // the first question after a wake-up also offers "Go back to sleep"
+  const renderChoices = (options, skipTo) => {
+    let list = options ? [...options] : [];
+    if (options && justWoke) {
+      if (!list.some(([, to]) => to === 'backToSleep')) list.push(['Go back to sleep', 'backToSleep']);
+      justWoke = false;
+    }
+    if (options) list.push(['Skip', skipTo || 'signoff', true]);
+    choicesEl.replaceChildren(...list.map(([label, to, isSkip]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = isSkip ? 'hero-choice hero-skip' : 'hero-choice'; b.textContent = label;
+      b.addEventListener('click', (e) => { e.stopPropagation(); lastActive = Date.now(); clickSound(); play(to); });
+      return b;
+    }));
+    choicesEl.hidden = !options;
+  };
+
+  // Stop talking: bubble away, back to fixing the tie
+  let idleOk = false;        // true while he's just waiting on the visitor (safe to doze off)
+  const rest = () => {
+    clearTimers();
+    resting = true; idleOk = true; justWoke = false;
+    bubble.classList.remove('show');
+    showHint();                                               // nothing more to say: remind how to interact
+    setTimeout(() => { if (resting) setPose('fix'); }, 450);
+  };
+
+  let currentText = '';
+  let shown = null;
+  // then: called once the line has finished typing (used by asides)
+  // hold: how long the line stays up before `then` runs (ms)
+  const play = (id, { keepChoices = false, text: forced, then, hold = 1600 } = {}) => {
+    const s = STEPS[id]; if (!s) return;
+    if (s.redirect && !forced) { const r = s.redirect(); if (r) return play(r, { keepChoices, then }); }
+    const text = forced || (typeof s.t === 'function' ? s.t() : s.t);
+    const options = typeof s.options === 'function' ? s.options() : s.options;
+    clearTimers();
+    shown = { s, then };                                      // what's on screen now (for click-to-skip)
+    if (s.fx === 'cutin' && !forced) showCutin();            // cut in instantly, before anything else changes
+    hero.dataset.mood = s.mood || '';                         // red when raging, black when rejected
+    if (sleeping) { sleeping = false; hero.classList.remove('sleeping'); } // talking means he's awake
+    if (id !== 'sleepy') drowsy = false;                      // interrupted while getting sleepy
+    if (!ASIDES.has(id)) { current = id; currentText = text; } // asides don't move the conversation
+    resting = false; idleOk = false;
+    hideHint();
+    setPose(s.pose);
+    // measure the full bubble first so it doesn't jump while typing
+    textEl.style.minWidth = ''; textEl.textContent = text;
+    if (!keepChoices) renderChoices(options, s.auto);
+    place();
+    if (s.fx && s.fx !== 'cutin' && FX[s.fx] && !forced) setTimeout(FX[s.fx], 150); // special effect (not again on a resume)
+    if (s.run && !forced) s.run();
+    if (!bubble.classList.contains('show')) popSound();
+    bubble.classList.add('show');
+    const after = () => {
+      if (then) { timer = setTimeout(then, hold); return; }
+      if (!keepChoices && options) {
+        choicesEl.classList.add('show');
+        if (s.auto) autoFrom(id);                             // no answer? he carries on
+        else idleOk = true;                                   // no answer? eventually he dozes off
+      }
+      if (s.next) timer = setTimeout(() => play(s.next), s.wait || 1400 + text.length * 25);
+      if (s.end) timer = setTimeout(rest, 2500 + text.length * 25);
+      if (s.doSleep) timer = setTimeout(() => sleep(), 2000);   // dozes right back off
+      if (s.go) timer = setTimeout(() => {
+        resting = true;
+        document.querySelector(s.go)?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+      }, 900);
+    };
+    if (!keepChoices) choicesEl.classList.remove('show');
+    if (calm) return after();
+    textEl.style.minWidth = `${textEl.offsetWidth}px`;
+    let n = 0; textEl.textContent = '';
+    typing = setInterval(() => {
+      textEl.textContent = text.slice(0, ++n);
+      if (n % 2 === 0 && /[a-z0-9]/i.test(text[n - 1])) blip(); // talk on every other letter
+      if (n >= text.length) { clearInterval(typing); after(); }
+    }, 26);
+  };
+
+  // A short interruption, then he picks up where he left off (same words, not a new joke)
+  const aside = (id) => {
+    if (sulking) return;                                       // he's not talking to you
+    const resume = resting ? null : current, resumeText = currentText;
+    play(id, { then: () => (resume ? play(resume, { text: resumeText }) : rest()) });
+  };
+
+  // Unanswered question: continue alone, but never while the pointer is on the bubble
+  let hovering = false;
+  bubble.addEventListener('pointerenter', () => { hovering = true; });
+  bubble.addEventListener('pointerleave', () => { hovering = false; });
+  const autoFrom = (id) => {
+    timer = setTimeout(function tick() {
+      if (current !== id || !visible) return;
+      if (hovering) { timer = setTimeout(tick, 1500); return; }
+      play(STEPS[id].auto);
+    }, AUTO_MS);
+  };
+
+  // ── Sleep: nobody has done anything for SLEEP_MS ──
+  let sleeping = false, sulking = false;
+  const zzz = hero.querySelector('.hero-zzz');
+  const shockEl = hero.querySelector('.hero-shock');
+  // First he says he's getting sleepy; if the visitor still does nothing, he dozes off
+  let drowsy = false;
+  const getSleepy = () => {
+    drowsy = true;
+    const resume = resting ? null : current, resumeText = currentText, saidAt = Date.now();
+    play('sleepy', { keepChoices: true, hold: SLEEPY_HOLD_MS, then: () => {
+      drowsy = false;
+      if (lastActive > saidAt) return resume ? play(resume, { text: resumeText }) : rest(); // they moved: stay awake
+      sleep();
+    } });
+  };
+  // No interaction and not dozing off this time: a quiet coffee break (hold → sip → hold → back)
+  const coffeeBreak = () => {
+    onCoffee = true;
+    const back = resting ? 'fix' : (STEPS[current] && STEPS[current].pose) || 'fix';
+    const seq = [['coffee', 0], ['sip', 2200], ['coffee', 4600], ['sip', 7000], ['coffee', 9000], [back, 11500]];
+    seq.forEach(([p, ms], i) => coffeeT.push(setTimeout(() => {
+      if (p === 'sip') tone(300, 260, 0.25, 0.025, 'sine');   // soft slurp
+      setPose(p);
+      if (i === seq.length - 1) { onCoffee = false; lastActive = Date.now(); } // restart the idle clock
+    }, ms)));
+  };
+  const sleep = () => {
+    sleeping = true;
+    clearTimers();
+    bubble.classList.remove('show');
+    setPose('sleep');
+    const hr = hero.getBoundingClientRect(), r = body.getBoundingClientRect();
+    zzz.style.left = `${r.left - hr.left + r.width * 0.6}px`;
+    zzz.style.top = `${r.top - hr.top + r.height * 0.12}px`;
+    hero.classList.add('sleeping');
+  };
+  // Woken by a click: he jolts up in shock, then makes excuses
+  const wakeUp = () => {
+    if (!sleeping) return;
+    sleeping = false;
+    hero.classList.remove('sleeping');
+    const resume = resting ? null : current, resumeText = currentText;
+    shockSound();
+    if (!calm) { charLayer.classList.remove('jolt'); void charLayer.offsetWidth; charLayer.classList.add('jolt'); }
+    const r = body.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+    shockEl.style.left = `${r.left - hr.left + r.width * 0.3}px`;
+    shockEl.style.top = `${r.top - hr.top + r.height * 0.06}px`;
+    hero.classList.remove('shocked'); void shockEl.offsetWidth; hero.classList.add('shocked');
+    setTimeout(() => hero.classList.remove('shocked'), 1400);
+    justWoke = true;
+    // Back to the question he was asking; otherwise ask what brings them here
+    const carryOn = () => (resume && STEPS[resume].options ? play(resume, { text: resumeText }) : play('wakeMenu'));
+    // Sometimes, while he's flustered anyway, he pops the question
+    const askNow = !hireAsked && Math.random() < WAKE_ASK_CHANCE;
+    if (askNow) hireAsked = true;
+    play('wake', { then: () => play('wake2', { then: () => (askNow ? play('wakeAsk') : carryOn()) }) });
+  };
+  // "Will you hire me?": once per visit, at a random quiet moment, never again after a yes
+  let hireAsked = false;
+  try { hireAsked = localStorage.getItem('heroHired') === 'yes'; } catch (e) {}
+  const hireAskAt = Date.now() + HIRE_ASK_MIN_MS + Math.random() * (HIRE_ASK_MAX_MS - HIRE_ASK_MIN_MS);
+  setInterval(() => {
+    if (!hireAsked && Date.now() > hireAskAt && (idleOk || resting) && visible && !sleeping && !drowsy && !sulking
+        && !onCoffee && !document.hidden && !hovering && !hero.classList.contains('cutin')) { hireAsked = true; play('askHire'); }
+  }, 1500);
+  setInterval(() => {
+    if (idleOk && visible && !sleeping && !drowsy && !sulking && !onCoffee && !document.hidden && Date.now() - lastActive > SLEEP_MS) {
+      if (Math.random() < COFFEE_CHANCE) coffeeBreak(); else getSleepy();
+    }
+  }, 2000);
+
+  // First words: a returning visitor gets a "welcome back" instead of the intro
+  const start = () => setTimeout(() => play(visits > 0 ? 'welcome' : 'hello'), 1900);
+  if (hero.classList.contains('is-layered')) start();
+  else body.addEventListener('load', start, { once: true });
+
+  // ── Clicking him: reopen the menu, or react if poked repeatedly ──
+  const shake = () => {
+    if (calm) return;
+    charLayer.classList.remove('shake'); void charLayer.offsetWidth; charLayer.classList.add('shake');
+  };
+  // Every click gives a little squish, so it always feels like you poked him
+  const squish = () => {
+    if (calm) return;
+    charLayer.classList.remove('squish'); void charLayer.offsetWidth; charLayer.classList.add('squish');
+  };
+  let pokes = 0, forgiveT = null, raging = false, sulkResume = null, sulkResumeText = '';
+
+  // Stop clicking for FORGIVE_MS and he calms down, then carries on where he was
+  const scheduleForgive = () => {
+    clearTimeout(forgiveT);
+    forgiveT = setTimeout(() => {
+      const wasRaging = raging, wasSulking = sulking;
+      pokes = 0; sulking = false; raging = false;
+      hero.classList.remove('raging'); hero.dataset.mood = '';
+      if (!wasSulking) return;                                  // only tickled: nothing to forgive
+      const resume = sulkResume, resumeText = sulkResumeText;
+      play(wasRaging ? 'calmDown' : 'forgive',
+           { then: () => (resume ? play(resume, { text: resumeText }) : rest()) });
+    }, FORGIVE_MS);
+  };
+  // POKES_TO_ANGRY clicks: he sulks and ignores you
+  const getAngry = () => {
+    sulking = true;
+    sulkResume = resting ? null : current; sulkResumeText = currentText;
+    shake();
+    play('angry', { then: () => { if (!raging) bubble.classList.remove('show'); } });
+  };
+  // POKES_TO_RAGE clicks: full meltdown, giant ARGH behind him
+  const rage = () => {
+    raging = true;
+    hero.classList.add('raging');
+    shake();
+    tone(140, 70, 0.5, 0.07, 'sawtooth');                      // angry growl
+    play('rage');
+  };
+
+  // Listen on the whole character layer, so clicks count even when the blink frame is on top
+  charLayer.addEventListener('click', (e) => {
+    lastActive = Date.now();
+    // Clicked the empty space around him: skip the current line instead of poking him
+    if (!e.target.closest('.hero-char-img') || !onBody(e.clientX, e.clientY)) return skipLine();
+    if (sleeping) return wakeUp();                             // only a click/tap wakes him
+    pokes++;
+    scheduleForgive();
+    if (raging) { shake(); return; }                           // already furious
+    if (pokes >= POKES_TO_RAGE) return rage();
+    if (sulking) { shake(); return; }                          // ignoring you, getting madder
+    if (pokes >= POKES_TO_ANGRY) return getAngry();
+    squish(); tone(500 + pokes * 60, 380, 0.06, 0.04, 'sine'); // "boop", higher each poke
+    if (pokes === 3) aside('poke2');
+    else if (pokes === 2) aside('poke1');
+    else if (pokes === 1 && (resting || !bubble.classList.contains('show'))) play('again');
+  });
+  // Is (x, y) on his drawn body, or on the transparent space around him? (checks the pixel)
+  const hitMaps = {};
+  const onBody = (x, y) => {
+    const src = body.getAttribute('src'), N = 256;
+    let map = hitMaps[src];
+    if (!map) {
+      if (!body.complete || !body.naturalWidth) return true;   // pose still loading: count it as him (don't cache)
+      try {
+        const c = document.createElement('canvas'); c.width = c.height = N;
+        const g = c.getContext('2d', { willReadFrequently: true });
+        g.drawImage(body, 0, 0, N, N);
+        map = hitMaps[src] = g.getImageData(0, 0, N, N).data;
+      } catch (err) { return true; }                            // can't read pixels (e.g. file://): treat as body
+    }
+    const r = body.getBoundingClientRect();
+    const px = Math.floor((x - r.left) / r.width * N), py = Math.floor((y - r.top) / r.height * N);
+    if (px < 0 || py < 0 || px >= N || py >= N) return false;
+    return map[(py * N + px) * 4 + 3] > 40;                     // alpha channel
+  };
+  // Click-to-skip: jump past whatever line is showing
+  const skipLine = () => {
+    if (sleeping || sulking || raging || !shown || !bubble.classList.contains('show')) return;
+    const { s, then } = shown;
+    clearTimers();
+    clickSound();
+    if (then) return then();
+    if (s.options) return play(s.auto || 'signoff');
+    if (s.next) return play(s.next);
+    if (s.doSleep) return sleep();
+    if (s.go) { resting = true; document.querySelector(s.go)?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); return; }
+    rest();
+  };
+  // Any sign of life keeps him from dozing off (but once asleep, only a click wakes him)
+  const activity = () => { lastActive = Date.now(); };
+  ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(ev =>
+    window.addEventListener(ev, activity, { passive: true, capture: true }));
+  document.addEventListener('scroll', activity, { passive: true, capture: true });
+
+  // Switched tabs and came back
+  let hiddenAt = 0;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { hiddenAt = Date.now(); return; }
+    if (hiddenAt && Date.now() - hiddenAt > 4000 && visible && !sleeping) setTimeout(() => aside('tabBack'), 400);
+  });
+
+  // Typed words anywhere on the page (Easter eggs): word → step
+  const EGGS = { hire: 'hire', rose: 'roseEgg', love: 'roseEgg' };
+  let typed = '';
+  window.addEventListener('keydown', (e) => {
+    const t = e.target;
+    if (e.ctrlKey || e.metaKey || e.altKey || (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))) return;
+    typed = (typed + (e.key.length === 1 ? e.key.toLowerCase() : ' ')).slice(-4);
+    const step = EGGS[typed];
+    if (!step || sulking) return;
+    typed = '';
+    if (sleeping) { sleeping = false; hero.classList.remove('sleeping'); }
+    if (visible) return play(step);
+    leftOnce = false;                                          // skip the "welcome back"
+    hero.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' });
+    setTimeout(() => play(step), 800);
+  });
+
+  // Still here after 5 minutes
+  const quiet = () => (idleOk || resting) && visible && !sleeping && !drowsy && !sulking && !onCoffee
+                      && !document.hidden && !hovering && !hero.classList.contains('cutin');
+  setTimeout(() => {
+    const iv = setInterval(() => {
+      if (!visible) { pendingLong = true; clearInterval(iv); return; }  // say it when they scroll back
+      if (quiet()) { clearInterval(iv); play('long'); }
+    }, 2000);
+  }, 5 * 60 * 1000);
+
+  // Scrolled away and came back
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (!visible) {
+      if (current) leftOnce = true;
+      if (sleeping) { sleeping = false; hero.classList.remove('sleeping'); }
+      clearTimers(); bubble.classList.remove('show'); setPose('fix');
+    } else if (leftOnce || pendingLong) {
+      const next = pendingLong ? 'long' : 'back';
+      leftOnce = pendingLong = false;
+      setTimeout(() => { if (visible) play(next); }, 500);
+    }
+  }, { threshold: 0.5 }).observe(hero);
+  window.addEventListener('resize', () => { if (bubble.classList.contains('show')) place(); });
+})();
