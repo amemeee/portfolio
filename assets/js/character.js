@@ -38,9 +38,13 @@
   //   end: true to stop talking after this line
   const CUTIN_MS = 5000;     // how long the despair close-up stays on screen
   const SAD_MS = 5000;       // then how long he stands there disappointed
+  const HIRE_ASK_ON = false;   // KIV: "Um… so… will you hire me?" moment switched off (true to bring it back)
   const WAKE_ASK_CHANCE = 0.5; // after waking up, chance he asks "will you hire me?"
   const JOKE_MS = 10000;     // each joke stays up this long
-  const AUTO_MS = 10000;     // unanswered question: wait this long, then he talks by himself
+  const CRY_VOLUME = 0.6;   // rejection music volume (0–1)
+  const ROSE_HOLD_MS = 5000; // the thrown rose stays in front of the viewer this long
+  const ROSE_LINE_MS = 6800; // his rose line stays up until the rose has dropped
+  const AUTO_MS = 20000;     // unanswered question: wait this long, then he gets sleepy and dozes off
   const phone = matchMedia('(max-width: 640px)').matches;
   const h = new Date().getHours();
   const hello =
@@ -80,10 +84,10 @@
     // Nobody answered (or they asked him to talk): he introduces himself
     solo:     { t: "Not much of a talker? No worries, I'll do the talking.", pose: 'look', next: 'solo2' },
     listen:   { t: 'Alright, story time.', pose: 'look', next: 'solo2' },
-    solo2:    { t: "I'm an IT manager by day, and a Laravel developer at heart.", pose: 'look', next: 'solo3' },
-    solo3:    { t: 'I build things with PHP and Laravel, from barbershop sites to property auction platforms.', pose: 'look', next: 'solo4' },
+    solo2:    { t: 'I work as an IT manager, so I wear a lot of hats.', pose: 'look', next: 'solo3' },
+    solo3:    { t: "I build things with PHP and Laravel. Hire me, and you'll unlock my full potential.", pose: 'excited', next: 'solo4' },
     solo4:    { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'solo5' },
-    solo5:    { t: "When I'm not coding, I draw. There's a whole gallery further down.", pose: 'think', next: 'solo6' },
+    solo5:    { t: "When I'm not coding, I'm leveling up in real life: learning new things, calisthenics… and a healthy amount of games and Netflix.", pose: 'laugh', next: 'solo6' },
     solo6:    { t: phone ? 'On your phone? Scroll down and swipe through my projects.'
                          : "Scroll down whenever you're ready. The projects are right below.", pose: 'point', next: 'solo7' },
     solo7:    { t: "Or pick one and I'll take you there.", pose: 'look', auto: 'signoff', options: MENU },
@@ -97,18 +101,18 @@
     site3:    { t: "Here are a few. Then let's talk.", pose: 'point', auto: 'solo7',
                 options: [['See projects', 'toWork'], ['Contact', 'toContact']] },
 
-    artLike:  { t: "Oh, you noticed! …this one's for you.", pose: 'rose', fx: 'rose', next: 'artLike2' },
-    artLike2: { t: 'I draw in my free time, mostly manga style.', pose: 'look', next: 'artLike3' },
+    artLike:  { t: "Oh, you noticed! …this one's for you.", pose: 'rose', fx: 'rose', next: 'artLike2', wait: ROSE_LINE_MS },
+    artLike2: { t: "Those are from my drawing days. I've hung up the pencil since, but I'm still proud of them.", pose: 'laugh', next: 'artLike3' },
     artLike3: { t: "There's more further down.", pose: 'point', auto: 'solo7', options: [['Show me', 'toArt']] },
 
     browse:   { t: 'Make yourself at home.', pose: 'look', next: 'browse2' },
-    browse2:  { t: 'I write code by day and draw by night. Which side do you want to see?', pose: 'think', auto: 'solo6',
+    browse2:  { t: "I code, I design, and if it's new, I want to learn it. Want to see my work, or my old drawings?", pose: 'think', auto: 'solo6',
                 options: [['The code', 'toWork'], ['The drawings', 'toArt']] },
 
-    about:    { t: 'IT manager by day, Laravel developer at heart.', pose: 'look', next: 'about2' },
+    about:    { t: 'I work as an IT manager, so I wear a lot of hats.', pose: 'look', next: 'about2' },
     about2:   { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'about3' },
-    about3:   { t: "Want to see what I've built?", pose: 'look', auto: 'solo5',
-                options: [['Sure', 'toWork'], ['Just say hi', 'toContact']] },
+    about3:   { t: "Too many hats to fit in this bubble. Email me and let's set up an interview for the full story.", pose: 'point', auto: 'solo5',
+                options: [['Email me', 'toContact'], ['See my work', 'toWork']] },
 
     joke:     { t: nextJoke, pose: 'laugh', next: 'joke2', wait: JOKE_MS, redirect: () => (jokesLeft() ? null : 'noJokes') },
     joke2:    { t: () => (jokesLeft() ? 'Another one?' : 'That was my last one, by the way.'), pose: 'look', auto: 'signoff',
@@ -129,11 +133,12 @@
     longNo:   { t: 'Take all the time you need.', pose: 'look', end: true },
 
     toWork:   { t: 'Right this way!', pose: 'point', go: '#work' },
-    toArt:    { t: 'My favourite part. Down here!', pose: 'point', go: '#art' },
-    toContact:{ t: "Can't wait to hear from you~", pose: 'rose', fx: 'rose', next: 'toContact2' },
+    toArt:    { t: 'Throwback time. Down here!', pose: 'point', go: '#art' },
+    toContact:{ t: "Can't wait to hear from you~", pose: 'rose', fx: 'rose', next: 'toContact2', wait: ROSE_LINE_MS },
     toContact2:{ t: "Email works best. I'll take you there.", pose: 'point', go: '#contact' },
     // Typed "rose" or "love"
-    roseEgg:  { t: 'For you~', pose: 'rose', fx: 'rose', end: true },
+    roseEgg:  { t: 'For you~', pose: 'rose', fx: 'rose', next: 'roseEnd', wait: ROSE_LINE_MS },
+    roseEnd:  { t: '…too much? Okay, too much.', pose: 'laugh', end: true },
 
     // Asked once per visit at a random quiet moment
     // "You're hired!" button
@@ -154,7 +159,7 @@
     willLater:{ t: "Okay! I'll be right here, smiling.", pose: 'excited', end: true },
     willNo:   { t: '…why, universe… WHY…', pose: 'sad', fx: 'cutin', mood: 'sad', next: 'willNoSad', wait: CUTIN_MS },
     willNoSad:{ t: '…oh. Okay.', pose: 'sad', mood: 'sad', next: 'willNo2', wait: SAD_MS },
-    willNo2:  { t: "*sniff*… it's fine… I'm fine…", pose: 'cry', mood: 'sad', next: 'willNo3', wait: 3500 },
+    willNo2:  { t: "*sniff*… it's fine… I'm fine…", pose: 'cry', next: 'willNo3', wait: 3500 },
     willNo3:  { t: 'Maybe my projects can change your mind?', pose: 'look', auto: 'signoff',
                 options: [['Show me', 'toWork'], ['Okay, fine, yes', 'willYes']] },
     willSkip: { t: '…forget I asked.', pose: 'shy', end: true },
@@ -171,7 +176,7 @@
     calmDown: { t: "…okay. I'm calm. I'm fine. Totally fine.", pose: 'look' },
     signoff:  { t: "No pressure. I'll be right here if you need me.", pose: 'look', end: true },
     forgive:  { t: '…fine. I forgive you.', pose: 'look' },
-    sleepy:   { t: 'You make me sleepy waiting for your answer…', pose: 'think' },
+    sleepy:   { t: 'You make me sleepy waiting for you…', pose: 'think' },
     wake:     { t: "WAH?! I'm up! I'm up!", pose: 'shock' },
     wake2:    { t: "I wasn't sleeping. I was… debugging with my eyes closed.", pose: 'laugh' },
     tabBack:  { t: "Oh, you're back. I was just… fixing my tie.", pose: 'fix' }
@@ -189,7 +194,9 @@
   // Each image: same 1024x1024 canvas and framing, transparent background.
   // 'fix' is the idle pose. A pose whose file is missing falls back to 'look', then 'fix'.
   const POSES = {
-    fix:     { src: 'assets/character/idle.png', blink: 'assets/character/idle-blink.png' },
+    smile:   { src: 'assets/character/idle-smile.png', blink: 'assets/character/idle-smile-blink.png' }, // resting: hands in pockets
+    phone:   { src: 'assets/character/idle-phone.png', blink: 'assets/character/idle-phone-blink.png' }, // resting: on his phone
+    fix:     { src: 'assets/character/idle.png', blink: 'assets/character/idle-blink.png' },   // fixing his tie
     look:    { src: 'assets/character/look.png',      blink: 'assets/character/look-blink.png' },
     wave:    { src: 'assets/character/wave.png',      blink: 'assets/character/wave-blink.png' },
     point:   { src: 'assets/character/point.png',     blink: 'assets/character/point-blink.png' },
@@ -214,7 +221,10 @@
     load(p.src).then(ok => p.ok = ok);
     if (p.blink) load(p.blink).then(ok => p.blinkOk = ok);
   });
-  let pose = 'fix';
+  let pose = 'smile';                                         // matches the image in index.html
+  // Resting look: picked at random each time he goes quiet
+  const IDLE_POSES = ['smile', 'phone'];
+  const restPose = () => IDLE_POSES[Math.floor(Math.random() * IDLE_POSES.length)];
   const setPose = (name) => {
     const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok);
     if (!p || p === POSES[pose]) return;
@@ -317,21 +327,46 @@
     hero.appendChild(rose);
     const dx = hr.width / 2 - x0, dy = hr.height * 0.45 - y0;  // toward the middle of the screen
     whooshSound();
+    // Original fast throw (~1s to reach you), then it hangs in front of the viewer for ROSE_HOLD_MS, then drops
+    const FLY = 1050, DROP = 450, total = FLY + ROSE_HOLD_MS + DROP;
+    const at = (ms) => ms / total;
+    const held = (y, r) => `translate(calc(-50% + ${dx}px), calc(-50% + ${dy + y}px)) scale(2.6) rotate(${r}deg)`;
     rose.animate([
       { transform: 'translate(-50%,-50%) scale(.2) rotate(-40deg)', opacity: 0 },
-      { transform: 'translate(-50%,-50%) scale(.35) rotate(0deg)', opacity: 1, offset: .1 },
-      { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) scale(2.6) rotate(380deg)`, opacity: 1, offset: .7 },
+      { transform: 'translate(-50%,-50%) scale(.35) rotate(0deg)', opacity: 1, offset: at(150) },
+      { transform: held(0, 380), opacity: 1, offset: at(FLY), easing: 'ease-in-out' },          // arrives
+      { transform: held(-8, 374), offset: at(FLY + ROSE_HOLD_MS * .35), easing: 'ease-in-out' }, // gentle float
+      { transform: held(6, 386), offset: at(FLY + ROSE_HOLD_MS * .7), easing: 'ease-in-out' },
+      { transform: held(0, 380), opacity: 1, offset: at(FLY + ROSE_HOLD_MS), easing: 'cubic-bezier(.5,0,.9,.6)' },
       { transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy + hr.height * 0.6}px)) scale(2.4) rotate(420deg)`, opacity: 0 }
-    ], { duration: 1500, easing: 'cubic-bezier(.3,.1,.4,1)' }).onfinish = () => rose.remove();
+    ], { duration: total }).onfinish = () => rose.remove();
   };
   // ── Cut-in: full-screen dramatic close-up (manga panel) for CUTIN_MS ──
   const cutin = hero.querySelector('.hero-cutin');
   const showCutin = () => {
     hero.classList.remove('cutin'); void cutin.offsetWidth; hero.classList.add('cutin');
-    tone(220, 110, 0.9, 0.05, 'triangle');                    // sad "dun dun"
+    playCry();                                                // sad trombone as the close-up cuts in
     setTimeout(() => { hero.classList.remove('cutin'); if (bubble.classList.contains('show')) place(); }, CUTIN_MS);
   };
   const FX = { rose: throwRose, cutin: showCutin };
+
+  // ── Rejection sound: sad trombone when the close-up cuts in (fades out if the sad part is cut short) ──
+  let cry = null, cryFade = null;
+  const playCry = () => {
+    if (!soundOn) return;
+    clearInterval(cryFade);
+    if (!cry) { cry = new Audio('assets/character/fx/sad-trombone.mp3'); cry.preload = 'auto'; }
+    cry.volume = CRY_VOLUME; cry.currentTime = 0;
+    cry.play().catch(() => {});
+  };
+  const stopCry = () => {
+    if (!cry || cry.paused) return;
+    clearInterval(cryFade);
+    cryFade = setInterval(() => {                               // ~0.6s fade out
+      cry.volume = Math.max(0, cry.volume - CRY_VOLUME / 12);
+      if (cry.volume <= 0.001) { clearInterval(cryFade); cry.pause(); cry.volume = CRY_VOLUME; }
+    }, 50);
+  };
   const syncSoundBtn = () => {
     soundBtn.setAttribute('aria-pressed', String(soundOn));
     soundBtn.setAttribute('aria-label', soundOn ? 'Mute his voice' : 'Turn on his voice');
@@ -343,7 +378,7 @@
     soundOn = !soundOn;
     try { localStorage.setItem('heroSound', soundOn ? 'on' : 'off'); } catch (err) {}
     syncSoundBtn();
-    if (soundOn) { audio(); setTimeout(clickSound, 30); }
+    if (soundOn) { audio(); setTimeout(clickSound, 30); } else stopCry();
   });
   // Browsers only allow audio after an interaction; unlock it on the first one
   window.addEventListener('pointerdown', () => { if (soundOn) audio(); }, { once: true, capture: true });
@@ -357,21 +392,57 @@
 
   // skipTo: where the "Skip" button goes (same as not answering, minus the wait)
   let justWoke = false;      // the first question after a wake-up also offers "Go back to sleep"
+  // Skip = he talks by himself (his intro, once per visit; after that he signs off).
+  // The "will you hire me?" questions keep their own reply to a skip.
+  let soloDone = false;
+  const OWN_SKIP = new Set(['askHire', 'askHireWake', 'hired']);
+  const skipTarget = (id) => (OWN_SKIP.has(id) ? STEPS[id].auto : soloDone ? 'signoff' : 'solo');
+
+  // Answers are shown PER_PAGE at a time; "More" / "Back" flip pages (Skip is always there)
+  const PER_PAGE = 4;
   const renderChoices = (options, skipTo) => {
     let list = options ? [...options] : [];
     if (options && justWoke) {
       if (!list.some(([, to]) => to === 'backToSleep')) list.push(['Go back to sleep', 'backToSleep']);
       justWoke = false;
     }
-    if (options) list.push(['Skip', skipTo || 'signoff', true]);
-    choicesEl.replaceChildren(...list.map(([label, to, isSkip]) => {
-      const b = document.createElement('button');
-      b.type = 'button'; b.className = isSkip ? 'hero-choice hero-skip' : 'hero-choice'; b.textContent = label;
-      b.addEventListener('click', (e) => { e.stopPropagation(); lastActive = Date.now(); clickSound(); play(to); });
-      return b;
-    }));
     choicesEl.hidden = !options;
+    if (!options) { choicesEl.replaceChildren(); return; }
+    const pages = Math.ceil(list.length / PER_PAGE);
+    const mk = (label, cls, onClick) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'hero-choice' + (cls ? ' ' + cls : ''); b.textContent = label;
+      b.addEventListener('click', (e) => { e.stopPropagation(); lastActive = Date.now(); clickSound(); onClick(); });
+      return b;
+    };
+    const showPage = (n) => {
+      const btns = list.slice(n * PER_PAGE, n * PER_PAGE + PER_PAGE).map(([label, to]) => mk(label, '', () => play(to)));
+      const turn = (to) => {                                     // flipping pages isn't an answer:
+        showPage(to); place();                                   // keep the question up, restart its timer
+        if (shown && shown.s.auto && current) { clearTimeout(timer); autoFrom(current); }
+      };
+      if (n > 0) btns.push(mk('Back', 'hero-nav', () => turn(n - 1)));
+      if (n < pages - 1) btns.push(mk('More', 'hero-nav', () => turn(n + 1)));
+      btns.push(mk('Skip', 'hero-skip', () => play(skipTo || 'signoff')));
+      choicesEl.replaceChildren(...btns);
+    };
+    showPage(0);
   };
+
+  // "Talk to me" button: sits where his speech bubble would be, while he's quiet
+  const talkBtn = document.getElementById('heroTalk');
+  const placeTalk = () => {};                                 // positioned by CSS: bottom center, above the hint
+  const showTalk = () => { if (!talkBtn) return; placeTalk(); talkBtn.classList.add('show'); };
+  const hideTalk = () => { if (talkBtn) talkBtn.classList.remove('show'); };
+  if (talkBtn) {
+    talkBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lastActive = Date.now();
+      clickSound();
+      if (sleeping) wakeUp(); else play('again');
+    });
+    window.addEventListener('resize', () => { if (talkBtn.classList.contains('show')) placeTalk(); });
+  }
 
   // Stop talking: bubble away, back to fixing the tie
   let idleOk = false;        // true while he's just waiting on the visitor (safe to doze off)
@@ -380,7 +451,8 @@
     resting = true; idleOk = true; justWoke = false;
     bubble.classList.remove('show');
     showHint();                                               // nothing more to say: remind how to interact
-    setTimeout(() => { if (resting) setPose('fix'); }, 450);
+    showTalk();
+    setTimeout(() => { if (resting) setPose(restPose()); }, 450);
   };
 
   let currentText = '';
@@ -396,15 +468,17 @@
     shown = { s, then };                                      // what's on screen now (for click-to-skip)
     if (s.fx === 'cutin' && !forced) showCutin();            // cut in instantly, before anything else changes
     hero.dataset.mood = s.mood || '';                         // red when raging, black when rejected
+    if (s.mood !== 'sad') stopCry();                          // sad part over: music fades out
     if (sleeping) { sleeping = false; hero.classList.remove('sleeping'); } // talking means he's awake
-    if (id !== 'sleepy') drowsy = false;                      // interrupted while getting sleepy
+    if (id !== 'sleepy') drowsy = false;
+    if (id === 'solo2') soloDone = true;                      // he has introduced himself                      // interrupted while getting sleepy
     if (!ASIDES.has(id)) { current = id; currentText = text; } // asides don't move the conversation
     resting = false; idleOk = false;
-    hideHint();
+    hideHint(); hideTalk();
     setPose(s.pose);
     // measure the full bubble first so it doesn't jump while typing
     textEl.style.minWidth = ''; textEl.textContent = text;
-    if (!keepChoices) renderChoices(options, s.auto);
+    if (!keepChoices) renderChoices(options, skipTarget(id));
     place();
     if (s.fx && s.fx !== 'cutin' && FX[s.fx] && !forced) setTimeout(FX[s.fx], 150); // special effect (not again on a resume)
     if (s.run && !forced) s.run();
@@ -451,7 +525,7 @@
     timer = setTimeout(function tick() {
       if (current !== id || !visible) return;
       if (hovering) { timer = setTimeout(tick, 1500); return; }
-      play(STEPS[id].auto);
+      getSleepy();                                              // nobody answered: he gets sleepy, then dozes off
     }, AUTO_MS);
   };
 
@@ -473,7 +547,7 @@
   // No interaction and not dozing off this time: a quiet coffee break (hold → sip → hold → back)
   const coffeeBreak = () => {
     onCoffee = true;
-    const back = resting ? 'fix' : (STEPS[current] && STEPS[current].pose) || 'fix';
+    const back = resting ? restPose() : (STEPS[current] && STEPS[current].pose) || restPose();
     const seq = [['coffee', 0], ['sip', 2200], ['coffee', 4600], ['sip', 7000], ['coffee', 9000], [back, 11500]];
     seq.forEach(([p, ms], i) => coffeeT.push(setTimeout(() => {
       if (p === 'sip') tone(300, 260, 0.25, 0.025, 'sine');   // soft slurp
@@ -490,6 +564,7 @@
     zzz.style.left = `${r.left - hr.left + r.width * 0.6}px`;
     zzz.style.top = `${r.top - hr.top + r.height * 0.12}px`;
     hero.classList.add('sleeping');
+    showTalk();
   };
   // Woken by a click: he jolts up in shock, then makes excuses
   const wakeUp = () => {
@@ -508,7 +583,7 @@
     // Back to the question he was asking; otherwise ask what brings them here
     const carryOn = () => (resume && STEPS[resume].options ? play(resume, { text: resumeText }) : play('wakeMenu'));
     // Sometimes, while he's flustered anyway, he pops the question
-    const askNow = !hireAsked && Math.random() < WAKE_ASK_CHANCE;
+    const askNow = HIRE_ASK_ON && !hireAsked && Math.random() < WAKE_ASK_CHANCE;
     if (askNow) hireAsked = true;
     play('wake', { then: () => play('wake2', { then: () => (askNow ? play('wakeAsk') : carryOn()) }) });
   };
@@ -517,7 +592,7 @@
   try { hireAsked = localStorage.getItem('heroHired') === 'yes'; } catch (e) {}
   const hireAskAt = Date.now() + HIRE_ASK_MIN_MS + Math.random() * (HIRE_ASK_MAX_MS - HIRE_ASK_MIN_MS);
   setInterval(() => {
-    if (!hireAsked && Date.now() > hireAskAt && (idleOk || resting) && visible && !sleeping && !drowsy && !sulking
+    if (HIRE_ASK_ON && !hireAsked && Date.now() > hireAskAt && (idleOk || resting) && visible && !sleeping && !drowsy && !sulking
         && !onCoffee && !document.hidden && !hovering && !hero.classList.contains('cutin')) { hireAsked = true; play('askHire'); }
   }, 1500);
   setInterval(() => {
@@ -587,7 +662,6 @@
     squish(); tone(500 + pokes * 60, 380, 0.06, 0.04, 'sine'); // "boop", higher each poke
     if (pokes === 3) aside('poke2');
     else if (pokes === 2) aside('poke1');
-    else if (pokes === 1 && (resting || !bubble.classList.contains('show'))) play('again');
   });
   // Is (x, y) on his drawn body, or on the transparent space around him? (checks the pixel)
   const hitMaps = {};
@@ -615,7 +689,7 @@
     clearTimers();
     clickSound();
     if (then) return then();
-    if (s.options) return play(s.auto || 'signoff');
+    if (s.options) return play(skipTarget(current));
     if (s.next) return play(s.next);
     if (s.doSleep) return sleep();
     if (s.go) { resting = true; document.querySelector(s.go)?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth' }); return; }
@@ -667,7 +741,7 @@
     if (!visible) {
       if (current) leftOnce = true;
       if (sleeping) { sleeping = false; hero.classList.remove('sleeping'); }
-      clearTimers(); bubble.classList.remove('show'); setPose('fix');
+      clearTimers(); stopCry(); hero.dataset.mood = ''; bubble.classList.remove('show'); setPose(restPose());
     } else if (leftOnce || pendingLong) {
       const next = pendingLong ? 'long' : 'back';
       leftOnce = pendingLong = false;

@@ -155,7 +155,6 @@ body {
   cursor: pointer;
   transition: background .15s ease, color .15s ease;
 }
-.hero-choice::before { content: '→ '; }
 
 /* Rage (20+ clicks): giant ARGHHHHH behind him, everything trembles */
 .hero-rage {
@@ -186,6 +185,28 @@ body {
   100% { translate: 0 0; }
 }
 
+/* "Talk to me": a little speech-bubble button next to his head while he's quiet */
+.hero-talk {
+  position: absolute; z-index: 6;
+  /* bottom center, just above the hint chip */
+  left: 0; right: 0; margin-inline: auto; width: max-content;
+  bottom: calc(var(--footer-h) + 76px);
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 16px;
+  background: #fff; color: #17161a;
+  border: 2px solid #17161a; border-radius: 20px 20px 20px 6px;
+  font: 600 14px/1 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #17161a;
+  opacity: 0; visibility: hidden; transform: translateY(6px) scale(.9);
+  transition: opacity .25s ease, transform .3s cubic-bezier(.3,1.6,.5,1), visibility .25s, background .15s, color .15s;
+}
+.hero-talk.show { opacity: 1; visibility: visible; transform: none; animation: hero-talk-bob 2.4s ease-in-out .6s infinite; }
+.hero-talk:hover, .hero-talk:focus-visible { background: #17161a; color: #fff; outline: none; }
+.hero-talk:active { transform: translateY(3px); box-shadow: 0 1px 0 #17161a; }
+@keyframes hero-talk-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+@media (prefers-reduced-motion: reduce) { .hero-talk.show { animation: none; } }
+
 /* Phones: no blue tap flash / selection when tapping him, no long-press image menu */
 .hero-cover, .hero-cover * {
   -webkit-tap-highlight-color: transparent;
@@ -197,12 +218,11 @@ body {
 /* Moods: red when he's furious, black spotlight when he's rejected */
 .hero-cover { transition: background-color .5s ease; }
 .hero-cover[data-mood="rage"] { background: #d3241c; }
-.hero-cover[data-mood="sad"] {
-  background: radial-gradient(ellipse 55% 60% at 50% 45%, #2c2c30 0%, #0b0b0d 70%) #0b0b0d;
-}
-/* faint rim light so his dark outlines don't vanish into the black */
+/* Sad: plain black */
+.hero-cover[data-mood="sad"] { background: #000; }
+/* soft rim light so his outlines stay readable on the dark */
 .hero-cover[data-mood="sad"] .hero-char-img {
-  filter: drop-shadow(0 0 1.5px rgba(255,255,255,.9)) drop-shadow(0 0 18px rgba(255,255,255,.18));
+  filter: drop-shadow(0 0 1.5px rgba(255,255,255,.85));
 }
 .hero-cover[data-mood="rage"] .hero-rage span { color: #4a0806; }
 body:has(.hero-cover[data-mood="sad"]) #nav:not(.scrolled) .nav-logo,
@@ -305,9 +325,12 @@ body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-hamburger span 
   background: #17161a; color: #fff; outline: none;
 }
 .hero-choice:hover, .hero-choice:focus-visible { background: #17161a; color: #fff; outline: none; }
+/* Page buttons (More / Back): filled, so they don't read as answers */
+.hero-choice.hero-nav { background: #17161a; color: #fff; }
+.hero-choice.hero-nav:hover, .hero-choice.hero-nav:focus-visible { background: #fff; color: #17161a; }
+
 /* Skip: quieter than the real answers */
 .hero-choice.hero-skip { border-style: dashed; border-color: #8a8780; color: #6f6b64; }
-.hero-choice.hero-skip::before { content: '⏭ '; }
 .hero-choice.hero-skip:hover, .hero-choice.hero-skip:focus-visible { background: #6f6b64; border-color: #6f6b64; color: #fff; }
 
 @keyframes hero-breathe {
@@ -570,6 +593,42 @@ body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-hamburger span 
 }
 .work-shot.active { opacity: 1; visibility: visible; }
 img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+/* "Just for fun" pill on side projects */
+.work-tag {
+  display: inline-block; align-self: flex-start; width: max-content;
+  padding: 3px 10px; border-radius: 999px;
+  font: 600 10px/1.4 'Space Grotesk', sans-serif; letter-spacing: .08em; text-transform: uppercase;
+  color: #fff; background: var(--accent); border: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.work-tag[hidden] { display: none; }
+.work-spot-tag { margin-bottom: 8px; }
+/* "Your project here": last slot is an invitation, drawn like a manga panel */
+.work-yours {
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 8% 6% 0; overflow: hidden;
+  background: #fff url('assets/character/scenes/your-project.jpg') left center / cover no-repeat;
+}
+.yours-frame {
+  position: relative; width: 38%; aspect-ratio: 16 / 10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  border: 3px dashed #17161a; border-radius: 14px; background: rgba(255,255,255,.85);
+  color: #17161a; text-align: center; padding: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.yours-plus  { font-size: clamp(32px, 4vw, 64px); font-weight: 300; line-height: .8; color: var(--accent); }
+.yours-title { font-size: clamp(16px, 1.9vw, 30px); font-weight: 700; line-height: 1.1; }
+.yours-sub   { font-size: clamp(11px, .95vw, 15px); color: #6f6b64; }
+.work-shot.work-yours.active .yours-frame { animation: yours-pulse 2.2s ease-in-out infinite; }
+@keyframes yours-pulse { 50% { border-color: var(--accent); transform: scale(1.02); } }
+@media (prefers-reduced-motion: reduce) { .work-shot.work-yours.active .yours-frame { animation: none; } }
+/* list thumbnail: dashed empty slot with a + */
+.work-thumb-yours {
+  display: flex !important; align-items: center; justify-content: center;
+  background: var(--surface) !important; border: 2px dashed var(--border); box-sizing: border-box;
+}
+.work-thumb-yours span { font: 300 42px/1 'Space Grotesk', sans-serif; color: var(--accent); }
 .work-thumb, .work-visit, .work-dots, .work-spot, .work-row-head { display: none; }
 .work-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 .work-live iframe, .work-thumb iframe {
@@ -730,6 +789,47 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 
 /* ── Skills ── */
 .skills-card { justify-content: flex-start; padding: 32px; }
+
+/* ── Peeking over the Skills card (large screens only) ──
+   The source image is 1456x720 and the card edge sits at y=597 (82.9%). */
+.skills-peek { display: none; }
+@media (min-width: 1025px) {
+  .skills-card { overflow: visible; }
+  .skills-peek {
+    display: block; position: absolute; top: 0; right: 7%; z-index: 2;
+    width: clamp(300px, 30vw, 440px); aspect-ratio: 1456 / 720;
+    transform: translateY(-82.9%);                 /* drawn edge = card's top edge */
+    cursor: pointer;
+  }
+  .peek-clip { position: absolute; inset: 0 0 17.1% 0; overflow: hidden; } /* hides him below the edge */
+  .peek-face { position: relative; translate: 0 75%; }
+  .peek-head { display: block; width: 100%; height: auto; }
+  .peek-hands { position: absolute; inset: 0; width: 100%; height: auto; opacity: 0; translate: 0 -8%; }
+
+  /* card scrolls in: hands grab the edge, then he slowly rises to peek */
+  .skills-card.visible .peek-hands { animation: peek-grab .35s ease-out .5s forwards; }
+  .skills-card.visible .peek-face  {
+    animation: peek-rise 1s cubic-bezier(.3,.7,.3,1) .9s forwards,
+               peek-idle 9s ease-in-out 3s infinite;
+  }
+  /* hover: he ducks down (hands stay), comes back up when you move away */
+  .skills-peek:hover .peek-face { animation: none; translate: 0 78%; transition: translate .18s ease-in; }
+  .peek-face { transition: translate .5s cubic-bezier(.3,.7,.3,1); }
+
+  @keyframes peek-grab { to { opacity: 1; translate: 0 0; } }
+  @keyframes peek-rise { to { translate: 0 0; } }
+  /* every so often: quick duck, then a slow suspicious rise */
+  @keyframes peek-idle {
+    0%, 70%   { translate: 0 0; }
+    74%       { translate: 0 70%; }
+    84%       { translate: 0 70%; }
+    94%, 100% { translate: 0 0; }
+  }
+}
+@media (min-width: 1025px) and (prefers-reduced-motion: reduce) {
+  .peek-face, .skills-card.visible .peek-face { animation: none; translate: 0 0; }
+  .peek-hands, .skills-card.visible .peek-hands { animation: none; opacity: 1; translate: 0 0; }
+}
 .skills-list { display: flex; flex-direction: column; }
 .skills-row {
   display: grid; grid-template-columns: 160px 1fr; gap: 24px;
@@ -746,17 +846,55 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 
 /* ── Contact tile ── */
 .contact-tile {
-  align-items: center; text-align: center; padding: 60px 40px;
-  background: var(--text);
+  position: relative; overflow: hidden;
+  padding: 0; aspect-ratio: 1376 / 768;
+  background: #fff; border-color: #e7e1d6;
+}
+/* the two characters, positioned as in the original picture (pushed a bit outward to widen the gap) */
+.contact-scene { position: absolute; inset: 0; pointer-events: none; }
+.contact-scene img { position: absolute; top: 0; height: 100%; width: auto; max-width: none; }
+.contact-boy  { left: -4%; transform-origin: 20% 100%; }
+.contact-girl { right: -3%; transform-origin: 90% 60%; }
+/* text in the empty middle */
+.contact-body {
+  position: absolute; z-index: 1; top: 50%; left: 50%;
+  width: 34%; transform: translate(-48%, -50%);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
 }
 .contact-heading {
   font-family: 'Space Grotesk', sans-serif; font-weight: 700;
-  font-size: clamp(28px, 4vw, 48px); line-height: 1.15; margin-bottom: 32px;
-  color: var(--bg);
+  font-size: clamp(24px, 2.8vw, 44px); line-height: 1.1; margin-bottom: 26px; white-space: nowrap;
+  color: #17161a;
 }
 .contact-heading em { font-style: normal; color: var(--accent); }
-.contact-tile .bento-btn.ghost { color: var(--bg); border-color: color-mix(in srgb, var(--bg) 25%, transparent); }
-.contact-tile .bento-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.contact-tile .bento-btn {
+  background: #17161a; color: #fff;
+  font-size: clamp(12px, 1.05vw, 15px); padding: 15px 26px;
+  box-shadow: 0 5px 0 var(--accent); transition: background .2s, transform .15s, box-shadow .15s;
+}
+.contact-tile .bento-btn:hover { opacity: 1; background: var(--accent); transform: translateY(-2px); box-shadow: 0 7px 0 #17161a; }
+
+/* ── Animation: they burst in when the card scrolls into view, then keep reacting ── */
+.contact-boy  { opacity: 0; translate: -12% 30%; }
+.contact-girl { opacity: 0; translate: 25% 0; }
+.contact-tile.visible .contact-boy {
+  animation: c-boy-in .7s cubic-bezier(.2,1.5,.4,1) .15s forwards,
+             c-boy-gasp 2.8s ease-in-out 1.2s infinite;
+}
+.contact-tile.visible .contact-girl {
+  animation: c-girl-in .6s cubic-bezier(.2,1.6,.4,1) .45s forwards,
+             c-girl-point 1.4s ease-in-out 1.3s infinite;
+}
+@keyframes c-boy-in   { to { opacity: 1; translate: 0 0; } }
+@keyframes c-girl-in  { to { opacity: 1; translate: 0 0; } }
+@keyframes c-boy-gasp { 0%, 100% { opacity: 1; translate: 0 0; scale: 1; } 50% { opacity: 1; translate: 0 -1.2%; scale: 1.015; } }
+@keyframes c-girl-point { 0%, 100% { opacity: 1; translate: 0 0; rotate: 0deg; } 45% { opacity: 1; translate: -2.2% 0; rotate: -1.2deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .contact-boy, .contact-girl,
+  .contact-tile.visible .contact-boy, .contact-tile.visible .contact-girl {
+    animation: none; opacity: 1; translate: 0 0;
+  }
+}
 
 /* ── Footer ── */
 footer {
@@ -787,6 +925,7 @@ footer a:hover { color: var(--accent); }
   .hero-cutin { background: #000; display: flex; align-items: center; }
   .hero-cutin img { width: 165%; height: auto; max-width: none; margin-left: -32.5%; object-fit: initial; }
   .hero-hint { bottom: 20px; font-size: 12px; border-radius: 18px; }
+  .hero-talk { bottom: 92px; }
   .hero-choice { font-size: 12px; padding: 6px 10px; }
   .hero-char-img { height: min(80%, 125vw); }
   /* Phones: free scrolling, content-height sections, footer at the end */
@@ -869,8 +1008,11 @@ footer a:hover { color: var(--accent); }
   .skills-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 0; }
   .skills-row dt, .skills-row dd { font-size: 14px; }
   .profile-name { font-size: 26px; }
-  .contact-tile { padding: 40px 20px; }
-  .contact-heading { font-size: 30px; }
+  /* Phones: text first, the two characters as a banner underneath (she points up at the text) */
+  .contact-tile { aspect-ratio: auto; display: flex; flex-direction: column; }
+  .contact-scene { position: relative; inset: auto; aspect-ratio: 1376 / 768; flex: none; order: 2; }
+  .contact-body { position: static; width: auto; transform: none; padding: 32px 20px 8px; order: 1; }
+  .contact-heading { font-size: 32px; white-space: normal; }
   footer { padding: 20px; text-align: center; justify-content: center; }
 
 }
