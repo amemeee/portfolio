@@ -85,9 +85,21 @@
     <div class="bento-item reveal intro-card">
       <h1 class="profile-name">Muhammad Amin</h1>
       <p class="profile-role">PHP / Laravel Developer</p>
-      <p class="status-line">IT Manager by day, <em>Laravel developer at heart.</em></p>
-      <p class="profile-avail">Open to full-time &amp; freelance</p>
-      <p class="profile-bio">Laravel and PHP are my favourite stack. Away from the code, I love animation and drawing. Hire me!</p>
+      <!-- Character-sheet style profile -->
+      <dl class="profile-sheet">
+        <div><dt>Day job</dt><dd>IT Manager <span class="sheet-note">(I wear a lot of hats)</span></dd></div>
+        <div><dt>Main weapon</dt><dd>PHP · Laravel · MySQL</dd></div>
+        <div><dt>Alt weapon</dt><dd>
+          <!-- cycles through the list below, one at a time -->
+          <span class="alt-weapon" id="altWeapon" aria-hidden="true" data-words="JavaScript|Vue|Tailwind|Bootstrap|Git|GitHub Actions|AWS|Postman|Photoshop|Illustrator|Canva|AI tools|and more…"><span class="alt-word">JavaScript</span></span>
+          <span class="sr-only">JavaScript, Vue, Tailwind, Bootstrap, Git, GitHub Actions, AWS, Postman, Photoshop, Illustrator, Canva, AI tools and more</span>
+        </dd></div>
+        <div><dt>Side quests</dt><dd>
+          <span class="alt-weapon" aria-hidden="true" data-ms="2400" data-words="Leveling up IRL|Learning new things|Calisthenics|Unlocking new skills"><span class="alt-word">Leveling up IRL</span></span>
+          <span class="sr-only">Learning new things and calisthenics</span>
+        </dd></div>
+      </dl>
+      <p class="profile-bio">I build web apps with Laravel, and I'm always learning something new.</p>
       <div class="profile-actions">
         <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn"><i class="fas fa-envelope"></i>Email me</a>
         <a href="https://github.com/amemeee" target="_blank" rel="noopener" class="bento-btn ghost"><i class="fab fa-github"></i>GitHub</a>
@@ -95,7 +107,11 @@
     </div>
 
     <div class="bento-item reveal portrait-card">
-      <img src="assets/brand/portrait.jpg" alt="Self-portrait illustration of Muhammad Amin">
+      <!-- Click to put the sunglasses on, click again to take them off -->
+      <button class="portrait-toggle" id="portraitToggle" type="button" aria-pressed="false" aria-label="Put on sunglasses">
+        <img class="portrait-normal" src="assets/brand/portrait.jpg" alt="Self-portrait illustration of Muhammad Amin">
+        <img class="portrait-cool" src="assets/brand/portrait-cool.jpg" alt="" aria-hidden="true">
+      </button>
     </div>
   </section>
 
@@ -127,7 +143,7 @@
           <h2 class="tile-label">Projects</h2>
           <div class="work-spot" aria-live="polite">
             <h3 class="work-spot-title" id="workTitle"></h3>
-            <span class="work-tag work-spot-tag" id="workTag" hidden>Just for fun</span>
+            <span class="work-tag work-spot-tag" id="workTag" hidden>Side project</span>
             <p class="work-spot-meta"><span id="workStack"></span><span id="workCount"></span></p>
             <p class="work-spot-desc" id="workDesc"></p>
             <div class="work-spot-actions">
@@ -186,7 +202,6 @@
             <button class="work-item" data-fun="1" data-url="https://01-agent-property-auction.wasmer.app">
               <span class="work-num">04</span>
               <span class="work-body">
-                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Agent Property Auction Platform</span>
                 <span class="work-desc">Property auction platform built for agents.</span>
                 <span class="work-stack">Vue · Laravel</span>
@@ -199,7 +214,6 @@
             <button class="work-item" data-fun="1" data-url="https://ornate-crumble-cb085e.netlify.app/">
               <span class="work-num">05</span>
               <span class="work-body">
-                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Wedding Invitation</span>
                 <span class="work-desc">Digital wedding card with an animated envelope, countdown, RSVP and guest wishes.</span>
                 <span class="work-stack">Vue 3 · Supabase</span>
@@ -212,7 +226,6 @@
             <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/bite-the-dust/">
               <span class="work-num">06</span>
               <span class="work-body">
-                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Bite The Dust</span>
                 <span class="work-desc">Rohan Kishibe Activate Bite THe Dust.</span>
                 <span class="work-stack">HTML · Javascript · CSS</span>
@@ -225,7 +238,6 @@
             <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/soul-match/">
               <span class="work-num">07</span>
               <span class="work-body">
-                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Soul Match</span>
                 <span class="work-desc">Trading card game demo: open packs, browse the gallery and keep a collection saved in the browser.</span>
                 <span class="work-stack">HTML · CSS · JavaScript</span>
@@ -238,7 +250,6 @@
             <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/barbershop/">
               <span class="work-num">08</span>
               <span class="work-body">
-                <span class="work-tag">Just for fun</span>
                 <span class="work-title">Skull &amp; Shears</span>
                 <span class="work-desc">Barbershop Website</span>
                 <span class="work-stack">HTML · CSS · JavaScript</span>
@@ -304,49 +315,92 @@
   <!-- ART -->
   <section id="art" class="bento-grid">
     <div class="bento-item t-4x1 reveal art-card">
-      <div class="section-head">
-        <h2 class="tile-label">Art &amp; Illustration</h2>
-        <p class="art-count" id="artCount"></p>
-      </div>
-      <div class="art-grid">
-        <button class="art-tile is-featured" data-title="Spell Caster" data-meta="Adobe Animate · Flash 8">
-          <img src="assets/gallery/seishin.gif" alt="" loading="lazy" decoding="async">
-          <span class="art-tag">Animated</span>
-          <span class="art-caption"><span class="art-title">Spell Caster</span><span class="art-meta">Adobe Animate · Flash 8</span></span>
-        </button>
-        <button class="art-tile" data-title="Cyberpunk">
-          <img src="assets/gallery/art7.gif" alt="" loading="lazy" decoding="async">
-          <span class="art-tag">Animated</span>
-          <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
-        </button>
-        <button class="art-tile" data-title="Midnight Samurai">
-          <img src="assets/gallery/art1.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
-        </button>
-        <button class="art-tile" data-title="AKUMA">
-          <img src="assets/gallery/art4.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">AKUMA</span></span>
-        </button>
-        <button class="art-tile" data-title="Abyss Hare">
-          <img src="assets/gallery/art12.jpeg" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Abyss Hare</span></span>
-        </button>
-        <button class="art-tile" data-title="Gadis Lolipop!">
-          <img src="assets/gallery/art11.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Gadis Lolipop!</span></span>
-        </button>
-        <button class="art-tile" data-title="Vanilla Ice Cream">
-          <img src="assets/gallery/art2.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Vanilla Ice Cream</span></span>
-        </button>
-        <button class="art-tile" data-title="Gumpunk">
-          <img src="assets/gallery/art6.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Gumpunk</span></span>
-        </button>
-        <button class="art-tile" data-title="Dropship Marketing">
-          <img src="assets/gallery/dropship.png" alt="" loading="lazy" decoding="async">
-          <span class="art-caption"><span class="art-title">Dropship Marketing</span></span>
-        </button>
+      <!-- Museum: he stands on the left reviewing his old drawings -->
+      <div class="art-layout">
+        <aside class="art-curator" aria-hidden="true">
+          <div class="curator-figure">
+            <p class="curator-bubble" id="curatorBubble">Behold, my magnum opus. Vintage 2021, from before I put the pencil down.</p>
+            <img class="curator-img" src="assets/character/scenes/art-curator.png" alt="" loading="lazy" decoding="async">
+          </div>
+        </aside>
+        <div class="art-main">
+          <div class="art-head-text">
+            <h2 class="tile-label">Art &amp; Illustration</h2>
+            <p class="art-exhibit">The Drawing Days Collection</p>
+            <p class="art-count"><span id="artCount"></span><span class="art-swipe" aria-hidden="true"> · drag or scroll to browse →</span></p>
+          </div>
+          <!-- Not my drawing: from my collection, by AngryTiger. Desktop: framed on the wall above the curator. Hover = glasses. -->
+          <figure class="art-shelf">
+            <span class="shelf-thumb">
+              <img class="shelf-plain" src="assets/gallery/guest-seishin-6.jpg" alt="Seishin #6 by AngryTiger, a character in a hijab with cat-ear headphones" loading="lazy" decoding="async">
+              <img class="shelf-glasses" src="assets/gallery/guest-seishin-6-glasses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            </span>
+            <figcaption>
+              <span class="shelf-label">My collection</span>
+              <span class="shelf-title">Seishin #6</span>
+              <span class="shelf-meta">Art by AngryTiger · my favourite and inspiration</span>
+            </figcaption>
+          </figure>
+          <div class="art-grid">
+            <button class="art-tile is-featured" data-title="Spell Caster" data-meta="Adobe Animate · Flash 8">
+              <img src="assets/gallery/seishin.gif" alt="" loading="lazy" decoding="async">
+              <span class="art-tag">Animated</span>
+              <span class="art-caption"><span class="art-title">Spell Caster</span><span class="art-meta">Adobe Animate · Flash 8</span></span>
+            </button>
+            <!-- My collection (art by AngryTiger), big, right of Spell Caster on big screens. Hover = glasses on. -->
+            <button class="art-tile is-collected is-featured" data-title="Seishin #6" data-meta="Art by AngryTiger · my favourite piece and my inspiration" data-line="Seishin #6 by AngryTiger. My all-time favourite, and the one that inspired me most.">
+              <img src="assets/gallery/guest-seishin-6.jpg" alt="" loading="lazy" decoding="async">
+              <img class="tile-glasses" src="assets/gallery/guest-seishin-6-glasses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+              <span class="art-tag">My collection</span>
+              <span class="art-caption"><span class="art-title">Seishin #6</span><span class="art-meta">Art by AngryTiger · my inspiration</span></span>
+            </button>
+            <button class="art-tile" data-title="Cyberpunk">
+              <img src="assets/gallery/art7.gif" alt="" loading="lazy" decoding="async">
+              <span class="art-tag">Animated</span>
+              <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
+            </button>
+            <button class="art-tile is-tall" data-title="Midnight Samurai">
+              <img src="assets/gallery/art1.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
+            </button>
+            <button class="art-tile" data-title="The Old Me" data-meta="2020 · before the glow-up" data-line="That's the old me. Let bygones be bygones… I've glowed up since. With a little AI touch-up.">
+              <img src="assets/gallery/self-portrait-2020.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">The Old Me</span><span class="art-meta">2020 · before the glow-up</span></span>
+            </button>
+            <button class="art-tile" data-title="Abyss Hare">
+              <img src="assets/gallery/art12.jpeg" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Abyss Hare</span></span>
+            </button>
+            <button class="art-tile" data-title="Gadis Lolipop!">
+              <img src="assets/gallery/art11.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Gadis Lolipop!</span></span>
+            </button>
+            <button class="art-tile" data-title="Vanilla Ice Cream">
+              <img src="assets/gallery/art2.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Vanilla Ice Cream</span></span>
+            </button>
+            <button class="art-tile" data-title="GUMPUNK" data-line="GUMPUNK. No other name would do.">
+              <img src="assets/gallery/art6.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">GUMPUNK</span></span>
+            </button>
+            <button class="art-tile" data-title="Dropship Marketing" data-meta="Made for Murah Kaya (now Makerz)" data-line="Dropship marketing for Murah Kaya, now known as Makerz. Ah, the memories.">
+              <img src="assets/gallery/dropship.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Dropship Marketing</span><span class="art-meta">Made for Murah Kaya (now Makerz)</span></span>
+            </button>
+            <button class="art-tile" data-title="Pink Mode" data-meta="Original character">
+              <img src="assets/gallery/random-character.jpg" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Pink Mode</span><span class="art-meta">Original character</span></span>
+            </button>
+            <button class="art-tile is-wide" data-title="Crispy Chicken Burger" data-meta="Genshin Impact event entry · won a pile of Primogems" data-line="Crispy Chicken Burger. Delicious! I entered a Genshin Impact event and won a lot of Primogems.">
+              <img src="assets/gallery/genshin-burger.jpg" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Crispy Chicken Burger</span><span class="art-meta">Genshin Impact event · won a pile of Primogems</span></span>
+            </button>
+            <button class="art-tile" data-title="AKUMA">
+              <img src="assets/gallery/art4.png" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">AKUMA</span></span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -476,6 +530,29 @@
     });
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  // Intro: rotating words (Alt weapon, Side quests). Each .alt-weapon cycles through its data-words.
+  document.querySelectorAll('.alt-weapon[data-words]').forEach((box, k) => {
+    const words = box.dataset.words.split('|');
+    const ms = +box.dataset.ms || 1800;
+    let i = 0;
+    setTimeout(() => setInterval(() => {
+      i = (i + 1) % words.length;
+      const next = document.createElement('span');
+      next.className = 'alt-word alt-in'; next.textContent = words[i];
+      const old = box.querySelector('.alt-word:not(.alt-out)');
+      if (old) { old.classList.add('alt-out'); setTimeout(() => old.remove(), 450); }
+      box.appendChild(next);
+    }, ms), k * 700);                                  // offset rows so they don't flip together
+  });
+
+  // Portrait: toggle sunglasses on click
+  const portraitToggle = document.getElementById('portraitToggle');
+  if (portraitToggle) portraitToggle.addEventListener('click', () => {
+    const cool = portraitToggle.classList.toggle('cool');
+    portraitToggle.setAttribute('aria-pressed', String(cool));
+    portraitToggle.setAttribute('aria-label', cool ? 'Take off sunglasses' : 'Put on sunglasses');
+  });
 
   // Work list + preview
   const workList = document.getElementById('workList');
@@ -616,7 +693,80 @@
   let artIndex = 0;
   let artOpener = null;
 
-  document.getElementById('artCount').textContent = `${artTiles.length} pieces`;
+  document.getElementById('artCount').textContent =
+    `${artTiles.filter(t => !t.classList.contains('is-collected')).length} pieces · from before I hung up the pencil`;
+
+  // Big screens: the collage scrolls sideways. Drag it with the mouse, or use the wheel/trackpad.
+  const artGrid = document.querySelector('.art-grid');
+  if (artGrid) {
+    let down = null, dragged = false;
+    artGrid.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || artGrid.scrollWidth <= artGrid.clientWidth) return;
+      down = { x: e.clientX, left: artGrid.scrollLeft }; dragged = false;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - down.x;
+      if (Math.abs(dx) > 5) { dragged = true; artGrid.classList.add('dragging'); }
+      if (dragged) artGrid.scrollLeft = down.left - dx;
+    });
+    window.addEventListener('pointerup', () => { down = null; setTimeout(() => artGrid.classList.remove('dragging'), 0); });
+    // a drag shouldn't also open the lightbox
+    artGrid.addEventListener('click', (e) => { if (dragged) { e.stopPropagation(); e.preventDefault(); dragged = false; } }, true);
+    // vertical wheel scrolls the collage sideways while it still has room to move
+    artGrid.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX) || artGrid.scrollWidth <= artGrid.clientWidth) return;
+      const max = artGrid.scrollWidth - artGrid.clientWidth;
+      if ((e.deltaY > 0 && artGrid.scrollLeft < max - 1) || (e.deltaY < 0 && artGrid.scrollLeft > 1)) {
+        e.preventDefault(); artGrid.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+  }
+
+  // Curator comments on whichever piece you hover or focus
+  const curatorBubble = document.getElementById('curatorBubble');
+  if (curatorBubble) {
+    const DEFAULT_LINE = curatorBubble.textContent;
+    const LINES = [
+      t => `Ah, "${t}". Back when I had free time.`,
+      t => `"${t}". Still proud of this one.`,
+      t => `"${t}". A true classic, if I say so myself.`,
+      t => `"${t}". Please don't zoom in too much.`,
+      t => `"${t}". Took me way too many late nights.`
+    ];
+    let lineT = null;
+    // Two curator poses: the normal curator, and a proud sunglasses pose for his favourite piece (preloaded so the swap is instant)
+    const curatorImg = document.querySelector('.curator-img');
+    const POSE = { normal: 'assets/character/scenes/art-curator.png', heart: 'assets/character/scenes/art-curator-proud.png' };
+    new Image().src = POSE.heart;
+    const pose = (heart) => {
+      if (!curatorImg) return;
+      const src = heart ? POSE.heart : POSE.normal;
+      if (!curatorImg.src.endsWith(src)) curatorImg.src = src;
+    };
+    const say = (text) => {
+      curatorBubble.classList.remove('pop'); void curatorBubble.offsetWidth;
+      curatorBubble.textContent = text; curatorBubble.classList.add('pop');
+    };
+    artTiles.forEach((tile, i) => {
+      const comment = () => {
+        clearTimeout(lineT);
+        pose(tile.classList.contains('is-collected'));          // heart pose for his favourite
+        const t = tile.dataset.title;
+        say(tile.dataset.line || (tile.querySelector('.art-tag') ? `"${t}". It even moves!` : LINES[i % LINES.length](t)));
+      };
+      tile.addEventListener('mouseenter', comment);
+      tile.addEventListener('focus', comment);
+    });
+    const reset = () => { clearTimeout(lineT); lineT = setTimeout(() => { say(DEFAULT_LINE); pose(false); }, 1200); };
+    const shelf = document.querySelector('.art-shelf');
+    if (shelf) {
+      shelf.addEventListener('mouseenter', () => { clearTimeout(lineT); pose(true); say("Seishin #6 by AngryTiger. My all-time favourite, and the one that inspired me most."); });
+      shelf.addEventListener('mouseleave', reset);
+    }
+    document.querySelector('.art-grid').addEventListener('mouseleave', reset);
+    document.querySelector('.art-grid').addEventListener('focusout', reset);
+  }
 
   function showArt(i) {
     artIndex = (i + artTiles.length) % artTiles.length;

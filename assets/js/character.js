@@ -41,9 +41,14 @@
   const HIRE_ASK_ON = false;   // KIV: "Um… so… will you hire me?" moment switched off (true to bring it back)
   const WAKE_ASK_CHANCE = 0.5; // after waking up, chance he asks "will you hire me?"
   const JOKE_MS = 10000;     // each joke stays up this long
+  const MASTER_VOLUME = 1;   // overall volume of all his sounds (try 0.6–1.5)
+  const VOICE = 'typing';    // how he "talks": 'typing' (keyboard clicks) or 'blip' (retro game voice)
+  const TYPING_VOLUME = 0.5; // keyboard clicks
+  const BLIP_VOLUME = 0.3;   // typing blips while he talks
+  const RAGE_VOLUME = 0.8;  // the shout at 20+ clicks (0–1)
   const CRY_VOLUME = 0.6;   // rejection music volume (0–1)
-  const ROSE_HOLD_MS = 5000; // the thrown rose stays in front of the viewer this long
-  const ROSE_LINE_MS = 6800; // his rose line stays up until the rose has dropped
+  const ROSE_HOLD_MS = 2500; // the thrown rose stays in front of the viewer this long
+  const ROSE_LINE_MS = 4300; // his rose line stays up until the rose has dropped (fly 1.05s + hold + drop 0.45s + a beat)
   const AUTO_MS = 20000;     // unanswered question: wait this long, then he gets sleepy and dozes off
   const phone = matchMedia('(max-width: 640px)').matches;
   const h = new Date().getHours();
@@ -159,7 +164,7 @@
     willLater:{ t: "Okay! I'll be right here, smiling.", pose: 'excited', end: true },
     willNo:   { t: '…why, universe… WHY…', pose: 'sad', fx: 'cutin', mood: 'sad', next: 'willNoSad', wait: CUTIN_MS },
     willNoSad:{ t: '…oh. Okay.', pose: 'sad', mood: 'sad', next: 'willNo2', wait: SAD_MS },
-    willNo2:  { t: "*sniff*… it's fine… I'm fine…", pose: 'cry', next: 'willNo3', wait: 3500 },
+    willNo2:  { t: "*sniff*… it's fine… I'm fine…", pose: 'think', next: 'willNo3', wait: 3500 },
     willNo3:  { t: 'Maybe my projects can change your mind?', pose: 'look', auto: 'signoff',
                 options: [['Show me', 'toWork'], ['Okay, fine, yes', 'willYes']] },
     willSkip: { t: '…forget I asked.', pose: 'shy', end: true },
@@ -212,11 +217,12 @@
     shy:     { src: 'assets/character/shy.png',   fallback: 'laugh' },   // "will you hire me?"
     excited: { src: 'assets/character/excited.png', fallback: 'laugh' }, // star eyes, jumping for joy
     sad:     { src: 'assets/character/sad.png',   fallback: 'think' },   // "…oh. Okay."
-    cry:     { src: 'assets/character/cry.png', fallback: 'think' }    // comedic tears
   };
   const blinkImg = hero.querySelector('.hero-blink');
   const charLayer = hero.querySelector('.hero-char');
-  const load = (src) => { const im = new Image(); im.src = src; return im.decode().then(() => true, () => false); };
+  // Preloaded images are kept in KEEP so the browser can't drop them (dropping them caused a blank frame on swap)
+  const KEEP = [];
+  const load = (src) => { const im = new Image(); im.src = src; KEEP.push(im); return im.decode().then(() => true, () => false); };
   Object.values(POSES).forEach(p => {
     load(p.src).then(ok => p.ok = ok);
     if (p.blink) load(p.blink).then(ok => p.blinkOk = ok);
@@ -229,7 +235,13 @@
     const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok);
     if (!p || p === POSES[pose]) return;
     pose = Object.keys(POSES).find(k => POSES[k] === p);
+    // No-flicker swap: keep the old pose painted underneath until the new one has drawn
+    const prev = body.currentSrc || body.src;
+    body.style.background = `url("${prev}") center / 100% 100% no-repeat`;
     body.src = p.src;
+    const clear = () => { if (body.src.endsWith(p.src)) body.style.background = ''; };
+    if (body.complete && body.naturalWidth) requestAnimationFrame(clear);
+    else body.addEventListener('load', () => requestAnimationFrame(clear), { once: true });
     if (blinkImg && blinkImg.isConnected && p.blinkOk) { blinkImg.src = p.blink; hero.classList.add('can-blink'); }
     else hero.classList.remove('can-blink');
     hero.classList.remove('blinking');
@@ -288,13 +300,22 @@
   const soundBtn = bubble.querySelector('.hero-sound');
   let soundOn = false, ctx = null;
   try { soundOn = localStorage.getItem('heroSound') === 'on'; } catch (e) {}
+  // All sounds go through one master volume and a compressor, so quiet blips stay audible on laptop speakers
+  let master = null;
   const audio = () => {
-    if (!ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC(); }
+    if (!ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null;
+      ctx = new AC();
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.value = -24; comp.ratio.value = 4;
+      master = ctx.createGain(); master.gain.value = MASTER_VOLUME;
+      master.connect(comp).connect(ctx.destination);
+    }
     if (ctx.state === 'suspended') ctx.resume();
     return ctx;
   };
   // one short tone: frequency glides from f0 to f1 over `dur` seconds
-  const tone = (f0, f1, dur, vol = 0.05, type = 'triangle') => {
+  const tone = (f0, f1, dur, vol = 0.05, type = 'triangle', lowpass = 0) => {
     if (!soundOn) return;
     const a = audio(); if (!a || a.state !== 'running') return;
     const t = a.currentTime, o = a.createOscillator(), g = a.createGain();
@@ -303,18 +324,45 @@
     o.frequency.exponentialRampToValueAtTime(f1, t + dur);
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(vol, t + 0.005);
+    g.gain.setValueAtTime(vol, t + dur * 0.6);               // hold, then fade: fuller than a pure ping
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g).connect(a.destination);
+    let node = o;
+    if (lowpass) { const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = lowpass; node = o.connect(f); }
+    node.connect(g).connect(master);
     o.start(t); o.stop(t + dur + 0.02);
+  };
+  // Typing sound: a short burst of filtered noise, like a mechanical keyboard key.
+  // 'key' for letters, 'space' for a deeper spacebar thock. Each click is slightly different.
+  let noiseBuf = null;
+  const keyClick = (kind = 'key') => {
+    if (!soundOn) return;
+    const a = audio(); if (!a || a.state !== 'running') return;
+    if (!noiseBuf) {
+      noiseBuf = a.createBuffer(1, Math.floor(a.sampleRate * 0.05), a.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+    }
+    const t = a.currentTime, src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+    src.buffer = noiseBuf;
+    src.playbackRate.value = 0.85 + Math.random() * 0.3;
+    f.type = 'bandpass';
+    f.frequency.value = kind === 'space' ? 900 : 2200 + Math.random() * 1400;
+    f.Q.value = kind === 'space' ? 1.2 : 2.5;
+    const vol = TYPING_VOLUME * (kind === 'space' ? 1.3 : 0.8 + Math.random() * 0.4);
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (kind === 'space' ? 0.06 : 0.035));
+    src.connect(f).connect(g).connect(master);
+    src.start(t); src.stop(t + 0.07);
   };
   const blip = () => {
     const f = (PITCH[pose] || 440) * (0.92 + Math.random() * 0.16);
-    tone(f, f * 0.9, pose === 'annoyed' ? 0.07 : 0.045, 0.04, pose === 'annoyed' ? 'square' : 'triangle');
+    // a soft square wave through a low-pass filter: the classic retro "talking" blip, clear on small speakers
+    tone(f, f * 0.9, pose === 'annoyed' ? 0.08 : 0.065, BLIP_VOLUME, 'square', pose === 'annoyed' ? 1400 : 2200);
   };
-  const popSound = () => tone(280, 620, 0.09, 0.05, 'sine');
-  const clickSound = () => tone(900, 700, 0.03, 0.035, 'sine');
-  const shockSound = () => tone(300, 1200, 0.18, 0.06, 'square');   // startled "boing"
-  const whooshSound = () => tone(900, 250, 0.35, 0.04, 'sine');      // rose flying past
+  const popSound = () => tone(280, 620, 0.1, 0.25, 'sine');
+  const clickSound = () => tone(900, 700, 0.04, 0.2, 'sine');
+  const shockSound = () => tone(300, 1200, 0.18, 0.2, 'square', 2500); // startled "boing"
+  const whooshSound = () => tone(900, 250, 0.35, 0.2, 'sine');       // rose flying past
 
   // ── Rose throw: the rose flies from his hand straight at the viewer ──
   const throwRose = () => {
@@ -500,12 +548,13 @@
       }, 900);
     };
     if (!keepChoices) choicesEl.classList.remove('show');
-    if (calm) return after();
+    if (calm) { for (let k = 0; k < Math.min(6, Math.ceil(text.length / 6)); k++) setTimeout(VOICE === 'typing' ? keyClick : blip, k * 70); return after(); }
     textEl.style.minWidth = `${textEl.offsetWidth}px`;
     let n = 0; textEl.textContent = '';
     typing = setInterval(() => {
       textEl.textContent = text.slice(0, ++n);
-      if (n % 2 === 0 && /[a-z0-9]/i.test(text[n - 1])) blip(); // talk on every other letter
+      if (VOICE === 'typing') { const ch = text[n - 1]; if (ch === ' ') keyClick('space'); else if (/\S/.test(ch)) keyClick(); }
+      else if (n % 2 === 0 && /[a-z0-9]/i.test(text[n - 1])) blip(); // retro voice: every other letter
       if (n >= text.length) { clearInterval(typing); after(); }
     }, 26);
   };
@@ -550,7 +599,7 @@
     const back = resting ? restPose() : (STEPS[current] && STEPS[current].pose) || restPose();
     const seq = [['coffee', 0], ['sip', 2200], ['coffee', 4600], ['sip', 7000], ['coffee', 9000], [back, 11500]];
     seq.forEach(([p, ms], i) => coffeeT.push(setTimeout(() => {
-      if (p === 'sip') tone(300, 260, 0.25, 0.025, 'sine');   // soft slurp
+      if (p === 'sip') tone(300, 260, 0.25, 0.1, 'sine');    // soft slurp
       setPose(p);
       if (i === seq.length - 1) { onCoffee = false; lastActive = Date.now(); } // restart the idle clock
     }, ms)));
@@ -639,11 +688,19 @@
     play('angry', { then: () => { if (!raging) bubble.classList.remove('show'); } });
   };
   // POKES_TO_RAGE clicks: full meltdown, giant ARGH behind him
+  // Rage shout: a short clip, played only when sound is on
+  let rageAudio = null;
+  const playRage = () => {
+    if (!soundOn) return;
+    if (!rageAudio) { rageAudio = new Audio('assets/character/fx/rage-shout.mp3'); rageAudio.preload = 'auto'; }
+    rageAudio.volume = RAGE_VOLUME; rageAudio.currentTime = 0;
+    rageAudio.play().catch(() => tone(140, 70, 0.5, 0.25, 'sawtooth', 900));
+  };
   const rage = () => {
     raging = true;
     hero.classList.add('raging');
     shake();
-    tone(140, 70, 0.5, 0.07, 'sawtooth');                      // angry growl
+    playRage();                                                // "I'm very angry!" shout (growl if it can't play)
     play('rage');
   };
 
@@ -659,7 +716,7 @@
     if (pokes >= POKES_TO_RAGE) return rage();
     if (sulking) { shake(); return; }                          // ignoring you, getting madder
     if (pokes >= POKES_TO_ANGRY) return getAngry();
-    squish(); tone(500 + pokes * 60, 380, 0.06, 0.04, 'sine'); // "boop", higher each poke
+    squish(); tone(500 + pokes * 60, 380, 0.07, 0.2, 'sine');  // "boop", higher each poke
     if (pokes === 3) aside('poke2');
     else if (pokes === 2) aside('poke1');
   });
