@@ -774,17 +774,17 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 .art-count { font-size: 12px; color: var(--muted); }
 
 /* ── Art: museum layout, curator on the right facing the gallery ── */
-.art-layout { display: grid; grid-template-columns: 1fr minmax(220px, 27%); gap: 8px 28px; }
+.art-layout { display: grid; grid-template-columns: 1fr minmax(240px, 30%); gap: 8px 28px; }
 .art-layout > .art-curator { order: 2; }
 .art-main { min-width: 0; }
 .art-head-text { margin-bottom: 18px; }
 .art-head-text .tile-label { margin-bottom: 8px; }
 .art-exhibit { font: 700 clamp(24px, 2.4vw, 34px)/1.1 'Space Grotesk', sans-serif; margin-bottom: 8px; }
 .art-curator {
-  position: relative; display: flex; align-items: flex-end; justify-content: center;
+  position: relative; display: flex; align-items: flex-end; justify-content: flex-end;   /* extra size grows leftwards */
   margin: 0 -32px -32px 0;                               /* he stands on the card's bottom-right edge */
 }
-.curator-figure { position: relative; width: 115%; flex: none; }
+.curator-figure { position: relative; width: 140%; flex: none; }
 .curator-img {
   display: block; width: 100%; height: auto;
   -webkit-mask: linear-gradient(to bottom, #000 78%, transparent);
