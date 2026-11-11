@@ -89,7 +89,7 @@
     // Nobody answered (or they asked him to talk): he introduces himself
     solo:     { t: "Not much of a talker? No worries, I'll do the talking.", pose: 'look', next: 'solo2' },
     listen:   { t: 'Alright, story time.', pose: 'look', next: 'solo2' },
-    solo2:    { t: 'I work as an IT manager, so I wear a lot of hats.', pose: 'look', next: 'solo3' },
+    solo2:    { t: "I'm an IT manager, which means I wear a lot of hats.", pose: 'look', next: 'solo3' },
     solo3:    { t: "I build things with PHP and Laravel. Hire me, and you'll unlock my full potential.", pose: 'excited', next: 'solo4' },
     solo4:    { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'solo5' },
     solo5:    { t: "When I'm not coding, I'm leveling up in real life: learning new things, calisthenics… and a healthy amount of games and Netflix.", pose: 'laugh', next: 'solo6' },
@@ -114,7 +114,7 @@
     browse2:  { t: "I code, I design, and if it's new, I want to learn it. Want to see my work, or my old drawings?", pose: 'think', auto: 'solo6',
                 options: [['The code', 'toWork'], ['The drawings', 'toArt']] },
 
-    about:    { t: 'I work as an IT manager, so I wear a lot of hats.', pose: 'look', next: 'about2' },
+    about:    { t: "I'm an IT manager, which means I wear a lot of hats.", pose: 'look', next: 'about2' },
     about2:   { t: 'The bandage? I fought a bug. The bug won.', pose: 'laugh', next: 'about3' },
     about3:   { t: "Too many hats to fit in this bubble. Email me and let's set up an interview for the full story.", pose: 'point', auto: 'solo5',
                 options: [['Email me', 'toContact'], ['See my work', 'toWork']] },

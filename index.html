@@ -329,18 +329,6 @@
             <p class="art-exhibit">The Drawing Days Collection</p>
             <p class="art-count"><span id="artCount"></span><span class="art-swipe" aria-hidden="true"> · drag or scroll to browse →</span></p>
           </div>
-          <!-- Not my drawing: from my collection, by AngryTiger. Desktop: framed on the wall above the curator. Hover = glasses. -->
-          <figure class="art-shelf">
-            <span class="shelf-thumb">
-              <img class="shelf-plain" src="assets/gallery/guest-seishin-6.jpg" alt="Seishin #6 by AngryTiger, a character in a hijab with cat-ear headphones" loading="lazy" decoding="async">
-              <img class="shelf-glasses" src="assets/gallery/guest-seishin-6-glasses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
-            </span>
-            <figcaption>
-              <span class="shelf-label">My collection</span>
-              <span class="shelf-title">Seishin #6</span>
-              <span class="shelf-meta">Art by AngryTiger · my favourite and inspiration</span>
-            </figcaption>
-          </figure>
           <div class="art-grid">
             <button class="art-tile is-featured" data-title="Spell Caster" data-meta="Adobe Animate · Flash 8">
               <img src="assets/gallery/seishin.gif" alt="" loading="lazy" decoding="async">
@@ -348,11 +336,11 @@
               <span class="art-caption"><span class="art-title">Spell Caster</span><span class="art-meta">Adobe Animate · Flash 8</span></span>
             </button>
             <!-- My collection (art by AngryTiger), big, right of Spell Caster on big screens. Hover = glasses on. -->
-            <button class="art-tile is-collected is-featured" data-title="Seishin #6" data-meta="Art by AngryTiger · my favourite piece and my inspiration" data-line="Seishin #6 by AngryTiger. My all-time favourite, and the one that inspired me most.">
+            <button class="art-tile is-collected is-featured" data-title="Seishin #6" data-meta="Art by AngryTiger · an NFT I bought · my favourite piece and my inspiration" data-line="Seishin #6 by AngryTiger, one of the NFTs I bought. My all-time favourite, and the one that inspired me most.">
               <img src="assets/gallery/guest-seishin-6.jpg" alt="" loading="lazy" decoding="async">
               <img class="tile-glasses" src="assets/gallery/guest-seishin-6-glasses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
               <span class="art-tag">My collection</span>
-              <span class="art-caption"><span class="art-title">Seishin #6</span><span class="art-meta">Art by AngryTiger · my inspiration</span></span>
+              <span class="art-caption"><span class="art-title">Seishin #6</span><span class="art-meta">Art by AngryTiger · an NFT I bought</span></span>
             </button>
             <button class="art-tile" data-title="Cyberpunk">
               <img src="assets/gallery/art7.gif" alt="" loading="lazy" decoding="async">
@@ -399,6 +387,12 @@
               <img src="assets/gallery/art4.png" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">AKUMA</span></span>
             </button>
+          </div>
+          <!-- Phones: one piece at a time, with arrows and a counter -->
+          <div class="art-pager">
+            <button class="art-pager-btn" id="artPrev" aria-label="Previous piece">&#8592;</button>
+            <span class="art-pager-count" id="artPagerCount" aria-live="polite"></span>
+            <button class="art-pager-btn" id="artNext" aria-label="Next piece">&#8594;</button>
           </div>
         </div>
       </div>
@@ -755,17 +749,67 @@
         const t = tile.dataset.title;
         say(tile.dataset.line || (tile.querySelector('.art-tag') ? `"${t}". It even moves!` : LINES[i % LINES.length](t)));
       };
+      tile._comment = comment;                                 // the phone pager reuses this
       tile.addEventListener('mouseenter', comment);
       tile.addEventListener('focus', comment);
     });
     const reset = () => { clearTimeout(lineT); lineT = setTimeout(() => { say(DEFAULT_LINE); pose(false); }, 1200); };
-    const shelf = document.querySelector('.art-shelf');
-    if (shelf) {
-      shelf.addEventListener('mouseenter', () => { clearTimeout(lineT); pose(true); say("Seishin #6 by AngryTiger. My all-time favourite, and the one that inspired me most."); });
-      shelf.addEventListener('mouseleave', reset);
-    }
     document.querySelector('.art-grid').addEventListener('mouseleave', reset);
     document.querySelector('.art-grid').addEventListener('focusout', reset);
+  }
+
+  // Phones: the gallery shows one piece at a time. Arrows + counter, and the curator reviews each piece as it comes up.
+  const artPager = document.querySelector('.art-pager');
+  if (artGrid && artPager) {
+    const phone = window.matchMedia('(max-width: 640px)');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pagerCount = document.getElementById('artPagerCount');
+    const prevBtn = document.getElementById('artPrev');
+    const nextBtn = document.getElementById('artNext');
+    const pieces = artTiles;
+    const pad = n => String(n).padStart(2, '0');
+    let current = 0, userMoved = false;
+
+    const setCurrent = (i) => {
+      current = i;
+      pagerCount.textContent = `${pad(i + 1)} / ${pad(pieces.length)}`;
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === pieces.length - 1;
+      if (userMoved && phone.matches && pieces[i]._comment) pieces[i]._comment();
+    };
+    const goTo = (i) => {
+      const idx = Math.max(0, Math.min(pieces.length - 1, i));
+      const tile = pieces[idx];
+      const left = tile.getBoundingClientRect().left - artGrid.getBoundingClientRect().left - parseFloat(getComputedStyle(artGrid).paddingLeft);
+      userMoved = true;
+      if (idx !== current) setCurrent(idx);                     // update right away so quick repeat taps keep advancing
+      artGrid.scrollBy({ left, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    };
+
+    const inView = new IntersectionObserver(entries => entries.forEach(e => {
+      const i = pieces.indexOf(e.target);
+      if (e.isIntersecting && phone.matches && i !== current) setCurrent(i);
+    }), { root: artGrid, threshold: 0.6 });
+    pieces.forEach(t => inView.observe(t));
+
+    // the curator stays on his opening line until the visitor actually starts browsing
+    artGrid.addEventListener('touchstart', () => { userMoved = true; }, { passive: true });
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    setCurrent(0);
+
+    // Phones: the curator is hidden and his comment is written out as a note under the piece.
+    // Desktop: it goes back into his speech bubble.
+    const bubble = document.getElementById('curatorBubble');
+    if (bubble) {
+      const figure = bubble.parentElement;
+      const place = () => {
+        if (phone.matches) artPager.before(bubble);
+        else figure.prepend(bubble);
+      };
+      place();
+      phone.addEventListener('change', place);
+    }
   }
 
   function showArt(i) {
