@@ -56,7 +56,7 @@
     h < 5  ? "Up this late? Same. I'm Amin." :
     h < 12 ? "Good morning! I'm Amin." :
     h < 18 ? "Hi there! I'm Amin." :
-    h < 22 ? "Good evening! I'm Amin." :
+    h < 20 ? "Good evening! I'm Amin." :
              "Late-night browsing? Respect. I'm Amin.";
   // Returning visitor? (counted in their own browser only)
   let visits = 0;
@@ -199,24 +199,24 @@
   // Each image: same 1024x1024 canvas and framing, transparent background.
   // 'fix' is the idle pose. A pose whose file is missing falls back to 'look', then 'fix'.
   const POSES = {
-    smile:   { src: 'assets/character/idle-smile.png', blink: 'assets/character/idle-smile-blink.png' }, // resting: hands in pockets
-    phone:   { src: 'assets/character/idle-phone.png', blink: 'assets/character/idle-phone-blink.png' }, // resting: on his phone
-    fix:     { src: 'assets/character/idle.png', blink: 'assets/character/idle-blink.png' },   // fixing his tie
-    look:    { src: 'assets/character/look.png',      blink: 'assets/character/look-blink.png' },
-    wave:    { src: 'assets/character/wave.png',      blink: 'assets/character/wave-blink.png' },
-    point:   { src: 'assets/character/point.png',     blink: 'assets/character/point-blink.png' },
-    laugh:   { src: 'assets/character/laugh.png' },
-    annoyed: { src: 'assets/character/annoyed.png',   blink: 'assets/character/annoyed-blink.png' },
-    think:   { src: 'assets/character/think.png',     blink: 'assets/character/think-blink.png' },
-    sleep:   { src: 'assets/character/sleep.png' },            // eyes already closed, no blink frame
-    shock:   { src: 'assets/character/shock.png' },            // woken up; too brief to need blinking
-    coffee:  { src: 'assets/character/coffee-hold.png', blink: 'assets/character/coffee-hold-blink.png' },
-    sip:     { src: 'assets/character/coffee-drink.png' },    // eyes closed while sipping
-    rage:    { src: 'assets/character/rage.png', fallback: 'annoyed' }, // 20+ clicks
-    rose:    { src: 'assets/character/rose-throw.png', fallback: 'wave' },     // just threw a rose (winking)
-    shy:     { src: 'assets/character/shy.png',   fallback: 'laugh' },   // "will you hire me?"
-    excited: { src: 'assets/character/excited.png', fallback: 'laugh' }, // star eyes, jumping for joy
-    sad:     { src: 'assets/character/sad.png',   fallback: 'think' },   // "…oh. Okay."
+    smile:   { src: 'assets/character/idle-smile.webp', blink: 'assets/character/idle-smile-blink.webp' }, // resting: hands in pockets
+    phone:   { src: 'assets/character/idle-phone.webp', blink: 'assets/character/idle-phone-blink.webp' }, // resting: on his phone
+    fix:     { src: 'assets/character/idle.webp', blink: 'assets/character/idle-blink.webp' },   // fixing his tie
+    look:    { src: 'assets/character/look.webp',      blink: 'assets/character/look-blink.webp' },
+    wave:    { src: 'assets/character/wave.webp',      blink: 'assets/character/wave-blink.webp' },
+    point:   { src: 'assets/character/point.webp',     blink: 'assets/character/point-blink.webp' },
+    laugh:   { src: 'assets/character/laugh.webp' },
+    annoyed: { src: 'assets/character/annoyed.webp',   blink: 'assets/character/annoyed-blink.webp' },
+    think:   { src: 'assets/character/think.webp',     blink: 'assets/character/think-blink.webp' },
+    sleep:   { src: 'assets/character/sleep.webp' },            // eyes already closed, no blink frame
+    shock:   { src: 'assets/character/shock.webp' },            // woken up; too brief to need blinking
+    coffee:  { src: 'assets/character/coffee-hold.webp', blink: 'assets/character/coffee-hold-blink.webp' },
+    sip:     { src: 'assets/character/coffee-drink.webp' },    // eyes closed while sipping
+    rage:    { src: 'assets/character/rage.webp', fallback: 'annoyed' }, // 20+ clicks
+    rose:    { src: 'assets/character/rose-throw.webp', fallback: 'wave' },     // just threw a rose (winking)
+    shy:     { src: 'assets/character/shy.webp',   fallback: 'laugh' },   // "will you hire me?"
+    excited: { src: 'assets/character/excited.webp', fallback: 'laugh' }, // star eyes, jumping for joy
+    sad:     { src: 'assets/character/sad.webp',   fallback: 'think' },   // "…oh. Okay."
   };
   const blinkImg = hero.querySelector('.hero-blink');
   const charLayer = hero.querySelector('.hero-char');
@@ -369,7 +369,7 @@
     if (calm) return;                                         // no flying objects for reduced motion
     const r = body.getBoundingClientRect(), hr = hero.getBoundingClientRect();
     const rose = document.createElement('img');
-    rose.src = 'assets/character/fx/rose.png'; rose.alt = ''; rose.className = 'hero-rose-fly';
+    rose.src = 'assets/character/fx/rose.webp'; rose.alt = ''; rose.className = 'hero-rose-fly';
     const x0 = r.left - hr.left + r.width * 0.17, y0 = r.top - hr.top + r.height * 0.52; // his open hand
     rose.style.left = `${x0}px`; rose.style.top = `${y0}px`;
     hero.appendChild(rose);

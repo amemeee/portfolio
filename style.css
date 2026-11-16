@@ -613,7 +613,7 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 .work-yours {
   display: flex; align-items: center; justify-content: flex-end;
   padding: 0 8% 6% 0; overflow: hidden;
-  background: #fff url('assets/character/scenes/your-project.jpg') left center / cover no-repeat;
+  background: #fff url('assets/character/scenes/your-project.webp') left center / cover no-repeat;
 }
 .yours-frame {
   position: relative; width: 38%; aspect-ratio: 16 / 10;
@@ -1167,4 +1167,42 @@ footer a:hover { color: var(--accent); }
   .contact-heading { font-size: 32px; white-space: normal; }
   footer { padding: 20px; text-align: center; justify-content: center; }
 
+}
+
+/* ════════════ LAPTOP / SHORT SCREENS ════════════
+   Sections are one-screen snaps, so anything sized only by width (art collage, contact banner, skills)
+   overflows on wide-but-short laptop viewports (e.g. 1366x768, or 1440x900 at 125% scale). Cap by height too. */
+@media (min-width: 641px) {
+  /* Art: tile size limited by the available height as well as the width */
+  .art-main .art-grid {
+    --tile: min(calc((100cqw - 4 * 10px) / 4.5), max(96px, calc((100vh - 400px) / 3)));
+  }
+  /* Contact banner: never taller than the screen */
+  .contact-tile {
+    justify-self: center;
+    width: min(100%, calc((100vh - var(--nav-h) - var(--footer-h) - 56px) * 1.7917));
+  }
+}
+@media (min-width: 641px) and (max-height: 820px) {
+  :root { --nav-h: 64px; --footer-h: 52px; }
+  .page > .bento-grid { padding-top: calc(var(--nav-h) + 8px); }
+  .bento-grid { gap: 14px; padding: 12px 24px; grid-auto-rows: minmax(120px, auto); }
+  .bento-item { padding: 20px; border-radius: 18px; }
+  .art-card, .skills-card { padding: 20px; }
+  .art-curator { margin: 0 -20px -20px 0; }
+  .art-head-text { margin-bottom: 10px; }
+  .art-exhibit { font-size: clamp(20px, 2vw, 26px); }
+  .art-main .art-grid { --tile: min(calc((100cqw - 4 * 10px) / 4.5), max(84px, calc((100vh - 330px) / 3))); }
+  .skills-row { padding: 9px 0; }
+  .skills-row dt, .skills-row dd { font-size: 14px; line-height: 1.5; }
+  .profile-name { font-size: 28px; }
+  .profile-bio { font-size: 14px; margin-bottom: 14px; }
+  .profile-sheet { gap: 5px; margin-bottom: 12px; }
+  .portrait-card { min-height: 0; }
+  footer { padding: 14px 40px; }
+  #nav { padding-top: 14px; padding-bottom: 14px; }
+  .page > #work { height: calc(100vh - var(--nav-h) - var(--footer-h) - 24px); min-height: 420px; }
+  #work .section-head { padding: 0 0 24px 32px; }
+  .work-spot-title { font-size: clamp(26px, 3vw, 38px); }
+  .work-spot-desc { font-size: 13px; line-height: 1.5; }
 }

@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Amin · PHP / Laravel Developer</title>
 <meta name="description" content="Muhammad Amin (Amemeee): PHP / Laravel developer and illustrator.">
-<link rel="icon" type="image/png" href="assets/brand/icon.png">
+<link rel="icon" type="image/webp" href="assets/brand/icon.webp">
+<link rel="preload" as="image" href="assets/character/idle-smile.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -41,16 +42,16 @@
   <!-- HERO COVER -->
   <div class="hero-cover" id="top" aria-label="Amemeee, illustrated self-portrait" role="img">
     <!-- Rejected: dramatic close-up that cuts in over everything -->
-    <div class="hero-cutin" aria-hidden="true"><img src="assets/character/fx/despair.jpg" alt="" decoding="async"></div>
+    <div class="hero-cutin" aria-hidden="true"><img src="assets/character/fx/despair.webp" alt="" decoding="async"></div>
 
     <!-- 20+ clicks: giant rage text behind him -->
     <div class="hero-rage" aria-hidden="true"><span>ARGHHHHH</span></div>
 
     <div class="hero-layer hero-char" aria-hidden="true">
       <div class="hero-in">
-        <img class="hero-char-img" src="assets/character/idle-smile.png" alt="" decoding="async"
+        <img class="hero-char-img" src="assets/character/idle-smile.webp" alt="" decoding="async"
              onload="this.closest('.hero-cover').classList.add('is-layered')" onerror="this.remove()">
-        <img class="hero-char-img hero-blink" src="assets/character/idle-smile-blink.png" alt="" decoding="async"
+        <img class="hero-char-img hero-blink" src="assets/character/idle-smile-blink.webp" alt="" decoding="async"
              onload="this.closest('.hero-cover').classList.add('can-blink')" onerror="this.remove()">
       </div>
     </div>
@@ -109,8 +110,8 @@
     <div class="bento-item reveal portrait-card">
       <!-- Click to put the sunglasses on, click again to take them off -->
       <button class="portrait-toggle" id="portraitToggle" type="button" aria-pressed="false" aria-label="Put on sunglasses">
-        <img class="portrait-normal" src="assets/brand/portrait.jpg" alt="Self-portrait illustration of Muhammad Amin">
-        <img class="portrait-cool" src="assets/brand/portrait-cool.jpg" alt="" aria-hidden="true">
+        <img class="portrait-normal" src="assets/brand/portrait.webp" alt="Self-portrait illustration of Muhammad Amin">
+        <img class="portrait-cool" src="assets/brand/portrait-cool.webp" alt="" aria-hidden="true">
       </button>
     </div>
   </section>
@@ -121,14 +122,14 @@
       <div class="work-hero">
         <div class="work-preview">
           <div class="browser-screen" id="workScreen">
-            <img class="work-shot active" src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async">
+            <img class="work-shot active" src="assets/project/portfolio/home.webp" alt="This Portfolio screenshot" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/kopi-introvert/" title="Kopi Introvert live preview" tabindex="-1"></iframe></div>
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/monochrome/" title="Monochrome live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/project/arena_auctioneers/1.webp" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/project/homestay/home.webp" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/project/wedding/home.webp" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
+            <img class="work-shot" src="assets/gallery/bite-the-dust.webp" alt="Killer Queen" loading="lazy" decoding="async">
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
             <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
             <!-- Last slot: an invitation, not a project -->
@@ -145,7 +146,7 @@
           <h2 class="tile-label">Projects</h2>
           <div class="work-spot" aria-live="polite">
             <h3 class="work-spot-title" id="workTitle"></h3>
-            <span class="work-tag work-spot-tag" id="workTag" hidden>Side project</span>
+            <span class="work-tag work-spot-tag" id="workTag" hidden>Prototype</span>
             <p class="work-spot-meta"><span id="workStack"></span><span id="workCount"></span></p>
             <p class="work-spot-desc" id="workDesc"></p>
             <div class="work-spot-actions">
@@ -164,7 +165,7 @@
       </div>
         <ol class="work-list" id="workList">
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/portfolio/home.png" alt="This Portfolio screenshot" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/portfolio/home.webp" alt="This Portfolio screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item active" data-url="https://amemeee.github.io/portfolio/">
               <span class="work-num">01</span>
               <span class="work-body">
@@ -181,7 +182,7 @@
               <span class="work-num">02</span>
               <span class="work-body">
                 <span class="work-title">Kopi Introvert</span>
-                <span class="work-desc">Side project.</span>
+                <span class="work-desc">Prototype.</span>
                 <span class="work-stack">HTML · CSS · JavaScript</span>
               </span>
             </button>
@@ -193,14 +194,14 @@
               <span class="work-num">03</span>
               <span class="work-body">
                 <span class="work-title">Monochrome</span>
-                <span class="work-desc">Side project.</span>
+                <span class="work-desc">Prototype.</span>
                 <span class="work-stack">HTML · CSS · JavaScript</span>
               </span>
             </button>
             <a class="work-visit" href="https://amemeee.github.io/monochrome/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/arena_auctioneers/1.png" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/arena_auctioneers/1.webp" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://arenaauctioneers.com">
               <span class="work-num">04</span>
               <span class="work-body">
@@ -212,7 +213,7 @@
             <a class="work-visit" href="https://arenaauctioneers.com" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/homestay/home.jpg" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/homestay/home.webp" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-url="https://homestay.arenaauctioneers.com">
               <span class="work-num">05</span>
               <span class="work-body">
@@ -236,7 +237,7 @@
             <a class="work-visit" href="https://01-agent-property-auction.wasmer.app" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/wedding/home.jpg" alt="Wedding Invitation screenshot" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/project/wedding/home.webp" alt="Wedding Invitation screenshot" loading="lazy" decoding="async"></div>
             <button class="work-item" data-fun="1" data-url="https://ornate-crumble-cb085e.netlify.app/">
               <span class="work-num">07</span>
               <span class="work-body">
@@ -248,7 +249,7 @@
             <a class="work-visit" href="https://ornate-crumble-cb085e.netlify.app/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
           </li>
           <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/gallery/bite-the-dust.jpg" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
+            <div class="work-thumb" aria-hidden="true"><img src="assets/gallery/bite-the-dust.webp" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
             <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/bite-the-dust/">
               <span class="work-num">08</span>
               <span class="work-body">
@@ -307,10 +308,10 @@
       <div class="skills-peek" aria-hidden="true">
         <div class="peek-clip">
           <div class="peek-face">
-            <img class="peek-head" src="assets/character/scenes/peek-head.png" alt="" loading="lazy" decoding="async">
+            <img class="peek-head" src="assets/character/scenes/peek-head.webp" alt="" loading="lazy" decoding="async">
           </div>
         </div>
-        <img class="peek-hands" src="assets/character/scenes/peek-hands.png" alt="" loading="lazy" decoding="async">
+        <img class="peek-hands" src="assets/character/scenes/peek-hands.webp" alt="" loading="lazy" decoding="async">
       </div>
       <h2 class="tile-label">Skills</h2>
       <dl class="skills-list">
@@ -346,7 +347,7 @@
         <aside class="art-curator" aria-hidden="true">
           <div class="curator-figure">
             <p class="curator-bubble" id="curatorBubble">Behold, my magnum opus. Vintage 2021, from before I put the pencil down.</p>
-            <img class="curator-img" src="assets/character/scenes/art-curator.png" alt="" loading="lazy" decoding="async">
+            <img class="curator-img" src="assets/character/scenes/art-curator.webp" alt="" loading="lazy" decoding="async">
           </div>
         </aside>
         <div class="art-main">
@@ -363,8 +364,8 @@
             </button>
             <!-- My collection (art by AngryTiger), big, right of Spell Caster on big screens. Hover = glasses on. -->
             <button class="art-tile is-collected is-featured" data-title="Seishin #6" data-meta="Art by AngryTiger · an NFT I bought · my favourite piece and my inspiration" data-line="Seishin #6 by AngryTiger, one of the NFTs I bought. My all-time favourite, and the one that inspired me most.">
-              <img src="assets/gallery/guest-seishin-6.jpg" alt="" loading="lazy" decoding="async">
-              <img class="tile-glasses" src="assets/gallery/guest-seishin-6-glasses.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async">
+              <img src="assets/gallery/guest-seishin-6.webp" alt="" loading="lazy" decoding="async">
+              <img class="tile-glasses" src="assets/gallery/guest-seishin-6-glasses.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
               <span class="art-tag">My collection</span>
               <span class="art-caption"><span class="art-title">Seishin #6</span><span class="art-meta">Art by AngryTiger · an NFT I bought</span></span>
             </button>
@@ -374,43 +375,43 @@
               <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
             </button>
             <button class="art-tile is-tall" data-title="Midnight Samurai">
-              <img src="assets/gallery/art1.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art1.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
             </button>
             <button class="art-tile" data-title="The Old Me" data-meta="2020 · before the glow-up" data-line="That's the old me. Let bygones be bygones… I've glowed up since. With a little AI touch-up.">
-              <img src="assets/gallery/self-portrait-2020.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/self-portrait-2020.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">The Old Me</span><span class="art-meta">2020 · before the glow-up</span></span>
             </button>
             <button class="art-tile" data-title="Abyss Hare">
-              <img src="assets/gallery/art12.jpeg" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art12.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Abyss Hare</span></span>
             </button>
             <button class="art-tile" data-title="Gadis Lolipop!">
-              <img src="assets/gallery/art11.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art11.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Gadis Lolipop!</span></span>
             </button>
             <button class="art-tile" data-title="Vanilla Ice Cream">
-              <img src="assets/gallery/art2.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art2.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Vanilla Ice Cream</span></span>
             </button>
             <button class="art-tile" data-title="GUMPUNK" data-line="GUMPUNK. No other name would do.">
-              <img src="assets/gallery/art6.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art6.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">GUMPUNK</span></span>
             </button>
             <button class="art-tile" data-title="Dropship Marketing" data-meta="Made for Murah Kaya (now Makerz)" data-line="Dropship marketing for Murah Kaya, now known as Makerz. Ah, the memories.">
-              <img src="assets/gallery/dropship.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/dropship.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Dropship Marketing</span><span class="art-meta">Made for Murah Kaya (now Makerz)</span></span>
             </button>
             <button class="art-tile" data-title="Pink Mode" data-meta="Original character">
-              <img src="assets/gallery/random-character.jpg" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/random-character.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Pink Mode</span><span class="art-meta">Original character</span></span>
             </button>
             <button class="art-tile is-wide" data-title="Crispy Chicken Burger" data-meta="Genshin Impact event entry · won a pile of Primogems" data-line="Crispy Chicken Burger. Delicious! I entered a Genshin Impact event and won a lot of Primogems.">
-              <img src="assets/gallery/genshin-burger.jpg" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/genshin-burger.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">Crispy Chicken Burger</span><span class="art-meta">Genshin Impact event · won a pile of Primogems</span></span>
             </button>
             <button class="art-tile" data-title="AKUMA">
-              <img src="assets/gallery/art4.png" alt="" loading="lazy" decoding="async">
+              <img src="assets/gallery/art4.webp" alt="" loading="lazy" decoding="async">
               <span class="art-caption"><span class="art-title">AKUMA</span></span>
             </button>
           </div>
@@ -430,8 +431,8 @@
     <div class="bento-item t-4x1 reveal contact-tile">
       <!-- Two separate layers so each character can animate -->
       <div class="contact-scene" aria-hidden="true">
-        <img class="contact-boy" src="assets/character/scenes/contact-boy.png" alt="" loading="lazy" decoding="async">
-        <img class="contact-girl" src="assets/character/scenes/contact-girl.png" alt="" loading="lazy" decoding="async">
+        <img class="contact-boy" src="assets/character/scenes/contact-boy.webp" alt="" loading="lazy" decoding="async">
+        <img class="contact-girl" src="assets/character/scenes/contact-girl.webp" alt="" loading="lazy" decoding="async">
       </div>
       <div class="contact-body">
         <h2 class="contact-heading">Hiring, or have<br>a project?<br><em>Send me an email.</em></h2>
@@ -617,7 +618,7 @@
       workDesc.textContent = item.querySelector('.work-desc').textContent;
       workStack.textContent = item.querySelector('.work-stack').textContent;
       const workTag = document.getElementById('workTag');
-      workTag.textContent = item.dataset.tag || 'Side project';
+      workTag.textContent = item.dataset.tag || 'Prototype';
       workTag.hidden = !(item.dataset.tag || item.dataset.fun);
       workCount.textContent = `${pad(i + 1)} / ${pad(workItems.length)}`;
       // keep the active card visible in the row
@@ -759,7 +760,7 @@
     let lineT = null;
     // Two curator poses: the normal curator, and a proud sunglasses pose for his favourite piece (preloaded so the swap is instant)
     const curatorImg = document.querySelector('.curator-img');
-    const POSE = { normal: 'assets/character/scenes/art-curator.png', heart: 'assets/character/scenes/art-curator-proud.png' };
+    const POSE = { normal: 'assets/character/scenes/art-curator.webp', heart: 'assets/character/scenes/art-curator-proud.webp' };
     new Image().src = POSE.heart;
     const pose = (heart) => {
       if (!curatorImg) return;
