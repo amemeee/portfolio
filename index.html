@@ -20,12 +20,21 @@
 </head>
 <body>
 
+<!-- Pencil-line wobble for the Intro card outline -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="pencil" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="4"/>
+  </filter>
+</svg>
+
 <!-- NAV -->
 <nav id="nav">
   <a href="#top" class="nav-logo">AMEMEEE</a>
   <div class="nav-links" id="navLinks">
     <a href="#work">Work</a>
     <a href="#art">Art</a>
+    <a href="#memes">Memes</a>
     <a href="#contact">Contact</a>
     <!-- <a href="assets/resume.pdf" download class="nav-resume">Resume</a> -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
@@ -84,11 +93,12 @@
   <!-- INTRO -->
   <section class="bento-grid intro-grid">
     <div class="bento-item reveal intro-card">
+     <div class="intro-main">
       <h1 class="profile-name">Muhammad Amin</h1>
       <p class="profile-role">PHP / Laravel Developer</p>
       <!-- Character-sheet style profile -->
       <dl class="profile-sheet">
-        <div><dt>Day job</dt><dd>IT Manager <span class="sheet-note">(I wear a lot of hats)</span></dd></div>
+        <div><dt>Position</dt><dd>IT Manager <span class="sheet-note">(I wear a lot of hats)</span></dd></div>
         <div><dt>Main weapon</dt><dd>PHP · Laravel · MySQL</dd></div>
         <div><dt>Alt weapon</dt><dd>
           <!-- cycles through the list below, one at a time -->
@@ -105,15 +115,12 @@
         <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn"><i class="fas fa-envelope"></i>Email me</a>
         <a href="https://github.com/amemeee" target="_blank" rel="noopener" class="bento-btn ghost"><i class="fab fa-github"></i>GitHub</a>
       </div>
-    </div>
+     </div>
 
-    <div class="bento-item reveal portrait-card">
-      <!-- Click to put the sunglasses on, click again to take them off -->
-      <button class="portrait-toggle" id="portraitToggle" type="button" aria-pressed="false" aria-label="Put on sunglasses">
-        <img class="portrait-normal" src="assets/brand/portrait.webp" alt="Self-portrait illustration of Muhammad Amin">
-        <img class="portrait-cool" src="assets/brand/portrait-cool.webp" alt="" aria-hidden="true">
-      </button>
+    <div class="portrait-card">
+      <img class="portrait-img" src="assets/character/portrait-profile.webp" alt="Self-portrait illustration of Muhammad Amin, chin resting on his hand on a desk">
     </div>
+    </div><!-- /intro-card -->
   </section>
 
   <!-- WORK -->
@@ -313,7 +320,17 @@
         </div>
         <img class="peek-hands" src="assets/character/scenes/peek-hands.webp" alt="" loading="lazy" decoding="async">
       </div>
+      <!-- Mio peeks over the opposite corner. Needs peek-mio-head.webp and peek-mio-hands.webp; removes itself if they are missing -->
+      <div class="skills-peek peek-mio" aria-hidden="true">
+        <div class="peek-clip">
+          <div class="peek-face">
+            <img class="peek-head" src="assets/character/scenes/peek-mio-head.webp" alt="" loading="lazy" decoding="async" onerror="this.closest('.peek-mio').remove()">
+          </div>
+        </div>
+        <img class="peek-hands" src="assets/character/scenes/peek-mio-hands.webp" alt="" loading="lazy" decoding="async" onerror="this.closest('.peek-mio')&&this.closest('.peek-mio').remove()">
+      </div>
       <h2 class="tile-label">Skills</h2>
+      <p class="skills-note">The skills I use daily, and I'm always eager to learn new things.</p>
       <dl class="skills-list">
         <div class="skills-row">
           <dt>Backend</dt>
@@ -325,7 +342,7 @@
         </div>
         <div class="skills-row">
           <dt>DevOps &amp; IT</dt>
-          <dd><span>Git</span> <span>GitHub Actions</span> <span>CI/CD</span> <span>Cloud / Server</span> <span>AWS</span> <span>Deployment</span> <span>IT Support (L1)</span> <span>Hardware &amp; Software Installation</span></dd>
+          <dd><span>Git</span> <span>GitHub Actions</span> <span>CI/CD</span> <span>Cloud / Server</span> <span>AWS</span> <span>Cloudflare</span> <span>Deployment</span> <span>IT Support (L1)</span> <span>Hardware &amp; Software Installation</span></dd>
         </div>
         <div class="skills-row">
           <dt>Design</dt>
@@ -423,6 +440,26 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- MEMES -->
+  <section id="memes" class="bento-grid">
+    <div class="bento-item t-4x1 reveal meme-card">
+      <div class="meme-head">
+        <h2 class="tile-label">Meme of the day</h2>
+        <p class="meme-sub" id="memeDate">A new one every day.</p>
+      </div>
+      <!-- Picked by today's date. Click the meme, swipe, or use the arrow keys for another one. -->
+      <div class="meme-viewer" id="memeViewer" tabindex="0" aria-label="Meme of the day">
+        <figure class="meme" id="meme">
+          <figcaption class="meme-top" id="memeTop" aria-live="polite"></figcaption>
+          <img class="meme-img" id="memeImg" alt="" decoding="async">
+          <div class="meme-strip" id="memeStrip"></div>
+          <p class="meme-bottom" id="memeBottom"></p>
+        </figure>
+      </div>
+      <p class="meme-hint" aria-hidden="true">Tap the photo for another one</p>
     </div>
   </section>
 
@@ -567,13 +604,78 @@
     }, ms), k * 700);                                  // offset rows so they don't flip together
   });
 
-  // Portrait: toggle sunglasses on click
-  const portraitToggle = document.getElementById('portraitToggle');
-  if (portraitToggle) portraitToggle.addEventListener('click', () => {
-    const cool = portraitToggle.classList.toggle('cool');
-    portraitToggle.setAttribute('aria-pressed', String(cool));
-    portraitToggle.setAttribute('aria-label', cool ? 'Take off sunglasses' : 'Put on sunglasses');
-  });
+  // Meme of the day. Each entry is a character pose + a caption pair; add `img: 'assets/memes/your-file.webp'` to use your own picture instead.
+  const MEMES = [
+    { pose: 'excited',     top: 'Me, deploying to production at 5:29 PM on a Friday', bottom: 'What could possibly go wrong?' },
+    { pose: 'shock',       top: 'Production, 5:01 PM',                                 bottom: 'Everything.' },
+    { pose: 'annoyed',     top: 'Client: "Can you make the logo bigger?"',             bottom: 'It is already the size of the page.' },
+    { pose: 'think',       top: '"But it works on my machine"',                        bottom: 'Okay, then we ship your machine.' },
+    { pose: 'laugh',       top: 'Me, the IT Manager: "Have you tried turning it off and on again?"', bottom: 'It worked. I am a genius.' },
+    { pose: 'sad',         top: 'Fixed 1 bug',                                         bottom: 'Found 3 new ones.' },
+    { pose: 'coffee-hold', top: 'Laravel migration fails at 2 AM',                     bottom: 'Coffee. Retry.' },
+    { pose: 'shy',         top: 'Someone compliments my code',                         bottom: 'It is only a few hundred lines of spaghetti.' },
+    { pose: 'sleep',       top: 'Me, after the deploy finally goes green',             bottom: 'Do not disturb.' },
+    // one crying close-up. Uses assets/memes/vacancy-cry.webp once you add it, the sad pose until then
+    { pose: 'sad', img: 'assets/memes/vacancy-cry.webp', top: 'Me, refreshing the job vacancy page', bottom: 'Still nothing.' }
+  ];
+  const memeEl = document.getElementById('meme');
+  if (memeEl) {
+    const mTop = document.getElementById('memeTop'), mImg = document.getElementById('memeImg'), mBottom = document.getElementById('memeBottom');
+    const mDate = document.getElementById('memeDate'), viewer = document.getElementById('memeViewer');
+    const srcOf = m => m.img || (m.panels && m.panels[0]) || `assets/character/${m.pose}.webp`;
+    // today's meme: the same one all day for everybody, a new one at local midnight
+    const now = new Date();
+    const dayNumber = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+    const todayIdx = dayNumber % MEMES.length;
+    const dateText = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+    let mi = todayIdx;
+    function showMeme(i, dir) {
+      mi = (i + MEMES.length) % MEMES.length;
+      const m = MEMES[mi];
+      mTop.textContent = m.top; mBottom.textContent = m.bottom;
+      const strip = document.getElementById('memeStrip');
+      strip.innerHTML = '';
+      memeEl.classList.toggle('is-strip', !!m.panels);
+      memeEl.classList.toggle('strip-3', !!m.panels && m.panels.length === 3);
+      if (m.panels) {                                  // four panels that pop in one after another
+        m.panels.forEach((p, k) => {
+          const im = new Image(); im.alt = ''; im.className = 'strip-img'; im.style.setProperty('--i', k);
+          im.onerror = () => { im.onerror = null; im.src = `assets/character/${m.fallback[k]}.webp`; };   // panel missing: use a pose
+          im.src = p; strip.appendChild(im);
+        });
+        mImg.removeAttribute('src'); mImg.alt = '';
+        strip.setAttribute('role', 'img'); strip.setAttribute('aria-label', `${m.top} ${m.bottom}`);
+      } else {
+        strip.removeAttribute('role'); strip.removeAttribute('aria-label');
+        mImg.onerror = () => { mImg.onerror = null; mImg.src = `assets/character/${m.pose}.webp`; };   // your own picture is missing: fall back to the pose
+        mImg.src = srcOf(m); mImg.alt = `${m.top} ${m.bottom}`;
+      }
+      mDate.textContent = mi === todayIdx ? `${dateText} \u00b7 a new one every day` : 'Bonus meme \u00b7 not today\u2019s pick';
+      memeEl.classList.remove('from-left', 'from-right'); void memeEl.offsetWidth;   // restart the entrance
+      memeEl.classList.add(dir < 0 ? 'from-left' : 'from-right');
+      new Image().src = srcOf(MEMES[(mi + 1) % MEMES.length]);                       // preload the next one
+    }
+    const reduceMeme = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let busy = false;
+    const go = d => {
+      if (busy) return;
+      if (reduceMeme) { showMeme(mi + d, d); return; }
+      busy = true;
+      memeEl.classList.remove('from-left', 'from-right');
+      memeEl.classList.add(d < 0 ? 'leave-l' : 'leave-r');                      // the top photo is flicked off the pile
+      setTimeout(() => { memeEl.classList.remove('leave-l', 'leave-r'); showMeme(mi + d, d); busy = false; }, 250);
+    };
+    memeEl.addEventListener('click', () => go(1));
+    viewer.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); });
+    let sx = null;
+    viewer.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    viewer.addEventListener('touchend', e => {
+      if (sx === null) return;
+      const dx = e.changedTouches[0].clientX - sx; sx = null;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    });
+    showMeme(todayIdx, 1);
+  }
 
   // Work list + preview
   const workList = document.getElementById('workList');

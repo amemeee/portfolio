@@ -232,6 +232,9 @@
   const IDLE_POSES = ['smile', 'phone'];
   const restPose = () => IDLE_POSES[Math.floor(Math.random() * IDLE_POSES.length)];
   const setPose = (name) => {
+    // While he is asleep (the z's are showing) nothing may change his pose except the sleep pose itself. A late timer from
+    // rest() used to swap in a smiling pose after he had dozed off, leaving the z's floating over an awake face.
+    if (name !== 'sleep' && hero.classList.contains('sleeping')) return;
     const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok);
     if (!p || p === POSES[pose]) return;
     pose = Object.keys(POSES).find(k => POSES[k] === p);
@@ -500,7 +503,7 @@
     bubble.classList.remove('show');
     showHint();                                               // nothing more to say: remind how to interact
     showTalk();
-    setTimeout(() => { if (resting) setPose(restPose()); }, 450);
+    setTimeout(() => { if (resting && !hero.classList.contains('sleeping')) setPose(restPose()); }, 450);
   };
 
   let currentText = '';

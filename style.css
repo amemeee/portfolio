@@ -3,14 +3,14 @@
   --footer-h: 64px;
   --bg: #F5F5F5;
   --surface: #ffffff;
-  --surface-hover: #fffdfa;
-  --border: #e7e1d6;
+  --surface-hover: #fafafa;
+  --border: #e4e4e4;
   --text: #17161a;
-  --muted: #6f6b64;
-  --accent: #ff5a3c;
+  --muted: #6b6b6b;
+  --accent: #17161a;
   --accent-ink: #ffffff;
-  --accent-dim: rgba(255, 90, 60, 0.1);
-  --accent-glow: rgba(255, 90, 60, 0.06);
+  --accent-dim: rgba(23, 22, 26, 0.08);
+  --accent-glow: rgba(23, 22, 26, 0.05);
   --shadow: rgba(23,22,26,0.04);
   --shadow-hover: rgba(23,22,26,0.08);
   color-scheme: light;
@@ -18,15 +18,15 @@
 
 :root[data-theme="dark"] {
   --bg: #000000;
-  --surface: #1a1815;
-  --surface-hover: #201e1a;
-  --border: #2d2a25;
-  --text: #f1ece2;
-  --muted: #948f86;
-  --accent: #ff6a4d;
-  --accent-ink: #17130f;
-  --accent-dim: rgba(255, 106, 77, 0.15);
-  --accent-glow: rgba(255, 106, 77, 0.08);
+  --surface: #000000;
+  --surface-hover: #0b0b0b;
+  --border: #2a2a2a;
+  --text: #f2f2f2;
+  --muted: #8f8f8f;
+  --accent: #ffffff;
+  --accent-ink: #000000;
+  --accent-dim: rgba(255, 255, 255, 0.14);
+  --accent-glow: rgba(255, 255, 255, 0.07);
   --shadow: rgba(0,0,0,0.3);
   --shadow-hover: rgba(0,0,0,0.5);
   color-scheme: dark;
@@ -217,14 +217,14 @@ body {
 
 /* Moods: red when he's furious, black spotlight when he's rejected */
 .hero-cover { transition: background-color .5s ease; }
-.hero-cover[data-mood="rage"] { background: #d3241c; }
+.hero-cover[data-mood="rage"] { background: #b8b8b8; }
 /* Sad: plain black */
 .hero-cover[data-mood="sad"] { background: #000; }
 /* soft rim light so his outlines stay readable on the dark */
 .hero-cover[data-mood="sad"] .hero-char-img {
   filter: drop-shadow(0 0 1.5px rgba(255,255,255,.85));
 }
-.hero-cover[data-mood="rage"] .hero-rage span { color: #4a0806; }
+.hero-cover[data-mood="rage"] .hero-rage span { color: #111; }
 body:has(.hero-cover[data-mood="sad"]) #nav:not(.scrolled) .nav-logo,
 body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-logo { color: #fff; }
 body:has(.hero-cover[data-mood="sad"]) #nav:not(.scrolled) .nav-hamburger span,
@@ -330,8 +330,8 @@ body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-hamburger span 
 .hero-choice.hero-nav:hover, .hero-choice.hero-nav:focus-visible { background: #fff; color: #17161a; }
 
 /* Skip: quieter than the real answers */
-.hero-choice.hero-skip { border-style: dashed; border-color: #8a8780; color: #6f6b64; }
-.hero-choice.hero-skip:hover, .hero-choice.hero-skip:focus-visible { background: #6f6b64; border-color: #6f6b64; color: #fff; }
+.hero-choice.hero-skip { border-style: dashed; border-color: #878787; color: #6b6b6b; }
+.hero-choice.hero-skip:hover, .hero-choice.hero-skip:focus-visible { background: #6b6b6b; border-color: #6b6b6b; color: #fff; }
 
 @keyframes hero-breathe {
   0%, 100% { transform: translateX(-50%) scale(1, 1); }
@@ -624,7 +624,7 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 }
 .yours-plus  { font-size: clamp(32px, 4vw, 64px); font-weight: 300; line-height: .8; color: var(--accent); }
 .yours-title { font-size: clamp(16px, 1.9vw, 30px); font-weight: 700; line-height: 1.1; }
-.yours-sub   { font-size: clamp(11px, .95vw, 15px); color: #6f6b64; }
+.yours-sub   { font-size: clamp(11px, .95vw, 15px); color: #6b6b6b; }
 .work-shot.work-yours.active .yours-frame { animation: yours-pulse 2.2s ease-in-out infinite; }
 @keyframes yours-pulse { 50% { border-color: var(--accent); transform: scale(1.02); } }
 @media (prefers-reduced-motion: reduce) { .work-shot.work-yours.active .yours-frame { animation: none; } }
@@ -681,8 +681,10 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 
 /* ── Quote tile ── */
 /* ── Intro: details (70%) + portrait (30%) ── */
-.bento-grid.intro-grid { grid-template-columns: 7fr 3fr; }
-.intro-card { justify-content: center; gap: 0; }
+.bento-grid.intro-grid { grid-template-columns: 1fr; }
+/* One card: text on the left (70%), portrait on the right (30%) */
+.intro-card.bento-item { display: grid; grid-template-columns: 6fr 4fr; gap: 0; padding: 0; }
+.intro-main { padding: 28px 32px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
 /* Character sheet: dotted leader between label and value, like a game stat screen */
 .profile-sheet { display: flex; flex-direction: column; gap: 8px; margin: 0 0 18px; max-width: 520px; }
 .profile-sheet > div { display: flex; align-items: baseline; gap: 10px; font-size: 14px; }
@@ -701,23 +703,43 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 @keyframes alt-in  { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes alt-out { to { transform: translateY(-100%); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .alt-word.alt-in, .alt-word.alt-out { animation: none; } .alt-word.alt-out { display: none; } }
+/* ── Pencil-drawn cards: white paper, sketchy black outline (same look in light and dark) ── */
+.intro-card.bento-item, .skills-card.bento-item {
+  --text: #17161a; --muted: #5a5a5a; --border: #17161a; --accent: #17161a; --accent-ink: #fff; --accent-dim: rgba(23,22,26,.08);   /* black and white only inside this card */
+  background: #fff; color: var(--text);
+  border-color: transparent; box-shadow: none;
+}
+.intro-card::before, .intro-card::after, .skills-card::before, .skills-card::after {
+  content: ''; position: absolute; pointer-events: none; z-index: 3;
+  border-style: solid; border-color: #17161a; filter: url(#pencil);
+}
+/* main line */
+.intro-card::before, .skills-card::before { inset: 7px; border-width: 2px; border-radius: 16px; }
+/* second, lighter, slightly off pass, like a sketch retraced */
+.intro-card::after, .skills-card::after { inset: 10px 9px 9px 11px; border-width: 1px; border-radius: 18px 14px 17px 15px; opacity: .45; rotate: .3deg; }
+.profile-sheet dt::after { border-bottom-color: rgba(23,22,26,.45); }
+
+.intro-card .bento-btn.ghost { border: 1.5px solid #17161a; }
+
+/* Skills: same pencil card. Dashed graphite dividers, and the peeking character stays above the outline. */
+.skills-card .skills-row { border-top: 1px dashed rgba(23,22,26,.4); }
+.skills-card .skills-row:first-child { border-top: 0; }
+.skills-card .skills-peek { z-index: 4; }
+/* Mio: same peek on the left corner, a beat later and on her own rhythm so they don't move in sync */
+.skills-card .peek-mio { right: auto; left: 7%; }
+.skills-card.visible .peek-mio .peek-hands { animation-delay: 1s; }
+.skills-card.visible .peek-mio .peek-face { animation: peek-rise 1s cubic-bezier(.3,.7,.3,1) 1.6s forwards, peek-idle 11s ease-in-out 6s infinite; }
+.skills-card.visible .peek-mio:hover .peek-face { animation: none; translate: 0 78%; transition: translate .18s ease-in; }
+@media (prefers-reduced-motion: reduce) { .skills-card.visible .peek-mio .peek-face { animation: none; translate: 0 0; } }
+.skills-note { margin: -4px 0 12px; font-size: 15px; line-height: 1.5; color: var(--muted); max-width: 520px; }
+.skills-card.bento-item { padding: 34px 36px 30px; }   /* keeps the text clear of the pencil outline */
+@media (max-width: 640px) { .skills-card.bento-item { padding: 26px 24px 22px; } }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.portrait-card { padding: 0; background: #fff; min-height: 420px; }
-.portrait-card img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
+.portrait-card { position: relative; overflow: hidden; background: #fff; aspect-ratio: 1; align-self: stretch; }   /* shape of the portrait art, so nothing is cropped */
+.portrait-img {
+  position: absolute; left: 0; bottom: 0; width: 100%; height: auto; display: block;   /* art keeps its own shape, pinned to the bottom */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%); mask-image: linear-gradient(to right, transparent 0, #000 7%);   /* the desk line fades in from the left edge instead of being cut */
 }
-.portrait-toggle {
-  position: absolute; inset: 0; padding: 0; border: 0; background: none;
-  cursor: pointer; -webkit-tap-highlight-color: transparent;
-}
-.portrait-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
-/* the cool version sits on top and fades in, with a little "snap" */
-.portrait-cool { opacity: 0; transition: opacity .25s ease; }
-.portrait-toggle.cool .portrait-cool { opacity: 1; animation: portrait-snap .35s cubic-bezier(.3,1.6,.5,1); }
-@keyframes portrait-snap { from { transform: scale(1.04); } to { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .portrait-toggle.cool .portrait-cool { animation: none; } }
 
 /* ── Lightbox ── */
 .lightbox {
@@ -985,7 +1007,7 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
 .contact-tile {
   position: relative; overflow: hidden;
   padding: 0; aspect-ratio: 1376 / 768;
-  background: #fff; border-color: #e7e1d6;
+  background: #fff; border-color: #e4e4e4;
 }
 /* the two characters, positioned as in the original picture (pushed a bit outward to widen the gap) */
 .contact-scene { position: absolute; inset: 0; pointer-events: none; }
@@ -1003,7 +1025,8 @@ img.work-shot { width: 100%; height: 100%; object-fit: cover; object-position: t
   font-size: clamp(24px, 2.8vw, 44px); line-height: 1.1; margin-bottom: 26px; white-space: nowrap;
   color: #17161a;
 }
-.contact-heading em { font-style: normal; color: var(--accent); }
+.contact-heading { font-weight: 500; }   /* the line above is lighter, so the email line stands out */
+.contact-heading em { font-style: normal; color: #000; font-weight: 700; font-size: 1.22em; line-height: 1.15; }
 .contact-tile .bento-btn {
   background: #17161a; color: #fff;
   font-size: clamp(12px, 1.05vw, 15px); padding: 15px 26px;
@@ -1090,7 +1113,9 @@ footer a:hover { color: var(--accent); }
   .t-2x2 { grid-column: span 2; grid-row: span 1; }
   .bento-grid.intro-grid { grid-template-columns: 1fr; }
   .intro-grid > .bento-item { grid-column: auto; }
+  .intro-card.bento-item { grid-template-columns: 1fr; }
   .portrait-card { order: -1; min-height: 0; aspect-ratio: 1; }
+  .portrait-card::before { content: ''; position: absolute; z-index: 3; pointer-events: none; filter: url(#pencil); left: 14px; right: 14px; bottom: 0; border-bottom: 2px solid #17161a; }
   .art-card, .work-card { padding: 20px; }
   /* phones: no curator figure; the script moves his comment under the piece as a written note */
   .art-layout { grid-template-columns: 1fr; }
@@ -1205,4 +1230,91 @@ footer a:hover { color: var(--accent); }
   #work .section-head { padding: 0 0 24px 32px; }
   .work-spot-title { font-size: clamp(26px, 3vw, 38px); }
   .work-spot-desc { font-size: 13px; line-height: 1.5; }
+}
+
+/* ── Dark mode: Skills turns black with white pencil lines (Intro and Contact stay white paper, because their drawings are black ink) ── */
+:root[data-theme="dark"] .skills-card.bento-item {
+  --text: #f2f2f2; --muted: #a3a3a3; --border: #f2f2f2; --accent: #f2f2f2; --accent-ink: #000; --accent-dim: rgba(242,242,242,.12);
+  background: #000; color: var(--text);
+}
+:root[data-theme="dark"] .skills-card::before, :root[data-theme="dark"] .skills-card::after { border-color: #f2f2f2; }
+:root[data-theme="dark"] .skills-card .skills-row { border-top-color: rgba(242,242,242,.4); }
+:root[data-theme="dark"] .skills-card .skills-row:first-child { border-top: 0; }
+
+/* ── Meme of the day, on white pencil paper ── */
+.meme-card.bento-item { justify-content: flex-start; align-items: center; padding: 34px 36px 30px; text-align: center; }
+.meme-card .meme-head { width: 100%; }
+.meme-sub { margin: -4px 0 18px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.meme-viewer { width: min(100%, 560px); outline: none; }
+.meme-viewer:focus-visible .meme { box-shadow: 0 0 0 3px #17161a; }
+.meme { margin: 0 auto; width: 100%; border: 2px solid #17161a; border-radius: 14px; background: #fff; color: #17161a; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; }
+.meme-top, .meme-bottom { margin: 0; padding: 12px 18px; text-align: center; font: 700 clamp(15px, 1.5vw, 19px)/1.3 'Space Grotesk', sans-serif; color: #17161a; }
+.meme-top { border-bottom: 1px dashed rgba(23,22,26,.45); min-height: 3.3em; display: flex; align-items: center; justify-content: center; }
+.meme-bottom { border-top: 1px dashed rgba(23,22,26,.45); font-size: clamp(17px, 1.8vw, 23px); min-height: 2.9em; display: flex; align-items: center; justify-content: center; }
+.meme-img { display: block; width: 100%; height: clamp(230px, 36vh, 360px); object-fit: contain; object-position: center bottom; background: #fff; }
+.meme.from-right { animation: meme-in-r .28s cubic-bezier(.2,.8,.3,1); }
+.meme.from-left  { animation: meme-in-l .28s cubic-bezier(.2,.8,.3,1); }
+@keyframes meme-in-r { from { opacity: 0; transform: translateX(26px) rotate(1.2deg); } }
+@keyframes meme-in-l { from { opacity: 0; transform: translateX(-26px) rotate(-1.2deg); } }
+@media (prefers-reduced-motion: reduce) { .meme.from-right, .meme.from-left { animation: none; }  }
+@media (max-width: 640px) { .meme-card.bento-item { padding: 26px 20px 24px; } }
+
+/* four-panel meme: a 2x2 strip, each panel pops in after the last */
+.meme-strip { display: none; }
+.meme.is-strip { width: min(100%, 440px); }
+.meme.is-strip .meme-img { display: none; }
+.meme.is-strip .meme-strip { display: grid; grid-template-columns: 1fr 1fr; }
+.strip-img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; object-position: center bottom; background: #fff; }
+.strip-img:nth-child(odd) { border-right: 1px dashed rgba(23,22,26,.45); }
+.strip-img:nth-child(-n+2) { border-bottom: 1px dashed rgba(23,22,26,.45); }
+.meme.is-strip .strip-img { animation: strip-pop .35s cubic-bezier(.2,.8,.3,1) both; animation-delay: calc(var(--i) * .55s + .15s); }
+@keyframes strip-pop { from { opacity: 0; transform: scale(.92); } }
+@media (prefers-reduced-motion: reduce) { .meme.is-strip .strip-img { animation: none; } }
+
+/* three-panel layout: one wide panel on top, two below */
+.meme.strip-3 { width: min(100%, 500px); }
+.meme.strip-3 .strip-img { border: 0; }
+.meme.strip-3 .strip-img:first-child { grid-column: 1 / -1; aspect-ratio: 2 / 1; border-bottom: 1px dashed rgba(23,22,26,.45); }
+.meme.strip-3 .strip-img:nth-child(2) { border-right: 1px dashed rgba(23,22,26,.45); }
+
+/* Fixed meme frame: the card keeps the same height for every meme (single picture, 4 panels or 3 panels). Pictures scale to fit inside it. */
+.meme-card { --meme-h: clamp(360px, 50vh, 460px); }
+.meme, .meme.is-strip, .meme.strip-3 { width: min(100%, 540px); height: var(--meme-h); }
+.meme-top, .meme-bottom { flex: none; }
+.meme-img { flex: 1 1 0; min-height: 0; height: auto; width: 100%; }
+.meme.is-strip .meme-strip { flex: 1 1 0; min-height: 0; grid-template-rows: 1fr 1fr; }
+.meme.is-strip .strip-img, .meme.strip-3 .strip-img:first-child { width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; }
+
+/* ── Memes: no background card. The meme is a photo on top of a small pile of photos. ── */
+.meme-card.bento-item { background: transparent; border: 0; box-shadow: none; overflow: visible; padding: 20px 0 10px; }
+.meme-viewer { position: relative; width: min(100%, 540px); height: var(--meme-h); margin: 14px auto 10px; }
+.meme-viewer:focus-visible { outline: 2px solid var(--text); outline-offset: 14px; border-radius: 8px; }
+/* the two photos underneath, slightly turned */
+.meme-viewer::before, .meme-viewer::after { content: ''; position: absolute; inset: 0; border-radius: 6px; box-shadow: 0 8px 22px rgba(0,0,0,.35); }
+.meme-viewer::before { background: #d6d6d6; rotate: -5deg; translate: -12px 8px; }
+.meme-viewer::after  { background: #ececec; rotate: 3.5deg; translate: 12px 4px; }
+/* the top photo: white print frame, soft shadow, a little off-straight */
+.meme, .meme.is-strip, .meme.strip-3 { position: relative; z-index: 1; width: 100%; height: 100%; padding: 12px; border: 0; border-radius: 6px; rotate: -1deg; box-shadow: 0 14px 34px rgba(0,0,0,.45); }
+.meme-sub { color: var(--muted); }
+/* flick the photo off the pile, then the next one drops in */
+.meme.leave-r { animation: meme-out-r .26s ease-in forwards; }
+.meme.leave-l { animation: meme-out-l .26s ease-in forwards; }
+@keyframes meme-out-r { to { opacity: 0; transform: translateX(70%) rotate(16deg); } }
+@keyframes meme-out-l { to { opacity: 0; transform: translateX(-70%) rotate(-16deg); } }
+@media (prefers-reduced-motion: reduce) { .meme.leave-r, .meme.leave-l { animation: none; } }
+
+/* Memes on phones and touch screens */
+.meme-hint { display: none; }
+@media (hover: none) { .meme-hint { display: block; margin: 16px 0 0; font: 600 11px/1 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); } }
+@media (max-width: 640px) {
+  .meme-card { --meme-h: clamp(340px, 46vh, 420px); }
+  .meme-card.bento-item { padding: 14px 0 6px; }
+  .meme-sub { font-size: 14px; margin-bottom: 14px; padding: 0 8px; }
+  /* keep the whole pile inside the screen gutters: a narrower stack and gentler tilts */
+  .meme-viewer { width: calc(100% - 44px); margin: 10px auto 8px; }
+  .meme-viewer::before { rotate: -3.5deg; translate: -7px 6px; }
+  .meme-viewer::after  { rotate: 2.5deg;  translate: 7px 4px; }
+  .meme, .meme.is-strip, .meme.strip-3 { padding: 10px; }
+  .meme-top, .meme-bottom { padding: 10px 12px; font-size: 15px; }
+  .meme-bottom { font-size: 17px; }
 }
