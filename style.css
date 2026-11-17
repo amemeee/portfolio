@@ -1318,3 +1318,10 @@ footer a:hover { color: var(--accent); }
   .meme-top, .meme-bottom { padding: 10px 12px; font-size: 15px; }
   .meme-bottom { font-size: 17px; }
 }
+
+/* Phones: every section is as tall as its content, with the same small gap between cards (Intro and Memes used to keep the full-screen minimum height) */
+@media (max-width: 640px) {
+  .page > .bento-grid { min-height: 0; padding-top: 12px; padding-bottom: 12px; align-content: start; scroll-margin-top: var(--nav-h); }
+  .page > #contact { padding-bottom: 32px; }
+}
+@media (max-width: 640px) { .contact-heading em { font-size: 1.06em; } }   /* keeps "Send me an email." on one line on phones */
