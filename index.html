@@ -631,7 +631,7 @@
       el('projTitle').textContent = p.title;
       el('bookStack').textContent = p.stack;
       el('specType').textContent = p.tag || (p.cta ? 'Your project' : 'Live site');
-      let host = 'Contact me'; if (!p.cta) { try { host = new URL(p.url).hostname.replace(/^www\./, ''); } catch (e) { host = p.url; } }
+      let host = 'Contact me'; if (!p.cta) { try { const u = new URL(p.url); host = u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/$/, ''); } catch (e) { host = p.url; } }
       el('specLink').textContent = host;
       el('projDesc').textContent = p.desc;
       const tag = el('projTag'); tag.hidden = !p.tag; tag.textContent = p.tag || '';
