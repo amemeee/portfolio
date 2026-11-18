@@ -1631,3 +1631,7 @@ footer a:hover { color: var(--accent); }
 }
 /* a thin white outline around him, so his black hair doesn't melt into the black letters behind it */
 .hero-char-img { filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff) drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff); }
+
+/* z's: white with a black outline, so they show on the white page and on the black letters behind his head */
+.hero-zzz { color: #fff; -webkit-text-stroke: 4px #17161a; paint-order: stroke fill; }
+.hero-zzz span:nth-child(1) { font-size: 26px; } .hero-zzz span:nth-child(2) { font-size: 34px; } .hero-zzz span:nth-child(3) { font-size: 44px; }

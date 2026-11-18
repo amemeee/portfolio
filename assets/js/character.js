@@ -235,7 +235,10 @@
     // While he is asleep (the z's are showing) nothing may change his pose except the sleep pose itself. A late timer from
     // rest() used to swap in a smiling pose after he had dozed off, leaving the z's floating over an awake face.
     if (name !== 'sleep' && hero.classList.contains('sleeping')) return;
-    const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok);
+    // Use the wanted pose unless its image has FAILED to load. (Waiting for "decoded and ready" meant a pose whose image was still
+    // loading was swapped for an awake one, which left the sleeping z's over an awake face. The old frame stays painted underneath
+    // until the new one has drawn, so there is no blank flash.)
+    const p = [name, POSES[name] && POSES[name].fallback, 'look', 'fix'].map(n => POSES[n]).find(p => p && p.ok !== false);
     if (!p || p === POSES[pose]) return;
     pose = Object.keys(POSES).find(k => POSES[k] === p);
     // No-flicker swap: keep the old pose painted underneath until the new one has drawn
