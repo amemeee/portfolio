@@ -9,7 +9,7 @@
 <link rel="preload" as="image" href="assets/character/idle-smile.webp" type="image/webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=Anton&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script>
   (function() {
@@ -33,8 +33,9 @@
   <a href="#top" class="nav-logo">AMEMEEE</a>
   <div class="nav-links" id="navLinks">
     <a href="#work">Work</a>
+    <a href="#skills">Skills</a>
     <a href="#art">Art</a>
-    <a href="#memes">Memes</a>
+    <!-- <a href="#memes">Memes</a> -->
     <a href="#contact">Contact</a>
     <!-- <a href="assets/resume.pdf" download class="nav-resume">Resume</a> -->
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
@@ -52,6 +53,15 @@
   <div class="hero-cover" id="top" aria-label="Amemeee, illustrated self-portrait" role="img">
     <!-- Rejected: dramatic close-up that cuts in over everything -->
     <div class="hero-cutin" aria-hidden="true"><img src="assets/character/fx/despair.webp" alt="" decoding="async"></div>
+
+    <!-- Poster-style background: a giant word behind him, sparkles and corner tags -->
+    <div class="hero-deck" aria-hidden="true">
+      <span class="hd-word">PORTFOLIO</span>
+      <svg class="hd-spark s1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <svg class="hd-spark s2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <svg class="hd-spark s3" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <svg class="hd-spark s4" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+    </div>
 
     <!-- 20+ clicks: giant rage text behind him -->
     <div class="hero-rage" aria-hidden="true"><span>ARGHHHHH</span></div>
@@ -94,11 +104,11 @@
   <section class="bento-grid intro-grid">
     <div class="bento-item reveal intro-card">
      <div class="intro-main">
-      <h1 class="profile-name">Muhammad Amin</h1>
-      <p class="profile-role">PHP / Laravel Developer</p>
+      <div class="cover-tags" aria-hidden="true"><span>[2026]</span><span>Amemeee</span></div>
+      <h1 class="profile-name">Muhammad Amin<span class="name-age"><span class="sr-only"> , age </span>27</span></h1>
+      <p class="profile-role"><span class="pill">PHP / Laravel Developer</span><span class="pill">IT Manager</span></p>
       <!-- Character-sheet style profile -->
       <dl class="profile-sheet">
-        <div><dt>Position</dt><dd>IT Manager <span class="sheet-note">(I wear a lot of hats)</span></dd></div>
         <div><dt>Main weapon</dt><dd>PHP · Laravel · MySQL</dd></div>
         <div><dt>Alt weapon</dt><dd>
           <!-- cycles through the list below, one at a time -->
@@ -106,11 +116,11 @@
           <span class="sr-only">JavaScript, Vue, Tailwind, Bootstrap, Git, GitHub Actions, AWS, Postman, Photoshop, Illustrator, Canva, AI tools and more</span>
         </dd></div>
         <div><dt>Side quests</dt><dd>
-          <span class="alt-weapon" aria-hidden="true" data-ms="2400" data-words="Leveling up IRL|Learning new things|Calisthenics|Unlocking new skills"><span class="alt-word">Leveling up IRL</span></span>
-          <span class="sr-only">Learning new things and calisthenics</span>
+          <span class="alt-weapon" aria-hidden="true" data-ms="2400" data-words="Illustration|Calisthenics"><span class="alt-word">Illustration</span></span>
+          <span class="sr-only">Illustration and calisthenics</span>
         </dd></div>
       </dl>
-      <p class="profile-bio">I build web apps with Laravel, and I'm always learning something new.</p>
+      <p class="profile-bio">IT Manager and Laravel developer. I build the web platforms behind a property auction business in Malaysia: auction listings with search, a homestay booking site and an agent platform.</p>
       <div class="profile-actions">
         <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn"><i class="fas fa-envelope"></i>Email me</a>
         <a href="https://github.com/amemeee" target="_blank" rel="noopener" class="bento-btn ghost"><i class="fab fa-github"></i>GitHub</a>
@@ -118,193 +128,55 @@
      </div>
 
     <div class="portrait-card">
-      <img class="portrait-img" src="assets/character/portrait-profile.webp" alt="Self-portrait illustration of Muhammad Amin, chin resting on his hand on a desk">
+      <svg class="spark s1" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <svg class="spark s2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <svg class="spark s3" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0z"/></svg>
+      <span class="hello-tag" aria-hidden="true">Hello!</span>
+      <div class="portrait-arch">
+        <img class="portrait-img" src="assets/character/portrait-profile.webp" alt="Self-portrait illustration of Muhammad Amin, chin resting on his hand on a desk">
+      </div>
     </div>
     </div><!-- /intro-card -->
+    <nav class="contents" aria-label="Contents">
+      <span class="contents-title">Contents</span>
+      <a href="#work"><b>01</b> Projects</a>
+      <a href="#skills"><b>02</b> Skills</a>
+      <a href="#art"><b>03</b> Art</a>
+      <a href="#contact"><b>04</b> Contact</a>
+    </nav>
   </section>
 
-  <!-- WORK -->
-  <section id="work" class="bento-grid">
-    <div class="bento-item t-4x1 reveal work-card">
-      <div class="work-hero">
-        <div class="work-preview">
-          <div class="browser-screen" id="workScreen">
-            <img class="work-shot active" src="assets/project/portfolio/home.webp" alt="This Portfolio screenshot" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/kopi-introvert/" title="Kopi Introvert live preview" tabindex="-1"></iframe></div>
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/monochrome/" title="Monochrome live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/arena_auctioneers/1.webp" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="assets/project/homestay/home.webp" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
-            <img class="work-shot" src="assets/project/wedding/home.webp" alt="Wedding Invitation screenshot" loading="lazy" decoding="async">
-            <img class="work-shot" src="assets/gallery/bite-the-dust.webp" alt="Killer Queen" loading="lazy" decoding="async">
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
-            <div class="work-shot work-live"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
-            <!-- Last slot: an invitation, not a project -->
-            <div class="work-shot work-yours">
-              <div class="yours-frame">
-                <span class="yours-plus">+</span>
-                <span class="yours-title">Your project here?</span>
-                <span class="yours-sub">Hire me and it's next on this list.</span>
-              </div>
+  <!-- WORK: a typographic index. Hover a title, see the project -->
+  <section id="work" class="bento-grid work3">
+    <div class="proj reveal">
+      <div class="proj-head">
+        <h2 class="tile-label">Projects</h2>
+        <p class="proj-sub" id="projSub">Hover a title to preview it.</p>
+      </div>
+      <div class="proj-body">
+        <ol class="proj-list" id="projList" aria-label="Projects"></ol>
+        <article class="proj-view" id="projView" aria-live="polite">
+          <div class="proj-frame"><div class="proj-preview" id="projPreview"></div></div>
+          <div class="proj-info" id="projInfo">
+            <p class="proj-num" id="projNum"></p>
+            <h3 class="proj-title" id="projTitle"></h3>
+            <span class="proj-tag" id="projTag" hidden></span>
+            <dl class="proj-specs">
+              <div><dt>Type</dt><dd id="specType"></dd></div>
+              <div><dt>Built with</dt><dd id="bookStack"></dd></div>
+              <div><dt>Link</dt><dd id="specLink"></dd></div>
+            </dl>
+            <p class="proj-desc" id="projDesc"></p>
+            <div class="proj-actions">
+              <a class="bento-btn" id="projVisit" href="#" target="_blank" rel="noopener"></a>
+              <span class="proj-nav">
+                <button class="proj-arrow" id="projPrev" type="button" aria-label="Previous project">&#8592;</button>
+                <button class="proj-arrow" id="projNext" type="button" aria-label="Next project">&#8594;</button>
+              </span>
             </div>
           </div>
-        </div>
-        <div class="section-head">
-          <h2 class="tile-label">Projects</h2>
-          <div class="work-spot" aria-live="polite">
-            <h3 class="work-spot-title" id="workTitle"></h3>
-            <span class="work-tag work-spot-tag" id="workTag" hidden>Prototype</span>
-            <p class="work-spot-meta"><span id="workStack"></span><span id="workCount"></span></p>
-            <p class="work-spot-desc" id="workDesc"></p>
-            <div class="work-spot-actions">
-              <a class="work-btn" id="workVisit" href="#" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i>Visit site</a>
-              <button class="work-btn glass" id="workNext">Next<i class="fas fa-arrow-right"></i></button>
-            </div>
-          </div>
-        </div>
+        </article>
       </div>
-      <div class="work-row-head">
-        <h3 class="work-row-label">All projects</h3>
-        <span class="work-row-nav">
-          <button class="work-row-btn" id="rowPrev" aria-label="Scroll projects up"><i class="fas fa-chevron-up"></i></button>
-          <button class="work-row-btn" id="rowNext" aria-label="Scroll projects down"><i class="fas fa-chevron-down"></i></button>
-        </span>
-      </div>
-        <ol class="work-list" id="workList">
-          <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/portfolio/home.webp" alt="This Portfolio screenshot" loading="lazy" decoding="async"></div>
-            <button class="work-item active" data-url="https://amemeee.github.io/portfolio/">
-              <span class="work-num">01</span>
-              <span class="work-body">
-                <span class="work-title">This Portfolio</span>
-                <span class="work-desc">The site you are on: a hand-drawn manga me who chats, reacts, naps and throws roses. No framework.</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/portfolio/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/kopi-introvert/" title="Kopi Introvert live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-tag="Prototype" data-url="https://amemeee.github.io/kopi-introvert/">
-              <span class="work-num">02</span>
-              <span class="work-body">
-                <span class="work-title">Kopi Introvert</span>
-                <span class="work-desc">Prototype.</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/kopi-introvert/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/monochrome/" title="Monochrome live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-tag="Prototype" data-url="https://amemeee.github.io/monochrome/">
-              <span class="work-num">03</span>
-              <span class="work-body">
-                <span class="work-title">Monochrome</span>
-                <span class="work-desc">Prototype.</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/monochrome/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/arena_auctioneers/1.webp" alt="Arena Auctioneers screenshot" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-url="https://arenaauctioneers.com">
-              <span class="work-num">04</span>
-              <span class="work-body">
-                <span class="work-title">Arena Auctioneers</span>
-                <span class="work-desc">Property auction listings across Malaysia, searchable by location, type, bank and price.</span>
-                <span class="work-stack">PHP · JavaScript · jQuery · AJAX</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://arenaauctioneers.com" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/homestay/home.webp" alt="Arena Auctioneers Homestay screenshot" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-url="https://homestay.arenaauctioneers.com">
-              <span class="work-num">05</span>
-              <span class="work-body">
-                <span class="work-title">Arena Homestay</span>
-                <span class="work-desc">Booking site for the Arena homestay (Subang Murni).</span>
-                <span class="work-stack">Laravel · Blade</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://homestay.arenaauctioneers.com" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://01-agent-property-auction.wasmer.app" title="Agent Property Auction Platform live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-fun="1" data-url="https://01-agent-property-auction.wasmer.app">
-              <span class="work-num">06</span>
-              <span class="work-body">
-                <span class="work-title">Agent Property Auction Platform</span>
-                <span class="work-desc">Property auction platform built for agents.</span>
-                <span class="work-stack">Vue · Laravel</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://01-agent-property-auction.wasmer.app" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/project/wedding/home.webp" alt="Wedding Invitation screenshot" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-fun="1" data-url="https://ornate-crumble-cb085e.netlify.app/">
-              <span class="work-num">07</span>
-              <span class="work-body">
-                <span class="work-title">Wedding Invitation</span>
-                <span class="work-desc">Digital wedding card with an animated envelope, countdown, RSVP and guest wishes.</span>
-                <span class="work-stack">Vue 3 · Supabase</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://ornate-crumble-cb085e.netlify.app/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><img src="assets/gallery/bite-the-dust.webp" alt="Killer Queen - Bite The Dust!" loading="lazy" decoding="async"></div>
-            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/bite-the-dust/">
-              <span class="work-num">08</span>
-              <span class="work-body">
-                <span class="work-title">Bite The Dust</span>
-                <span class="work-desc">Rohan Kishibe Activate Bite THe Dust.</span>
-                <span class="work-stack">HTML · Javascript · CSS</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/bite-the-dust/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/soul-match/" title="Soul Match live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/soul-match/">
-              <span class="work-num">09</span>
-              <span class="work-body">
-                <span class="work-title">Soul Match</span>
-                <span class="work-desc">Trading card game demo: open packs, browse the gallery and keep a collection saved in the browser.</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/soul-match/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li>
-            <div class="work-thumb" aria-hidden="true"><iframe data-src="https://amemeee.github.io/barbershop/" title="Skull &amp; Shears live preview" tabindex="-1"></iframe></div>
-            <button class="work-item" data-fun="1" data-url="https://amemeee.github.io/barbershop/">
-              <span class="work-num">10</span>
-              <span class="work-body">
-                <span class="work-title">Skull &amp; Shears</span>
-                <span class="work-desc">Barbershop Website</span>
-                <span class="work-stack">HTML · CSS · JavaScript</span>
-              </span>
-            </button>
-            <a class="work-visit" href="https://amemeee.github.io/barbershop/" target="_blank" rel="noopener">Visit site <i class="fas fa-arrow-up-right-from-square"></i></a>
-          </li>
-          <li class="work-yours-item">
-            <div class="work-thumb work-thumb-yours" aria-hidden="true"><span>+</span></div>
-            <button class="work-item" data-url="#contact" data-cta="Let's talk">
-              <span class="work-num">11</span>
-              <span class="work-body">
-                <span class="work-title">Your project here</span>
-                <span class="work-desc">This spot is waiting for your idea. Hire me to put your project here.</span>
-                <span class="work-stack">Laravel · PHP · whatever you need</span>
-              </span>
-            </button>
-            <a class="work-visit" href="#contact">Hire me <i class="fas fa-arrow-right"></i></a>
-          </li>
-        </ol>
-        <div class="work-dots" id="workDots"></div>
     </div>
   </section>
 
@@ -353,6 +225,10 @@
           <dd><span>Claude</span> <span>ChatGPT</span> <span>Gemini</span> <span>Grok</span></dd>
         </div>
       </dl>
+      <div class="swatches" aria-hidden="true">
+        <span class="swatches-label">+ Palette</span>
+        <i style="--c:#000000"><b>#000000</b></i><i style="--c:#17161a"><b>#17161A</b></i><i style="--c:#6b6b6b"><b>#6B6B6B</b></i><i style="--c:#e4e4e4"><b>#E4E4E4</b></i><i style="--c:#ffffff"><b>#FFFFFF</b></i>
+      </div>
     </div>
   </section>
 
@@ -363,6 +239,8 @@
       <div class="art-layout">
         <aside class="art-curator" aria-hidden="true">
           <div class="curator-figure">
+            <p class="art-info-title" id="artInfoTitle">Hover a piece</p>
+            <p class="art-info-meta" id="artInfoMeta"></p>
             <p class="curator-bubble" id="curatorBubble">Behold, my magnum opus. Vintage 2021, from before I put the pencil down.</p>
             <img class="curator-img" src="assets/character/scenes/art-curator.webp" alt="" loading="lazy" decoding="async">
           </div>
@@ -386,14 +264,14 @@
               <span class="art-tag">My collection</span>
               <span class="art-caption"><span class="art-title">Seishin #6</span><span class="art-meta">Art by AngryTiger · an NFT I bought</span></span>
             </button>
-            <button class="art-tile" data-title="Cyberpunk">
+            <button class="art-tile" data-title="Midnight Samurai">
+              <img src="assets/gallery/art1.webp" alt="" loading="lazy" decoding="async">
+              <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
+            </button>
+            <button class="art-tile is-featured" data-title="Cyberpunk">
               <img src="assets/gallery/art7.gif" alt="" loading="lazy" decoding="async">
               <span class="art-tag">Animated</span>
               <span class="art-caption"><span class="art-title">Cyberpunk</span></span>
-            </button>
-            <button class="art-tile is-tall" data-title="Midnight Samurai">
-              <img src="assets/gallery/art1.webp" alt="" loading="lazy" decoding="async">
-              <span class="art-caption"><span class="art-title">Midnight Samurai</span></span>
             </button>
             <button class="art-tile" data-title="The Old Me" data-meta="2020 · before the glow-up" data-line="That's the old me. Let bygones be bygones… I've glowed up since. With a little AI touch-up.">
               <img src="assets/gallery/self-portrait-2020.webp" alt="" loading="lazy" decoding="async">
@@ -468,12 +346,13 @@
     <div class="bento-item t-4x1 reveal contact-tile">
       <!-- Two separate layers so each character can animate -->
       <div class="contact-scene" aria-hidden="true">
-        <img class="contact-boy" src="assets/character/scenes/contact-boy.webp" alt="" loading="lazy" decoding="async">
-        <img class="contact-girl" src="assets/character/scenes/contact-girl.webp" alt="" loading="lazy" decoding="async">
+        <img class="contact-boy" src="assets/character/scenes/contact-boy.webp" alt="" decoding="async">
+        <img class="contact-girl" src="assets/character/scenes/contact-girl.webp" alt="" decoding="async">
       </div>
       <div class="contact-body">
-        <h2 class="contact-heading">Hiring, or have<br>a project?<br><em>Send me an email.</em></h2>
-        <div class="profile-actions">
+        <h2 class="contact-title">Let&rsquo;s<br>connect!</h2>
+        <p class="contact-line">Hiring, or have a project?<br><em>Send me an email.</em></p>
+        <div class="contact-row">
           <a href="mailto:muhd.amin0004@gmail.com" class="bento-btn">muhd.amin0004@gmail.com</a>
         </div>
       </div>
@@ -677,135 +556,115 @@
     showMeme(todayIdx, 1);
   }
 
-  // Work list + preview
-  const workList = document.getElementById('workList');
-  if (workList) {
-    const workItems = Array.from(workList.querySelectorAll('.work-item'));
-    const workShots = Array.from(document.querySelectorAll('#workScreen .work-shot'));
-    const workScreen = document.getElementById('workScreen');
-    const workVisit = document.getElementById('workVisit');
+  // Projects: a shelf of manga volumes and an open book
+  const PROJECTS = [
+    { title: 'Arena Auctioneers', url: 'https://arenaauctioneers.com', stack: 'PHP · JavaScript · jQuery · AJAX',
+      desc: 'Property auction listings across Malaysia, searchable by location, type, bank and price.', img: 'assets/project/arena_auctioneers/1.webp' },
+    { title: 'Arena Homestay', url: 'https://homestay.arenaauctioneers.com', stack: 'Laravel · Blade',
+      desc: 'Booking site for the Arena homestay (Subang Murni).', img: 'assets/project/homestay/home.webp' },
+    { title: 'Agent Property Auction Platform', short: 'Agent Auction Platform', url: 'https://01-agent-property-auction.wasmer.app', stack: 'Vue · Laravel', tag: 'Side project',
+      desc: 'Property auction platform built for agents.', live: true },
+    { title: 'Wedding Invitation', url: 'https://ornate-crumble-cb085e.netlify.app/', stack: 'Vue 3 · Supabase', tag: 'Side project',
+      desc: 'Digital wedding card with an animated envelope, countdown, RSVP and guest wishes.', img: 'assets/project/wedding/home.webp' },
+    { title: 'This Portfolio', url: 'https://amemeee.github.io/portfolio/', stack: 'HTML · CSS · JavaScript',
+      desc: 'The site you are on: a hand-drawn manga me who chats, reacts, naps and throws roses. No framework.', img: 'assets/project/portfolio/home.webp' },
+    { title: 'Soul Match', url: 'https://amemeee.github.io/soul-match/', stack: 'HTML · CSS · JavaScript', tag: 'Side project',
+      desc: 'Trading card game demo: open packs, browse the gallery and keep a collection saved in the browser.', live: true },
+    { title: 'Skull & Shears', url: 'https://amemeee.github.io/barbershop/', stack: 'HTML · CSS · JavaScript', tag: 'Side project',
+      desc: 'Barbershop landing page concept.', live: true },
+    { title: 'Bite The Dust', url: 'https://amemeee.github.io/bite-the-dust/', stack: 'HTML · JavaScript · CSS', tag: 'Side project',
+      desc: 'An interactive Bite the Dust animation, a tribute to JoJo\'s Bizarre Adventure.', img: 'assets/gallery/bite-the-dust.webp' },
+    { title: 'Kopi Introvert', url: 'https://amemeee.github.io/kopi-introvert/', stack: 'HTML · CSS · JavaScript', tag: 'Prototype',
+      desc: 'Front-end design prototype in plain HTML, CSS and JavaScript.', live: true },
+    { title: 'Monochrome', url: 'https://amemeee.github.io/monochrome/', stack: 'HTML · CSS · JavaScript', tag: 'Prototype',
+      desc: 'Front-end design prototype with a black-and-white manga look.', live: true },
+    { title: 'Have a project in mind?', url: '#contact', stack: 'Laravel · PHP · MySQL', cta: "Let's talk", art: 'assets/character/scenes/your-project.webp',
+      desc: 'Tell me what you need built and I will get back to you.' }
+  ];
+  (function () {
+    const list = document.getElementById('projList'), preview = document.getElementById('projPreview'), info = document.getElementById('projInfo');
+    if (!list || !preview) return;
+    const el = id => document.getElementById(id);
+    const pad = n => String(n).padStart(2, '0');
+    const rows = [], shots = [];
+    let cur = -1;
+    const isTouch = window.matchMedia('(hover: none)').matches;
+    if (isTouch) { const sub = el('projSub'); if (sub) sub.textContent = 'Swipe the card, or tap a title.'; }
 
-    // Live previews render at desktop width, then scale down to the frame
+    PROJECTS.forEach((p, i) => {
+      // a title in the index
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'proj-row';
+      b.innerHTML = `<span class="proj-n">${pad(i + 1)}</span><span class="proj-t">${p.cta ? 'Your project?' : (p.short || p.title)}</span>`;
+      b.addEventListener('mouseenter', () => { if (!isTouch) select(i); });
+      b.addEventListener('focus', () => select(i));
+      b.addEventListener('click', () => select(i));
+      li.appendChild(b); list.appendChild(li); rows.push(b);
+      // its picture
+      let s;
+      if (p.img) { s = document.createElement('img'); s.className = 'shot'; s.src = p.img; s.alt = `${p.title} screenshot`; }
+      else if (p.live) { s = document.createElement('div'); s.className = 'shot live'; s.innerHTML = `<iframe data-src="${p.url}" title="${p.title} live preview" tabindex="-1"></iframe>`; }
+      else { s = document.createElement('div'); s.className = 'shot plus'; s.style.setProperty('--art', `url('${p.art}')`); s.innerHTML = '<span class="plus-text"><span>Have a project<br>in mind?</span><small>Tell me what you need.</small></span>'; }
+      preview.appendChild(s); shots.push(s);
+    });
+
+    // live previews render at desktop width, then scale down into the frame
     const LIVE_WIDTH = 1280;
     new ResizeObserver(() => {
-      if (!workScreen.clientWidth) return;
-      const scale = workScreen.clientWidth / LIVE_WIDTH;
-      workScreen.style.setProperty('--live-scale', scale);
-      workScreen.style.setProperty('--live-h', Math.max(800, workScreen.clientHeight / scale) + 'px');
-    }).observe(workScreen);
+      if (!preview.clientWidth) return;
+      const k = preview.clientWidth / LIVE_WIDTH;
+      preview.style.setProperty('--live-scale', k);
+      preview.style.setProperty('--live-h', Math.max(700, preview.clientHeight / k) + 'px');
+    }).observe(preview);
 
-    const workTitle = document.getElementById('workTitle');
-    const workDesc = document.getElementById('workDesc');
-    const workStack = document.getElementById('workStack');
-    const workCount = document.getElementById('workCount');
-    const pad = n => String(n).padStart(2, '0');
-    let workIndex = 0;
-
-    function showProject(i) {
-      workIndex = (i + workItems.length) % workItems.length;
-      i = workIndex;
-      workItems.forEach((b, j) => b.classList.toggle('active', j === i));
-      workShots.forEach((el, j) => el.classList.toggle('active', j === i));
-      const frame = workShots[i].querySelector('iframe');
+    function select(i) {
+      const n = PROJECTS.length, next = (i + n) % n;
+      if (next === cur) return;
+      cur = next;
+      const p = PROJECTS[cur];
+      rows.forEach((r, j) => r.setAttribute('aria-current', String(j === cur)));
+      shots.forEach((s, j) => s.classList.toggle('active', j === cur));
+      const frame = shots[cur].querySelector && shots[cur].querySelector('iframe');
       if (frame && !frame.src) frame.src = frame.dataset.src;
-      const item = workItems[i];
-      const url = item.dataset.url;
-      workVisit.href = url;
-      const isCta = !!item.dataset.cta;                 // the "your project here" slot
-      workVisit.target = isCta ? '' : '_blank';
-      workVisit.innerHTML = isCta
-        ? `${item.dataset.cta}<i class="fas fa-arrow-right"></i>`
-        : '<i class="fas fa-arrow-up-right-from-square"></i>Visit site';
-      workTitle.textContent = item.querySelector('.work-title').textContent;
-      workDesc.textContent = item.querySelector('.work-desc').textContent;
-      workStack.textContent = item.querySelector('.work-stack').textContent;
-      const workTag = document.getElementById('workTag');
-      workTag.textContent = item.dataset.tag || 'Prototype';
-      workTag.hidden = !(item.dataset.tag || item.dataset.fun);
-      workCount.textContent = `${pad(i + 1)} / ${pad(workItems.length)}`;
-      // keep the active card visible in the row
-      const card = item.parentElement;
-      if (getComputedStyle(document.getElementById('workDots')).display === 'none') {
-        const top = card.offsetTop - workList.offsetTop;
-        if (top < workList.scrollTop || top + card.offsetHeight > workList.scrollTop + workList.clientHeight) {
-          workList.scrollTo({ top: Math.max(0, top - 8), behavior: 'smooth' });
-        }
+      el('projNum').textContent = `${pad(cur + 1)} / ${pad(n)}`;
+      el('projTitle').textContent = p.title;
+      el('bookStack').textContent = p.stack;
+      el('specType').textContent = p.tag || (p.cta ? 'Your project' : 'Live site');
+      let host = 'Contact me'; if (!p.cta) { try { host = new URL(p.url).hostname.replace(/^www\./, ''); } catch (e) { host = p.url; } }
+      el('specLink').textContent = host;
+      el('projDesc').textContent = p.desc;
+      const tag = el('projTag'); tag.hidden = !p.tag; tag.textContent = p.tag || '';
+      const visit = el('projVisit');
+      visit.href = p.url; visit.target = p.cta ? '' : '_blank';
+      visit.innerHTML = p.cta ? `${p.cta} <i class="fas fa-arrow-right"></i>` : 'Visit site <i class="fas fa-arrow-up-right-from-square"></i>';
+      info.classList.remove('swap'); void info.offsetWidth; info.classList.add('swap');
+      if (list.scrollWidth > list.clientWidth + 2) {                       // phones: the titles are a sideways row
+        const li = rows[cur].parentElement;
+        list.scrollTo({ left: li.offsetLeft - (list.clientWidth - li.offsetWidth) / 2, behavior: 'smooth' });
       }
     }
-
-    workItems.forEach((btn, i) => btn.addEventListener('click', () => showProject(i)));
-    document.getElementById('workNext').addEventListener('click', () => showProject(workIndex + 1));
-    showProject(0);
-
-    // Desktop row shows every card, so load their live thumbnails up front
-    const isRow = () => getComputedStyle(document.getElementById('workDots')).display === 'none';
-    if (isRow()) {
-      workList.querySelectorAll('.work-thumb iframe').forEach(f => { f.src = f.dataset.src; });
-    }
-
-    // Desktop side list: wheel (native), drag and arrow buttons scroll it vertically
-    const rowPrev = document.getElementById('rowPrev');
-    const rowNext = document.getElementById('rowNext');
-    const maxScroll = () => workList.scrollHeight - workList.clientHeight;
-    function updateRowNav() {
-      rowPrev.disabled = workList.scrollTop <= 1;
-      rowNext.disabled = workList.scrollTop >= maxScroll() - 1;
-      workList.classList.toggle('at-end', rowNext.disabled);
-      workList.classList.toggle('at-start', rowPrev.disabled);
-    }
-    workList.addEventListener('scroll', updateRowNav, { passive: true });
-    new ResizeObserver(updateRowNav).observe(workList);
-    rowPrev.addEventListener('click', () => workList.scrollBy({ top: -workList.clientHeight * 0.8, behavior: 'smooth' }));
-    rowNext.addEventListener('click', () => workList.scrollBy({ top: workList.clientHeight * 0.8, behavior: 'smooth' }));
-
-    let drag = null;
-    workList.addEventListener('pointerdown', e => {
-      if (!isRow() || e.pointerType !== 'mouse' || e.button !== 0) return;
-      drag = { y: e.clientY, top: workList.scrollTop, moved: false };
+    const step = d => select(cur + d);
+    el('projPrev').addEventListener('click', () => step(-1));
+    el('projNext').addEventListener('click', () => step(1));
+    // swipe the project card left / right
+    const view = el('projView');
+    let sx = null, sy = null;
+    view.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    view.addEventListener('touchend', e => {
+      if (sx === null) return;
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = sy = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
     });
-    window.addEventListener('pointermove', e => {
-      if (!drag) return;
-      const dy = e.clientY - drag.y;
-      if (Math.abs(dy) > 5) { drag.moved = true; workList.classList.add('dragging'); }
-      if (drag.moved) workList.scrollTop = drag.top - dy;
+    list.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const to = (cur + (e.key === 'ArrowDown' ? 1 : -1) + PROJECTS.length) % PROJECTS.length;
+        rows[to].focus();
+      }
     });
-    window.addEventListener('pointerup', () => {
-      if (drag && drag.moved) setTimeout(() => workList.classList.remove('dragging'));
-      drag = null;
-    });
-    // a drag shouldn't count as picking a card
-    workList.addEventListener('click', e => {
-      if (workList.classList.contains('dragging')) { e.stopPropagation(); e.preventDefault(); }
-    }, true);
-  }
-
-  // Phones: projects become a swipeable row of cards
-  const workCards = workList ? Array.from(workList.children) : [];
-  const workDots = document.getElementById('workDots');
-  if (workCards.length && workDots) {
-    workCards.forEach((card, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'cdot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', `Project ${i + 1}`);
-      dot.addEventListener('click', () => workList.scrollTo({ left: card.offsetLeft - workList.offsetLeft, behavior: 'smooth' }));
-      workDots.appendChild(dot);
-    });
-    const dots = Array.from(workDots.children);
-
-    const thumbScale = new ResizeObserver(entries => entries.forEach(e => {
-      e.target.style.setProperty('--live-scale', e.target.clientWidth / 1280);
-    }));
-    workList.querySelectorAll('.work-thumb').forEach(t => thumbScale.observe(t));
-
-    const cardInView = new IntersectionObserver(entries => entries.forEach(e => {
-      if (!e.isIntersecting || getComputedStyle(workDots).display === 'none') return;
-      const i = workCards.indexOf(e.target);
-      dots.forEach((d, j) => d.classList.toggle('active', j === i));
-      const frame = e.target.querySelector('.work-thumb iframe');
-      if (frame && !frame.src) frame.src = frame.dataset.src;
-    }), { root: workList, threshold: 0.6 });
-    workCards.forEach(card => cardInView.observe(card));
-  }
+    select(0);
+  })();
 
   // Art lightbox
   const artTiles = Array.from(document.querySelectorAll('.art-tile'));
@@ -869,16 +728,19 @@
       const src = heart ? POSE.heart : POSE.normal;
       if (!curatorImg.src.endsWith(src)) curatorImg.src = src;
     };
-    const say = (text) => {
+    const infoTitle = document.getElementById('artInfoTitle'), infoMeta = document.getElementById('artInfoMeta');
+    const DEFAULT_TITLE = infoTitle ? infoTitle.textContent : '';
+    const say = (text, title, meta) => {
       curatorBubble.classList.remove('pop'); void curatorBubble.offsetWidth;
       curatorBubble.textContent = text; curatorBubble.classList.add('pop');
+      if (infoTitle) { infoTitle.textContent = title || DEFAULT_TITLE; infoMeta.textContent = meta || ''; }   // desktop: the panel on the right
     };
     artTiles.forEach((tile, i) => {
       const comment = () => {
         clearTimeout(lineT);
         pose(tile.classList.contains('is-collected'));          // heart pose for his favourite
         const t = tile.dataset.title;
-        say(tile.dataset.line || (tile.querySelector('.art-tag') ? `"${t}". It even moves!` : LINES[i % LINES.length](t)));
+        say(tile.dataset.line || (tile.querySelector('.art-tag') ? `"${t}". It even moves!` : LINES[i % LINES.length](t)), t, tile.dataset.meta);
       };
       tile._comment = comment;                                 // the phone pager reuses this
       tile.addEventListener('mouseenter', comment);
@@ -936,7 +798,7 @@
       const figure = bubble.parentElement;
       const place = () => {
         if (phone.matches) artPager.before(bubble);
-        else figure.prepend(bubble);
+        else figure.append(bubble);   // desktop: the description sits under the title in the right-hand panel
       };
       place();
       phone.addEventListener('change', place);
