@@ -273,11 +273,14 @@ body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-hamburger span 
 }
 
 /* Sleeping: z's drift up from his head */
-.hero-zzz { position: absolute; z-index: 6; display: none; pointer-events: none;
+.hero-zzz {
+  /* an invisible box exactly the size and place of his picture, so the z's sit on his head whatever the window does */
+  position: absolute; z-index: 6; display: none; pointer-events: none;
+  left: 50%; bottom: 0; height: min(94%, 125vw); aspect-ratio: 1 / 1; transform: translateX(-50%);
   font: 700 22px/1 'Space Grotesk', sans-serif; color: #17161a; }
 .hero-cover.sleeping .hero-zzz { display: block; }
 .hero-zzz span {
-  position: absolute; left: 0; bottom: 0; opacity: 0;
+  position: absolute; left: 60%; top: 16%; opacity: 0;
   animation: hero-z 3s ease-in infinite;
 }
 .hero-zzz span:nth-child(2) { animation-delay: 1s; font-size: 28px; }
@@ -341,7 +344,8 @@ body:has(.hero-cover[data-mood="rage"]) #nav:not(.scrolled) .nav-hamburger span 
 
 @media (prefers-reduced-motion: reduce) {
   .hero-cover *, .hero-cover *::before, .hero-cover *::after { animation: none !important; }
-  .hero-zzz span { position: static; opacity: 1; margin-right: 4px; }
+  .hero-zzz span { opacity: 1; }
+  .hero-zzz span:nth-child(1) { left: 60%; top: 18%; } .hero-zzz span:nth-child(2) { left: 64%; top: 11%; } .hero-zzz span:nth-child(3) { left: 69%; top: 3%; }
 }
 
 /* ── Nav ── */
@@ -1085,7 +1089,7 @@ footer a:hover { color: var(--accent); }
   .hero-hint { bottom: 20px; font-size: 12px; border-radius: 18px; }
   .hero-talk { bottom: 92px; }
   .hero-choice { font-size: 12px; padding: 6px 10px; }
-  .hero-char-img { height: min(80%, 125vw); }
+  .hero-char-img, .hero-zzz { height: min(80%, 125vw); }
   /* Phones: free scrolling, content-height sections, footer at the end */
   .page { height: auto; overflow: visible; scroll-snap-type: none; }
   .hero-cover { height: 100vh; height: 100svh; }
@@ -1635,3 +1639,19 @@ footer a:hover { color: var(--accent); }
 /* z's: white with a black outline, so they show on the white page and on the black letters behind his head */
 .hero-zzz { color: #fff; -webkit-text-stroke: 4px #17161a; paint-order: stroke fill; }
 .hero-zzz span:nth-child(1) { font-size: 26px; } .hero-zzz span:nth-child(2) { font-size: 34px; } .hero-zzz span:nth-child(3) { font-size: 44px; }
+
+/* A white line around "LET'S CONNECT!" and the line under it, in light and dark mode, so they stay readable where the characters come close */
+.contact-title {
+  -webkit-text-stroke: 8px #fff; paint-order: stroke fill;
+  text-shadow: 3px 0 0 #fff, -3px 0 0 #fff, 0 3px 0 #fff, 0 -3px 0 #fff, 2px 2px 0 #fff, -2px 2px 0 #fff, 2px -2px 0 #fff, -2px -2px 0 #fff;
+}
+.contact-line {
+  -webkit-text-stroke: 9px #fff; paint-order: stroke fill;
+  text-shadow: 4px 0 0 #fff, -4px 0 0 #fff, 0 4px 0 #fff, 0 -4px 0 #fff, 3px 3px 0 #fff, -3px 3px 0 #fff, 3px -3px 0 #fff, -3px -3px 0 #fff;
+}
+
+/* ── Dark mode: the main page is black, with white letters and sparkles, and white ink on the nav ── */
+:root[data-theme="dark"] .hero-cover { background: #000; }
+:root[data-theme="dark"] .hero-deck { --hd: #f2f2f2; }
+:root[data-theme="dark"] #nav:not(.scrolled) .nav-logo { color: #f2f2f2; }
+:root[data-theme="dark"] #nav:not(.scrolled) .nav-hamburger span { background: #f2f2f2; }

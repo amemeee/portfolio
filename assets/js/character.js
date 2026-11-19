@@ -615,9 +615,7 @@
     clearTimers();
     bubble.classList.remove('show');
     setPose('sleep');
-    const hr = hero.getBoundingClientRect(), r = body.getBoundingClientRect();
-    zzz.style.left = `${r.left - hr.left + r.width * 0.6}px`;
-    zzz.style.top = `${r.top - hr.top + r.height * 0.12}px`;
+    // the z's are anchored to his head in CSS (percentages of his picture), so they follow him if the window changes
     hero.classList.add('sleeping');
     showTalk();
   };
