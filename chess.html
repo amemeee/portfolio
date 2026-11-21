@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chess Duel · Amemeee</title>
+<link rel="icon" type="image/webp" href="assets/brand/icon.webp">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Anton&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0f1117; --panel:#181b25; --text:#eef0f6; --muted:#8b91a5;
+    --light:#e8d9bd; --dark:#a67c52; --sel:#f6e05e; --accent:#ff5a7a;
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Space Grotesk',system-ui,sans-serif; min-height:100vh; padding:16px; }
+  a { color:var(--muted); text-decoration:none; font-size:14px; }
+  h1 { font-family:Anton,sans-serif; letter-spacing:.04em; font-weight:400; font-size:28px; }
+  header { display:flex; justify-content:space-between; align-items:center; max-width:1000px; margin:0 auto 16px; }
+
+  /* character select */
+  #select { max-width:1000px; margin:0 auto; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:14px; }
+  .card { background:var(--panel); border:2px solid transparent; border-radius:16px; padding:20px; cursor:pointer; text-align:center; transition:.2s; }
+  .card:hover { transform:translateY(-4px); border-color:var(--c); box-shadow:0 8px 30px -8px var(--c); }
+  .card .face { font-size:64px; }
+  .card h2 { margin:8px 0 2px; color:var(--c); }
+  .card p { color:var(--muted); font-size:13px; line-height:1.4; }
+  .card .ult { margin-top:10px; font-size:12px; color:var(--text); background:#0003; border-radius:8px; padding:6px; }
+
+  /* game */
+  #game { display:none; max-width:1000px; margin:0 auto; gap:16px; grid-template-columns:minmax(0,1fr) 300px; align-items:start; }
+  #boardWrap { position:relative; width:100%; max-width:640px; margin:0 auto; }
+  #board { display:grid; grid-template-columns:repeat(8,1fr); aspect-ratio:1; border-radius:10px; overflow:hidden; box-shadow:0 10px 40px #0008; user-select:none; }
+  .sq { display:flex; align-items:center; justify-content:center; font-size:min(8vw,56px); position:relative; cursor:pointer; line-height:1; }
+  .sq.l { background:var(--light); } .sq.d { background:var(--dark); }
+  .sq.sel { background:var(--sel)!important; }
+  .sq.last::after { content:''; position:absolute; inset:0; background:#ffee0044; }
+  .sq.hint::before { content:''; width:28%; height:28%; border-radius:50%; background:#0000004d; position:absolute; }
+  .sq.hint.cap::before { width:86%; height:86%; background:none; border:4px solid #00000055; }
+  .sq.check { background:radial-gradient(#ff3b3b,#ff3b3b00 75%), var(--light); }
+  .w { color:#fff; text-shadow:0 0 2px #000,0 0 2px #000,0 0 3px #000; }
+  .b { color:#111; text-shadow:0 0 1px #fff8; }
+  .sq.frozen::after { content:'❄'; position:absolute; top:2px; right:4px; font-size:14px; color:#7fd7ff; }
+
+  aside { background:var(--panel); border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:12px; }
+  #portrait { display:flex; gap:12px; align-items:center; }
+  #face { width:84px; height:84px; border-radius:50%; background:#0004; border:3px solid var(--c); display:flex; align-items:center; justify-content:center; font-size:48px; overflow:hidden; flex:none; transition:transform .2s; }
+  #face img { width:100%; height:100%; object-fit:cover; }
+  #face.react { animation:pop .45s; }
+  #face.hurt { animation:shake .5s; }
+  @keyframes pop { 50% { transform:scale(1.25) rotate(-6deg);} }
+  @keyframes shake { 20%,60% { transform:translateX(-8px);} 40%,80% { transform:translateX(8px);} }
+  #name { font-family:Anton,sans-serif; font-size:22px; color:var(--c); letter-spacing:.04em; }
+  #bubble { background:#0003; border-left:3px solid var(--c); padding:10px 12px; border-radius:8px; font-size:14px; min-height:56px; line-height:1.4; }
+  .meter { height:12px; background:#0005; border-radius:99px; overflow:hidden; }
+  .meter i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--c),#fff); transition:width .4s; }
+  .meter.full i { animation:glow .6s infinite alternate; }
+  @keyframes glow { to { filter:brightness(1.6); } }
+  .label { font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); display:flex; justify-content:space-between; }
+  #status { font-size:14px; color:var(--muted); }
+  button { background:var(--accent); color:#fff; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-weight:600; cursor:pointer; }
+  button.ghost { background:#ffffff14; }
+
+  /* ultimate cut-in */
+  #cutin { position:fixed; inset:0; display:none; z-index:50; pointer-events:none; overflow:hidden; background:#000a; }
+  #cutin.on { display:block; animation:flash 2.4s forwards; }
+  #cutin .band { position:absolute; left:-10%; right:-10%; top:30%; height:40%; background:linear-gradient(100deg,var(--c),#000 80%); transform:skewY(-6deg); animation:slide 2.4s forwards; }
+  #cutin .big { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); text-align:center; animation:zoom 2.4s forwards; }
+  #cutin .big .f { font-size:min(30vw,200px); filter:drop-shadow(0 0 30px var(--c)); }
+  #cutin .big h2 { font-family:Anton,sans-serif; font-size:min(10vw,72px); letter-spacing:.06em; text-shadow:0 0 24px var(--c); margin-top:-10px; }
+  #cutin .big p { font-size:18px; color:#fff; opacity:.85; }
+  #cutin .sp { position:absolute; width:6px; height:6px; border-radius:50%; background:var(--c); animation:spark 1.6s forwards; }
+  @keyframes flash { 0%{opacity:0} 10%{opacity:1} 85%{opacity:1} 100%{opacity:0} }
+  @keyframes slide { 0%{transform:translateX(-100%) skewY(-6deg)} 20%{transform:translateX(0) skewY(-6deg)} 100%{transform:translateX(4%) skewY(-6deg)} }
+  @keyframes zoom { 0%{transform:translate(-50%,-50%) scale(.3);opacity:0} 20%{transform:translate(-50%,-50%) scale(1.1);opacity:1} 100%{transform:translate(-50%,-50%) scale(1)} }
+  @keyframes spark { from{opacity:1; transform:translate(0,0)} to{opacity:0; transform:translate(var(--dx),var(--dy))} }
+  body.quake { animation:quake .6s; }
+  @keyframes quake { 10%{transform:translate(-10px,6px)} 30%{transform:translate(10px,-8px)} 50%{transform:translate(-8px,-6px)} 70%{transform:translate(8px,8px)} }
+  .sq.boom { animation:boom .8s; }
+  @keyframes boom { 0%{box-shadow:inset 0 0 0 0 #fff} 40%{box-shadow:inset 0 0 30px 20px var(--c)} 100%{box-shadow:none} }
+
+  #over { position:absolute; inset:0; background:#000b; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; border-radius:10px; text-align:center; padding:20px; }
+  @media (max-width:820px){ #game{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>CHESS DUEL</h1>
+  <a href="index.html">← Back to portfolio</a>
+</header>
+
+<section id="select">
+  <p style="color:var(--muted)">Pick your opponent. Each one reacts to your moves and unleashes an <b>ultimate</b> when their meter is full.</p>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="game">
+  <div id="boardWrap">
+    <div id="board"></div>
+    <div id="over"><h1 id="overTitle"></h1><p id="overMsg"></p><button id="again">Rematch</button></div>
+  </div>
+  <aside>
+    <div id="portrait"><div id="face"></div><div><div id="name"></div><div id="status"></div></div></div>
+    <div id="bubble"></div>
+    <div>
+      <div class="label"><span>Ultimate</span><span id="ultName"></span></div>
+      <div class="meter" id="meter"><i></i></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="ghost" id="undo">Undo</button>
+      <button class="ghost" id="menu">Change opponent</button>
+    </div>
+  </aside>
+</section>
+
+<div id="cutin"><div class="band"></div><div class="big"><div class="f"></div><h2></h2><p></p></div></div>
+
+<script type="module">
+/* Built on open-source projects:
+   - chess.js (jhlywa/chess.js)       → rules, legal moves, check/mate detection
+   - stockfish.js (nmrugg/stockfish.js) → the AI engine, run in a Web Worker
+*/
+import { Chess } from "https://cdn.jsdelivr.net/npm/chess.js@1.0.0/+esm";
+
+const $ = id => document.getElementById(id);
+const GLYPH = { p:'♟', n:'♞', b:'♝', r:'♜', q:'♛', k:'♚' };
+const VAL = { p:1, n:3, b:3, r:5, q:9, k:0 };
+
+/* ---- Characters ----
+   Put portraits at assets/chess/<id>-<mood>.webp (moods: idle, happy, angry, sad, shock, ult) to replace emoji. */
+const CHARS = {
+  mio: { name:'Mio', color:'#ff7ab8', skill:3, depth:3, emoji:{idle:'😊',happy:'😆',angry:'😤',sad:'😢',shock:'😲',ult:'🔥'},
+    desc:'Cheerful beginner. Plays fast and loose.',
+    ult:{ name:'Flame Burst', text:'Burns one of your pieces to ash.', fx:'burn' },
+    say:{ start:"Let's have fun! Don't go easy on me~", capture:["Got one!","Yum, thanks for the piece!","Hehe, mine now!"], lost:["Hey! That was my piece!","Ouch... rude!","Noooo!"], check:["Check! Run, run!"], inCheck:["Eek! My king!"], blunder:["Wow, you just gave that away?"], think:["Hmm hmm..."], win:"I won?! I actually won!!", lose:"Aww, you're really good... rematch?", draw:"A draw! Fair enough." } },
+  ren: { name:'Ren', color:'#4aa8ff', skill:12, depth:9, emoji:{idle:'😐',happy:'😏',angry:'😠',sad:'😔',shock:'😳',ult:'⚡'},
+    desc:'Cold and calculating. Rarely makes mistakes.',
+    ult:{ name:'Time Skip', text:'Freezes time. You lose your next turn.', fx:'skip' },
+    say:{ start:"Show me what you've got.", capture:["Predictable.","Thank you.","Material advantage."], lost:["...Noted.","A lucky trade.","Hm. Not bad."], check:["Check."], inCheck:["Tch."], blunder:["Careless."], think:["..."], win:"As expected.", lose:"...Impressive. I underestimated you.", draw:"A draw. Unsatisfying." } },
+  yuki:{ name:'Yuki', color:'#7fe0e8', skill:7, depth:6, emoji:{idle:'🙂',happy:'😌',angry:'🥶',sad:'🥺',shock:'😮',ult:'❄️'},
+    desc:'Calm and patient. Waits for your mistakes.',
+    ult:{ name:'Blizzard', text:'Freezes and shatters two of your pawns.', fx:'freeze' },
+    say:{ start:"Let's play quietly.", capture:["I'll take that.","Patience pays.","Thank you."], lost:["Oh... you got me.","I see.","Careful, now."], check:["Check."], inCheck:["Oh my."], blunder:["Was that intentional?"], think:["Let me think..."], win:"Good game.", lose:"You played beautifully.", draw:"A peaceful draw." } },
+};
+
+let game, me, ai, charge, selected = null, hints = [], lastMove = null, busy = false, worker = null, undoStack = [];
+
+/* ---- Select screen ---- */
+$('cards').innerHTML = Object.entries(CHARS).map(([id,c]) => `
+  <div class="card" data-id="${id}" style="--c:${c.color}">
+    <div class="face">${c.emoji.idle}</div><h2>${c.name}</h2><p>${c.desc}</p>
+    <div class="ult">⚡ ${c.ult.name}: ${c.ult.text}</div>
+  </div>`).join('');
+$('cards').onclick = e => { const c = e.target.closest('.card'); if (c) start(c.dataset.id); };
+$('menu').onclick = () => { $('game').style.display='none'; $('select').style.display='block'; };
+$('again').onclick = () => start(ai.id);
+$('undo').onclick = undo;
+
+/* ---- Engine ---- */
+function initEngine() {
+  if (worker) return;
+  try {
+    const url = 'https://cdn.jsdelivr.net/npm/stockfish.js@10.0.2/stockfish.js';
+    worker = new Worker(URL.createObjectURL(new Blob([`importScripts("${url}")`], { type:'text/javascript' })));
+    worker.postMessage('uci');
+  } catch (e) { worker = null; }
+}
+function engineMove(fen, cb) {
+  if (!worker) return cb(null);
+  let done = false;
+  const timer = setTimeout(() => { if (!done) { done = true; worker.onmessage = null; cb(null); } }, 15000);
+  worker.onmessage = e => {
+    const m = typeof e.data === 'string' ? e.data : '';
+    if (m.startsWith('bestmove') && !done) { done = true; clearTimeout(timer); const mv = m.split(' ')[1]; cb(mv && mv !== '(none)' ? mv : null); }
+  };
+  worker.postMessage(`setoption name Skill Level value ${ai.skill}`);
+  worker.postMessage(`position fen ${fen}`);
+  worker.postMessage(`go depth ${ai.depth}`);
+}
+
+/* ---- Game flow ---- */
+function start(id) {
+  ai = { id, ...CHARS[id] };
+  initEngine();
+  game = new Chess(); me = 'w'; charge = 0; selected = null; hints = []; lastMove = null; busy = false; undoStack = [];
+  document.documentElement.style.setProperty('--c', ai.color);
+  $('select').style.display = 'none'; $('game').style.display = 'grid';
+  $('over').style.display = 'none';
+  $('name').textContent = ai.name; $('ultName').textContent = ai.ult.name;
+  setMood('idle'); say(ai.say.start); render();
+}
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function setMood(m, anim) {
+  const f = $('face');
+  f.innerHTML = `<img src="assets/chess/${ai.id}-${m}.webp" alt="" onerror="this.replaceWith(document.createTextNode('${ai.emoji[m]}'))">`;
+  if (anim) { f.classList.remove('react','hurt'); void f.offsetWidth; f.classList.add(anim); }
+}
+function say(t) { $('bubble').textContent = t; }
+function setCharge(v) { charge = Math.max(0, Math.min(100, v)); $('meter').firstElementChild.style.width = charge+'%'; $('meter').classList.toggle('full', charge >= 100); }
+
+function render() {
+  const b = $('board'); b.innerHTML = '';
+  const board = game.board();
+  const kingSq = game.inCheck() ? findKing(game.turn()) : null;
+  for (let r = 0; r < 8; r++) for (let f = 0; f < 8; f++) {
+    const name = 'abcdefgh'[f] + (8 - r);
+    const p = board[r][f];
+    const d = document.createElement('div');
+    d.className = 'sq ' + ((r+f)%2 ? 'd' : 'l');
+    d.dataset.sq = name;
+    if (selected === name) d.classList.add('sel');
+    if (lastMove && (lastMove.from === name || lastMove.to === name)) d.classList.add('last');
+    const h = hints.find(m => m.to === name);
+    if (h) d.classList.add('hint', ...(h.captured ? ['cap'] : []));
+    if (kingSq === name) d.classList.add('check');
+    if (p) d.innerHTML = `<span class="${p.color}">${GLYPH[p.type]}</span>`;
+    b.appendChild(d);
+  }
+  setCharge(charge);
+  $('status').textContent = game.isGameOver() ? '' : (game.turn() === me ? 'Your turn' : `${ai.name} is thinking…`);
+}
+function findKing(color) {
+  const bd = game.board();
+  for (let r=0;r<8;r++) for (let f=0;f<8;f++) { const p=bd[r][f]; if (p && p.type==='k' && p.color===color) return 'abcdefgh'[f]+(8-r); }
+}
+$('board').addEventListener('click', e => {
+  const sq = e.target.closest('.sq')?.dataset.sq;
+  if (!sq || busy || game.isGameOver() || game.turn() !== me) return;
+  const h = hints.find(m => m.to === sq);
+  if (selected && h) return playerMove(h);
+  const p = game.get(sq);
+  if (p && p.color === me) { selected = sq; hints = game.moves({ square:sq, verbose:true }); }
+  else { selected = null; hints = []; }
+  render();
+});
+
+function material(color) { let s=0; for (const row of game.board()) for (const p of row) if (p && p.color===color) s += VAL[p.type]; return s; }
+
+function playerMove(m) {
+  undoStack.push(game.fen());
+  const before = material(me);
+  const mv = game.move({ from:m.from, to:m.to, promotion:'q' });
+  lastMove = mv; selected = null; hints = [];
+  after(mv, 'player');
+  render();
+  if (!checkOver()) aiTurn();
+}
+
+function after(mv, who) {
+  const aiMoved = who === 'ai';
+  if (aiMoved) {
+    if (mv.captured) { setCharge(charge + 25); setMood('happy','react'); say(pick(ai.say.capture)); }
+    if (game.inCheck()) { setCharge(charge + 10); setMood('happy','react'); say(pick(ai.say.check)); }
+    if (!mv.captured && !game.inCheck()) setMood('idle');
+  } else {
+    if (mv.captured) { setCharge(charge + 15); setMood(VAL[mv.captured] >= 5 ? 'shock':'angry', 'hurt'); say(pick(ai.say.lost)); }
+    else if (game.inCheck()) { setMood('shock','hurt'); say(pick(ai.say.inCheck)); }
+    else { setMood('idle'); say(pick(ai.say.think)); }
+  }
+}
+
+function aiTurn() {
+  busy = true; render();
+  const run = async () => {
+    if (charge >= 100 && !game.isGameOver()) await ultimate();
+    if (game.isGameOver()) { busy = false; render(); return checkOver(); }
+    if (game.turn() === me) { busy = false; render(); return; } // player's turn was restored (shouldn't normally happen)
+    engineMove(game.fen(), uci => {
+      const moves = game.moves({ verbose:true });
+      let m = uci && moves.find(x => x.from+x.to+(x.promotion||'') === uci);
+      if (!m) m = pick(moves);
+      setTimeout(() => {
+        const mv = game.move({ from:m.from, to:m.to, promotion:m.promotion || 'q' });
+        lastMove = mv; after(mv, 'ai'); busy = false; render();
+        if (!checkOver() && skipPending) { skipPending = false; say("Time is frozen. Your turn is skipped!"); busy = true; render(); setTimeout(() => { skipTurn(); }, 700); }
+      }, 450);
+    });
+  };
+  run();
+}
+let skipPending = false;
+function skipTurn() {
+  // AI moves again: flip turn to AI via FEN
+  const parts = game.fen().split(' '); parts[1] = ai ? (me === 'w' ? 'b' : 'w') : parts[1]; parts[3] = '-';
+  try { game.load(parts.join(' ')); } catch { busy = false; render(); return; }
+  engineMove(game.fen(), uci => {
+    const moves = game.moves({ verbose:true });
+    if (!moves.length) { busy = false; render(); return checkOver(); }
+    let m = uci && moves.find(x => x.from+x.to+(x.promotion||'') === uci) || pick(moves);
+    const mv = game.move({ from:m.from, to:m.to, promotion:m.promotion || 'q' });
+    lastMove = mv; after(mv, 'ai'); busy = false; render(); checkOver();
+  });
+}
+
+/* ---- Ultimates ---- */
+function cutin() {
+  const c = $('cutin');
+  c.innerHTML = `<div class="band"></div><div class="big"><div class="f">${ai.emoji.ult}</div><h2>${ai.ult.name.toUpperCase()}</h2><p>${ai.name} unleashes an ultimate!</p></div>`;
+  for (let i=0;i<40;i++) { const s=document.createElement('i'); s.className='sp'; const a=Math.random()*6.28, d=150+Math.random()*350;
+    s.style.cssText = `left:50%;top:50%;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px;animation-delay:${Math.random()*.5}s`; c.appendChild(s); }
+  c.classList.remove('on'); void c.offsetWidth; c.classList.add('on');
+  return new Promise(r => setTimeout(() => { c.classList.remove('on'); r(); }, 2400));
+}
+function victims(filter) {
+  const out = [];
+  game.board().forEach((row,r) => row.forEach((p,f) => { if (p && p.color===me && filter(p)) out.push('abcdefgh'[f]+(8-r)); }));
+  return out.sort(() => Math.random()-.5);
+}
+async function ultimate() {
+  setMood('ult','react'); say(`${ai.ult.name}!!`);
+  await cutin();
+  document.body.classList.add('quake'); setTimeout(() => document.body.classList.remove('quake'), 700);
+  let hit = [];
+  if (ai.ult.fx === 'burn') hit = victims(p => ['n','b','r','p'].includes(p.type)).slice(0,1);
+  if (ai.ult.fx === 'freeze') hit = victims(p => p.type === 'p').slice(0,2);
+  if (ai.ult.fx === 'skip') skipPending = true;
+  hit.forEach(sq => document.querySelector(`[data-sq="${sq}"]`)?.classList.add('boom'));
+  await new Promise(r => setTimeout(r, 700));
+  for (const sq of hit) game.remove(sq);
+  setCharge(0); render();
+  // removing pieces resets castling rights implicitly; make sure position is still valid
+  try { game.load(game.fen()); } catch { /* ignore */ }
+  if (hit.length) say(`${ai.name}: "${ai.ult.fx==='burn'?'Burn!':'Shatter!'}"`);
+}
+
+/* ---- End / undo ---- */
+function checkOver() {
+  if (!game.isGameOver()) return false;
+  let t, msg, mood;
+  if (game.isCheckmate()) {
+    if (game.turn() === me) { t = 'You lose'; msg = ai.say.win; mood = 'happy'; } else { t = 'You win!'; msg = ai.say.lose; mood = 'sad'; }
+  } else { t = 'Draw'; msg = ai.say.draw; mood = 'idle'; }
+  setMood(mood, 'react'); say(msg);
+  $('overTitle').textContent = t; $('overMsg').textContent = `${ai.name}: "${msg}"`; $('over').style.display = 'flex';
+  render(); return true;
+}
+function undo() {
+  if (busy || !undoStack.length) return;
+  game.load(undoStack.pop()); selected = null; hints = []; lastMove = null; $('over').style.display='none'; setMood('idle'); say("Taking it back? Fine."); render();
+}
+</script>
+</body>
+</html>
